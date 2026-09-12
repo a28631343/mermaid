@@ -29,7 +29,6 @@
         #gameplay-screen { background-image: url('images/bg-underwater.jpg'); background-color: #000851; z-index: 5; justify-content: space-between; padding: 0; overflow: hidden;}
         #result-screen { background-image: url('images/bg-result.jpg'); background-color: rgba(0,8,81,0.9); justify-content: center; backdrop-filter: blur(10px);}
 
-        /* 標題與 Logo */
         h1 { font-size: 34px; color: #fff; text-shadow: 0 0 10px #ff69b4, 0 0 20px #ff1493, 0 5px 5px rgba(0,0,0,0.5); text-align: center; margin-bottom: 10px; line-height: 1.2; letter-spacing: 2px;}
         .subtitle { font-size: 18px; color: #00ffff; text-shadow: 0 0 8px #00ffff, 1px 1px 2px #000; margin-bottom: 30px; font-weight: bold;}
         
@@ -40,12 +39,7 @@
         }
         @keyframes floatLogo { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
 
-        #music-btn {
-            position: absolute; top: 15px; right: 15px; z-index: 20; 
-            background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.4); border-radius: 20px;
-            color: #fff; padding: 8px 15px; font-size: 14px; cursor: pointer; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.3); transition: all 0.2s;
-        }
-
+        /* 統一按鈕風格，移除絕對定位的音樂按鈕設定 */
         .btn {
             background-image: url('images/btn-primary.png'); background-color: transparent; 
             background-size: 100% 100%; background-position: center; background-repeat: no-repeat;
@@ -63,7 +57,6 @@
         .level-btn:active:not(.locked) { transform: scale(0.95); }
         .level-btn.locked { filter: grayscale(100%) brightness(0.5); cursor: not-allowed; }
 
-        /* 戰鬥頂部 HUD */
         .top-bar { 
             display: flex; justify-content: space-between; align-items: center; padding: 10px 25px; width: 100%; 
             background: rgba(10, 20, 50, 0.4); backdrop-filter: blur(8px); border-bottom: 1px solid rgba(255,255,255,0.2); box-shadow: 0 4px 15px rgba(0,0,0,0.3); z-index: 10;
@@ -77,22 +70,20 @@
         .timer-bar-container { width: 260px; height: 12px; background: rgba(0,0,0,0.6); border-radius: 6px; margin: 10px auto; overflow: hidden; border: 1px solid rgba(255,255,255,0.5); box-shadow: inset 0 2px 5px rgba(0,0,0,0.5); }
         .timer-bar { height: 100%; background: linear-gradient(90deg, #00ffcc, #00bfff); width: 100%; box-shadow: 0 0 10px #00ffcc;}
         
-        /* 戰鬥舞台角色 */
         .battle-stage { flex: 1; position: relative; width: 100%; z-index: 5;}
-        .character { position: absolute; bottom: 30px; transition: all 0.3s ease; height: auto; object-fit: contain; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5));}
-        .mermaid { left: 8%; width: 220px; font-size: 70px;} 
-        .monster { right: 8%; width: 180px; font-size: 70px;}
-        .boss { width: 260px; filter: drop-shadow(0 0 25px rgba(255,0,0,0.8)); transform: scale(1.1); }
+        
+        .character { position: absolute; bottom: 30px; transition: all 0.3s ease; height: auto; max-height: 250px; object-fit: contain; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5));}
+        .mermaid { left: 5%; width: 200px; font-size: 70px; transform-origin: bottom left;} 
+        .monster { right: 5%; width: 200px; font-size: 70px; transform-origin: bottom right;}
+        .boss { max-height: 280px; width: 260px; filter: drop-shadow(0 0 25px rgba(255,0,0,0.8)); transform: scale(1.1); transform-origin: bottom right;}
 
-        /* 公主語音氣泡 */
         .speech-bubble {
-            position: absolute; bottom: 230px; left: 16%; width: 160px; min-height: 70px;
+            position: absolute; bottom: 250px; left: 8%; width: 150px; min-height: 60px; z-index: 20;
             background-image: url('images/ui-speech-bg.png'); background-size: 100% 100%; background-color: transparent; background-repeat: no-repeat;
-            display: flex; justify-content: center; align-items: center; text-align: center; color: #1e3799; font-size: 15px; font-weight: 900; opacity: 0; transition: opacity 0.3s, transform 0.3s; transform: translateY(10px); padding: 10px 15px 15px 15px; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3));
+            display: flex; justify-content: center; align-items: center; text-align: center; color: #1e3799; font-size: 15px; font-weight: 900; opacity: 0; transition: opacity 0.3s, transform 0.3s; transform: translateY(10px); padding: 5px 15px 15px 15px; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3));
         }
         .speech-bubble.show { opacity: 1; transform: translateY(0); }
 
-        /* 3選1 答題氣泡按鈕 */
         .bottom-controls { display: flex; justify-content: flex-end; padding: 20px 30px; gap: 20px; background: linear-gradient(to top, rgba(0,5,30,0.8), rgba(0,5,30,0)); z-index: 10; }
         .answer-btn {
             background-image: url('images/btn-answer.png'); background-color: transparent; background-size: 100% 100%; background-repeat: no-repeat;
@@ -134,19 +125,23 @@
 </head>
 <body>
 
-<audio id="bgm" src="audio/bgm.mp3" loop></audio>
+<audio id="bgm-main" src="https://freepd.com/music/The%20Magical%20Surprise.mp3" loop></audio>
+<audio id="bgm-battle" src="https://freepd.com/music/Super%20Hero.mp3" loop></audio>
 
 <div id="game-container">
-    <button id="music-btn" onclick="toggleMusic()">🎵 音樂: 關</button>
     <div class="bubbles" id="bubble-layer"></div>
 
+    <!-- 首頁 -->
     <div id="main-screen" class="screen active">
         <img src="images/logo.png" id="game-logo" alt="重返亞特蘭提斯：人魚公主與數靈聖域" onerror="this.outerHTML='<h1 style=\'margin-top:20px;\'>重返亞特蘭提斯<br>人魚公主與數靈聖域</h1>'">
         <div class="subtitle">✨ 魔法少女 x 九九乘法 ✨</div>
         <button class="btn" onclick="firstStart()">開始冒險</button>
         <button class="btn" onclick="showGallery()">夢幻相簿 & 夥伴</button>
+        <!-- 音樂控制按鈕移到這裡，套用 .btn 樣式 -->
+        <button class="btn" id="music-btn" onclick="toggleMusic()">🎵 音效/音樂: 關</button>
     </div>
 
+    <!-- 關卡選擇 -->
     <div id="level-screen" class="screen">
         <h2 style="color: #fff; text-shadow: 0 4px 6px rgba(0,0,0,0.8); margin-top: 0; margin-bottom: 15px; letter-spacing: 2px;">選擇關卡</h2>
         <div class="level-grid" id="level-grid"></div>
@@ -160,6 +155,7 @@
         <button class="btn" style="width: 150px;" onclick="showScreen('main-screen')">返回</button>
     </div>
 
+    <!-- 相簿 -->
     <div id="gallery-screen" class="screen">
         <h2 style="color: #fff; text-shadow: 0 4px 6px rgba(0,0,0,0.8); margin-top:0; margin-bottom: 5px; letter-spacing: 2px;">星光好朋友相簿</h2>
         <div style="font-size: 14px; margin-bottom: 15px; color: #00ffff; font-weight: bold; text-shadow: 1px 1px 2px #000;">點擊已解鎖的卡牌來裝備夥伴 Buff</div>
@@ -181,25 +177,22 @@
             <div class="timer-bar-container"><div class="timer-bar" id="ui-timer"></div></div>
         </div>
         <div class="battle-stage">
-            <!-- 人魚公主 -->
             <img src="images/char-mermaid.png" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" class="character mermaid" id="char-mermaid">
             <div style="display:none; font-size: 70px;" class="character mermaid" id="fallback-mermaid">🧜‍♀️</div>
             
-            <!-- 對話氣泡 -->
             <div class="speech-bubble" id="ui-speech">準備好了嗎？</div>
             
-            <!-- 數字海怪 -->
             <img src="" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" class="character monster" id="char-monster">
             <div style="display:none; font-size: 70px;" class="character monster" id="fallback-monster">👾</div>
         </div>
         <div class="bottom-controls">
-            <!-- 答題氣泡按鈕 -->
             <button class="answer-btn" onclick="checkAnswer(0)" id="btn-ans-0">1</button>
             <button class="answer-btn" onclick="checkAnswer(1)" id="btn-ans-1">2</button>
             <button class="answer-btn" onclick="checkAnswer(2)" id="btn-ans-2">3</button>
         </div>
     </div>
 
+    <!-- 結算畫面 -->
     <div id="result-screen" class="screen">
         <h1 id="result-title" style="font-size: 45px;">關卡完成！</h1>
         <div class="subtitle" id="result-desc" style="font-size: 22px; line-height: 1.5;"></div>
@@ -208,6 +201,42 @@
 </div>
 
 <script>
+    // --- 音效生成器 ---
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    let audioCtx;
+    
+    function initAudio() {
+        if (!audioCtx) audioCtx = new AudioContext();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+    }
+
+    function playSFX(type) {
+        if (!isMusicPlaying || !audioCtx) return;
+        const osc = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        osc.connect(gainNode); gainNode.connect(audioCtx.destination);
+        const now = audioCtx.currentTime;
+        
+        if (type === 'correct') {
+            osc.type = 'sine'; osc.frequency.setValueAtTime(880, now); osc.frequency.setValueAtTime(1108.73, now + 0.1); 
+            gainNode.gain.setValueAtTime(0.2, now); gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+            osc.start(now); osc.stop(now + 0.3);
+        } else if (type === 'wrong') {
+            osc.type = 'sawtooth'; osc.frequency.setValueAtTime(150, now);
+            gainNode.gain.setValueAtTime(0.15, now); gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+            osc.start(now); osc.stop(now + 0.4);
+        } else if (type === 'win') {
+            osc.type = 'triangle'; osc.frequency.setValueAtTime(523.25, now); osc.frequency.setValueAtTime(659.25, now + 0.1); osc.frequency.setValueAtTime(783.99, now + 0.2); osc.frequency.setValueAtTime(1046.50, now + 0.3); 
+            gainNode.gain.setValueAtTime(0.2, now); gainNode.gain.linearRampToValueAtTime(0, now + 0.6);
+            osc.start(now); osc.stop(now + 0.6);
+        } else if (type === 'lose') {
+            osc.type = 'triangle'; osc.frequency.setValueAtTime(300, now); osc.frequency.setValueAtTime(250, now + 0.2); osc.frequency.setValueAtTime(200, now + 0.4);
+            gainNode.gain.setValueAtTime(0.2, now); gainNode.gain.linearRampToValueAtTime(0, now + 0.8);
+            osc.start(now); osc.stop(now + 0.8);
+        }
+    }
+
+    // --- 背景氣泡 ---
     function createBubbles() {
         const layer = document.getElementById('bubble-layer');
         setInterval(() => {
@@ -216,31 +245,74 @@
             bubble.classList.add('bubble');
             const size = Math.random() * 20 + 5; 
             bubble.style.width = `${size}px`; bubble.style.height = `${size}px`;
-            bubble.style.left = `${Math.random() * 100}%`;
-            bubble.style.animationDuration = `${Math.random() * 3 + 3}s`; 
-            layer.appendChild(bubble);
-            setTimeout(() => bubble.remove(), 6000);
+            bubble.style.left = `${Math.random() * 100}%`; bubble.style.animationDuration = `${Math.random() * 3 + 3}s`; 
+            layer.appendChild(bubble); setTimeout(() => bubble.remove(), 6000);
         }, 300);
     }
     createBubbles();
 
+    // --- 音樂系統控制 ---
     let isMusicPlaying = false;
-    const bgm = document.getElementById('bgm');
-    const musicBtn = document.getElementById('music-btn');
+    let hasInteractedWithMusic = false; // 紀錄玩家是否手動操作過
+    const bgmMain = document.getElementById('bgm-main');
+    const bgmBattle = document.getElementById('bgm-battle');
+    
     function toggleMusic() {
+        initAudio(); 
+        hasInteractedWithMusic = true;
+        const musicBtn = document.getElementById('music-btn');
+        
         if (isMusicPlaying) {
-            bgm.pause(); musicBtn.innerText = "🎵 音樂: 關"; musicBtn.style.background = "rgba(255, 255, 255, 0.1)"; isMusicPlaying = false;
+            bgmMain.pause(); 
+            bgmBattle.pause();
+            musicBtn.innerText = "🎵 音效/音樂: 關"; 
+            isMusicPlaying = false;
         } else {
-            bgm.play().then(() => { 
-                musicBtn.innerText = "🎵 音樂: 開"; musicBtn.style.background = "rgba(0, 255, 204, 0.3)"; isMusicPlaying = true; 
-            }).catch(e => { console.log("瀏覽器擋住了自動播放"); });
+            isMusicPlaying = true;
+            musicBtn.innerText = "🎵 音效/音樂: 開"; 
+            
+            const activeScreen = document.querySelector('.screen.active').id;
+            if (activeScreen === 'gameplay-screen') {
+                let p = bgmBattle.play(); if (p !== undefined) p.catch(e=>{});
+            } else {
+                let p = bgmMain.play(); if (p !== undefined) p.catch(e=>{});
+            }
         }
     }
+
+    function switchBGM(screenId) {
+        if (!isMusicPlaying) return;
+        
+        if (screenId === 'gameplay-screen') {
+            bgmMain.pause();
+            bgmBattle.currentTime = 0; 
+            let p = bgmBattle.play(); if (p !== undefined) p.catch(e=>{});
+        } else {
+            bgmBattle.pause();
+            if (bgmMain.paused) {
+                let p = bgmMain.play(); if (p !== undefined) p.catch(e=>{});
+            }
+        }
+    }
+
     function firstStart() {
-        if (!isMusicPlaying) toggleMusic();
+        initAudio();
+        // 只有在玩家從未操作過設定，且目前是關閉的狀態下，才會在初次點擊開始時自動播放
+        if (!hasInteractedWithMusic && !isMusicPlaying) {
+            toggleMusic();
+        }
         showScreen('level-screen');
     }
 
+    // --- 畫面切換邏輯 ---
+    function showScreen(id) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        document.getElementById(id).scrollTop = 0; 
+        switchBGM(id);
+    }
+
+    // --- 遊戲資料存檔 ---
     let saveFile = JSON.parse(localStorage.getItem('mermaidSave')) || { unlockedLevel: 1, unlockedCards: [], equippedPartner: null };
     if(saveFile.equippedPartner === undefined) saveFile.equippedPartner = null;
 
@@ -272,12 +344,6 @@
         document.getElementById('special-modes-ui').style.display = saveFile.unlockedLevel > 9 ? 'flex' : 'none';
     }
     updateLevelUI();
-
-    function showScreen(id) {
-        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-        document.getElementById(id).scrollTop = 0; 
-    }
 
     function showGallery() {
         const grid = document.getElementById('gallery-grid');
@@ -313,7 +379,7 @@
     function showSpeech(text, isGood = true) {
         const bubble = document.getElementById('ui-speech');
         bubble.innerHTML = text; 
-        bubble.style.color = isGood ? '#1e3799' : '#e84118'; // 答對顯示藍色，答錯顯示紅色 
+        bubble.style.color = isGood ? '#1e3799' : '#e84118'; 
         bubble.classList.add('show');
         setTimeout(() => { bubble.classList.remove('show'); }, 2000);
     }
@@ -375,10 +441,16 @@
     }
 
     function setupMonster(index) {
-        document.getElementById('char-monster').src = `images/${monsterImg[index]}`;
-        document.getElementById('fallback-monster').innerText = monsters[index];
-        document.getElementById('char-monster').className = 'character monster';
-        document.getElementById('fallback-monster').className = 'character monster';
+        const monsterPic = document.getElementById('char-monster');
+        const fallbackPic = document.getElementById('fallback-monster');
+        
+        monsterPic.style.display = 'block';
+        fallbackPic.style.display = 'none';
+        
+        monsterPic.src = `images/${monsterImg[index]}`;
+        fallbackPic.innerText = monsters[index];
+        monsterPic.className = 'character monster';
+        fallbackPic.className = 'character monster';
     }
 
     function generateQuestion() {
@@ -431,18 +503,13 @@
     }
 
     function handleCorrect(mermaid) {
-        // ========== 核心更新：動態切換攻擊圖片 ==========
-        if (mermaid.id === 'char-mermaid') { // 確保不是 Emoji 替身
+        playSFX('correct'); 
+
+        if (mermaid.id === 'char-mermaid') { 
             mermaid.src = 'images/char-mermaid-atk.png';
-            
-            // 如果玩家沒有 char-mermaid-atk.png，這裡會有一道防護網退回待機圖
             mermaid.onerror = function() { this.src = 'images/char-mermaid.png'; };
-            
-            setTimeout(() => { 
-                mermaid.src = 'images/char-mermaid.png'; 
-            }, 400); // 動畫結束後切換回待機狀態
+            setTimeout(() => { mermaid.src = 'images/char-mermaid.png'; }, 400); 
         }
-        // ============================================
 
         mermaid.classList.add('anim-attack');
         showSpeech(["太棒了！", "答對了！", "真理魔法！"][Math.floor(Math.random()*3)], true);
@@ -479,6 +546,8 @@
     }
 
     function handleWrong(msg, mermaid) {
+        playSFX('wrong'); 
+
         const gameContainer = document.getElementById('game-container');
         gameContainer.classList.add('shake-screen');
         setTimeout(() => gameContainer.classList.remove('shake-screen'), 400);
@@ -502,6 +571,10 @@
 
     function endGame(isWin) {
         clearInterval(state.timerInterval);
+        
+        if(isWin) playSFX('win');
+        else playSFX('lose');
+
         const title = document.getElementById('result-title');
         const desc = document.getElementById('result-desc');
         
