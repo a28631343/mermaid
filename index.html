@@ -1,3 +1,26 @@
+這真是一個精準且具備深度的排版與特效優化建議！
+
+您點出的核心問題非常到位：
+
+1. **背景移動 Bug**：原本的 `transform: translateX` 會把**整個戰鬥舞台（包含上面的角色與 UI）**整塊推走，才導致畫面位移的 Bug。我們不該移動容器，而是該**「移動背景圖座標 (`background-position`)」**。
+2. **每次前進 15%**：這個幅度確實能營造出「我們還在同一片海域邊打邊往前游」的沉浸感。
+3. **DOM 結構層級化**：讓答題按鈕完全貼合在題目下方，並將戰鬥畫面獨立在最下方，背景圖統一由題目下緣一路延伸到底部。
+
+我為您進行了「極致平滑卷軸與戰鬥排版」的全面重構：
+
+### 🛠️ 本次優化亮點：
+
+* **完美 15vw 無縫卷軸**：現在打敗怪物前進時，畫面跟角色**絕對不會跟著位移**，只有海底背景圖會平滑向左捲動 `15%` (`15vw`)，呈現完美的 2D 橫向卷軸探索感！
+* **上半部解題、下半部戰鬥**：
+* **上半區**：狀態列 -> 題目區 -> 答題區。完全緊密連接，答題區不再墊任何黑色漸層，直接懸浮在海底背景上。
+* **下半區**：專屬的戰鬥舞台（`.stage-elements`）。因為上面排版理順了，對話氣泡現在完美歸位，精準浮在人魚公主的頭頂斜上方，完全不遮擋題目或按鈕。
+
+
+* **底部填滿設計**：海底背景從題目下方開始向下 `cover`（填滿）。
+
+請將這份 **「平滑卷軸與完美分區版」** 程式碼，完整覆蓋您的 `index.html`：
+
+```html
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
@@ -115,7 +138,8 @@
         @keyframes pulse-boss { 0% { box-shadow: 0 0 8px #ff4757; } 50% { box-shadow: 0 0 25px #ff0055, inset 0 0 10px #ff0055; transform: scale(1.02); } 100% { box-shadow: 0 0 8px #ff4757; } }
         .level-btn-wrapper.cleared .level-btn.boss-level-btn { border-color: #f1c40f; background: linear-gradient(135deg, #b33939, #660000); }
 
-        /* ====== 戰鬥畫面 ====== */
+
+        /* ====== 戰鬥排版：極致流暢分層 ====== */
         #gameplay-screen { 
             background-color: #000851; z-index: 5; 
             padding: 0 !important; overflow: hidden; background: none;
@@ -123,6 +147,7 @@
             height: 100%; width: 100%;
         }
         
+        /* 1. 頂部狀態列 */
         .top-bar { 
             display: flex; justify-content: space-between; align-items: center; 
             padding: max(15px, env(safe-area-inset-top, 15px)) 15px 8px 15px; 
@@ -134,6 +159,7 @@
         .hp-icon { width: 22px; height: 22px; object-fit: contain; }
         .progress-bar { font-size: 15px; color: #f1c40f; font-weight: 900; text-shadow: 0 2px 4px rgba(0,0,0,0.8); text-align: right; line-height: 1.2; }
 
+        /* 2. 問題區 */
         .question-area { 
             text-align: center; color: #fff; text-shadow: 0 0 20px #00ffff, 0 4px 8px rgba(0,0,0,0.8); 
             margin-top: 15px; transition: all 0.2s; z-index: 10; flex-shrink: 0;
@@ -141,42 +167,49 @@
             width: 100%;
         }
         #ui-question { font-size: 45px; font-weight: 900; margin-bottom: 10px; }
-        
         .timer-bar-container { width: 260px; height: 12px; background: rgba(0,0,0,0.6); border-radius: 6px; overflow: hidden; border: 1px solid rgba(255,255,255,0.5); margin-bottom: 10px; }
         .timer-bar { height: 100%; background: linear-gradient(90deg, #00ffcc, #00bfff); width: 100%; transition: width 0.1s linear;}
         
-        /* 答題按鈕區：緊接在問題區下方，不墊漸層色塊 */
+        /* 3+4. 戰鬥舞台 (背景圖從這裡開始往下填滿) */
+        .battle-stage { 
+            flex: 1; /* 自動填補剩下所有高度 */
+            display: flex; flex-direction: column; justify-content: flex-start;
+            background-color: #000851; /* 底部填塞色 (預防螢幕超長) */
+            background-image: url('images/bg-underwater.jpg'); 
+            background-size: auto 100%; /* 確保高度 100% 貼齊上下，寬度保持比例延伸 */
+            background-position: 0vw top; /* 背景對齊頂部 (題目區下緣) */
+            background-repeat: repeat-x; /* 水平無限卷軸 */
+            transition: background-position 0.8s ease-in-out; /* 平滑 15% 卷軸特效 */
+            width: 100%; z-index: 5;
+        }
+
+        /* 3. 答題按鈕區 (緊接在舞台最頂端，完全透明，沒有漸層色塊) */
         .bottom-controls { 
             display: flex; justify-content: space-evenly; align-items: center; 
-            padding: 5px 10px 15px 10px; width: 100%; z-index: 10; flex-shrink: 0; 
-            background: transparent; /* 取消底部墊的漸層色塊 */
+            padding: 5px 10px 15px 10px; width: 100%; z-index: 15; flex-shrink: 0; 
+            background: transparent; 
         }
         .answer-btn { background-image: url('images/btn-answer.png'); background-color: transparent; background-size: contain; background-position: center; background-repeat: no-repeat; border: none; width: 28vw; max-width: 90px; height: 28vw; max-height: 90px; font-size: 32px; font-weight: 900; color: #fff; text-shadow: 0 3px 6px rgba(0,0,0,0.8), 0 0 10px rgba(0,255,255,0.5); cursor: pointer; display: flex; justify-content: center; align-items: center; filter: drop-shadow(0 5px 8px rgba(0,0,0,0.5)); transition: all 0.1s; }
         .answer-btn:active { transform: scale(0.9) translateY(4px); filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5)); }
         .answer-btn.flash { filter: brightness(1.5) drop-shadow(0 0 15px rgba(0,255,255,0.8)); transform: scale(1.05); }
 
-        /* 戰鬥舞台：自動填滿下半部 */
-        .battle-stage { 
-            flex: 1; /* 自動填補剩餘高度 */
-            position: relative; width: 100%; min-height: 30vh; 
-            z-index: 5; background-image: url('images/bg-underwater.jpg'); 
-            background-size: cover; 
-            background-position: center top; /* 背景貼齊上方，向下延伸 */
-            background-repeat: no-repeat; 
-            margin-bottom: env(safe-area-inset-bottom, 20px);
+        /* 4. 戰鬥角色層 (位在答題區下方，佔滿剩下的舞台) */
+        .stage-elements {
+            flex: 1; position: relative; width: 100%;
         }
-        
-        .character { position: absolute; bottom: 18%; transition: all 0.3s ease; height: auto; max-height: 60%; max-width: 42vw; object-fit: contain; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5));}
+
+        .character { position: absolute; bottom: calc(10% + env(safe-area-inset-bottom, 5px)); transition: all 0.3s ease; height: auto; max-height: 70%; max-width: 42vw; object-fit: contain; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5));}
         .mermaid { left: 2%; transform-origin: bottom center;} 
         .monster { right: 2%; transform-origin: bottom center;}
         
-        .partner-container { position: absolute; left: 32%; bottom: 35%; width: 22vw; max-width: 85px; height: 22vw; max-height: 85px; z-index: 8; display: none; }
+        .partner-container { position: absolute; left: 32%; bottom: calc(25% + env(safe-area-inset-bottom, 5px)); width: 22vw; max-width: 85px; height: 22vw; max-height: 85px; z-index: 8; display: none; }
         .partner-img { width: 100%; height: 100%; object-fit: contain; transform: scaleX(-1); filter: drop-shadow(0 5px 10px rgba(255,255,255,0.5)); }
 
+        /* 對話氣泡：定位在公主頭部斜上方，絕對跟隨 */
         .speech-bubble { 
             position: absolute; 
-            bottom: 75%; 
-            left: 10%; 
+            bottom: calc(55% + env(safe-area-inset-bottom, 5px)); 
+            left: 8%; 
             background-image: url('images/ui-speech-bg.png'); background-size: 100% 100%; 
             background-color: transparent; background-repeat: no-repeat; 
             display: flex; justify-content: center; align-items: center; text-align: center; 
@@ -192,23 +225,17 @@
         .adv-monster { filter: hue-rotate(150deg) saturate(1.5) drop-shadow(0 10px 15px rgba(0,0,0,0.5)); }
         .elite-monster { transform: scale(1.15); filter: drop-shadow(0 0 15px #ff4757) contrast(1.2) saturate(1.5); }
         .adv-monster.elite-monster { filter: hue-rotate(150deg) drop-shadow(0 0 15px #ff4757) contrast(1.2) saturate(1.5); }
-        .boss { max-height: 75%; max-width: 55vw; right: 0; filter: drop-shadow(0 0 25px rgba(255,0,0,0.8)); transform: scale(1.1); }
+        .boss { max-height: 80%; max-width: 55vw; right: 0; filter: drop-shadow(0 0 25px rgba(255,0,0,0.8)); transform: scale(1.1); }
         .adv-monster.boss { filter: hue-rotate(150deg) drop-shadow(0 0 25px rgba(255,0,0,0.8)); }
 
-        .monster-ui { position: absolute; right: 5%; bottom: 75%; width: 35vw; max-width: 150px; text-align: center; transition: all 0.3s; z-index: 15; display: none; }
-        .monster-ui.boss-ui { bottom: 85%; width: 45vw; max-width: 200px; right: 5%; } 
-        .monster-ui.elite-ui { bottom: 80%; } 
+        .monster-ui { position: absolute; right: 5%; bottom: 65%; width: 35vw; max-width: 150px; text-align: center; transition: all 0.3s; z-index: 15; display: none; }
+        .monster-ui.boss-ui { bottom: 75%; width: 45vw; max-width: 200px; right: 5%; } 
+        .monster-ui.elite-ui { bottom: 70%; } 
         .monster-hp-bar { width: 100%; height: 12px; border: 2px solid #fff; border-radius: 6px; background: rgba(0,0,0,0.8); overflow: hidden; }
         .monster-hp-fill { height: 100%; background: linear-gradient(90deg, #ff4757, #ff0000); width: 100%; transition: width 0.2s ease-out; }
         .monster-hp-text { color: #fff; font-size: 13px; font-weight: 900; text-shadow: 1px 1px 3px #000; margin-top: 4px;}
 
-        /* ====== 修復：背景移動動畫，改為每次平滑移動 15vw，而非直接 100vw ====== */
-        .anim-dash-forward { animation: bgRun 0.8s ease-in-out forwards; }
-        @keyframes bgRun { 
-            0% { transform: translateX(0); } 
-            100% { transform: translateX(-15vw); } 
-        }
-        /* ====================================================================== */
+        /* ====== 修復：移除了背景整塊推移的 CSS ====== */
         
         .anim-mermaid-enter { animation: mermaidEnter 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
         @keyframes mermaidEnter { 0% { transform: translateX(-150vw); opacity: 0; } 100% { transform: translateX(0); opacity: 1; } }
@@ -383,29 +410,35 @@
             <div class="timer-bar-container"><div class="timer-bar" id="ui-timer"></div></div>
         </div>
         
-        <div class="bottom-controls">
-            <button class="answer-btn" onclick="checkAnswer(0)" id="btn-ans-0">1</button>
-            <button class="answer-btn" onclick="checkAnswer(1)" id="btn-ans-1">2</button>
-            <button class="answer-btn" onclick="checkAnswer(2)" id="btn-ans-2">3</button>
-        </div>
-        
+        <!-- 背景圖與戰鬥舞台從這區開始填滿往下 -->
         <div class="battle-stage" id="battle-stage-bg">
-            <img src="images/char-mermaid.png" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" class="character mermaid" id="char-mermaid">
-            <div style="display:none; font-size: 70px;" class="character mermaid" id="fallback-mermaid">🧜‍♀️</div>
             
-            <div id="char-partner-container" class="partner-container">
-                <img src="" id="char-partner" class="partner-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                <div style="display:none; font-size: 40px; transform: scaleX(-1);" id="fallback-partner">✨</div>
+            <!-- 答題區：放入戰鬥舞台的最頂層，透明懸浮，且沒有色塊 -->
+            <div class="bottom-controls">
+                <button class="answer-btn" onclick="checkAnswer(0)" id="btn-ans-0">1</button>
+                <button class="answer-btn" onclick="checkAnswer(1)" id="btn-ans-1">2</button>
+                <button class="answer-btn" onclick="checkAnswer(2)" id="btn-ans-2">3</button>
             </div>
-
-            <div class="speech-bubble" id="ui-speech">準備好了嗎？</div>
             
-            <img src="" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" class="character monster" id="char-monster">
-            <div style="display:none; font-size: 70px;" class="character monster" id="fallback-monster">👾</div>
+            <!-- 角色與氣泡舞台 -->
+            <div class="stage-elements">
+                <img src="images/char-mermaid.png" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" class="character mermaid" id="char-mermaid">
+                <div style="display:none; font-size: 70px;" class="character mermaid" id="fallback-mermaid">🧜‍♀️</div>
+                
+                <div id="char-partner-container" class="partner-container">
+                    <img src="" id="char-partner" class="partner-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <div style="display:none; font-size: 40px; transform: scaleX(-1);" id="fallback-partner">✨</div>
+                </div>
 
-            <div id="monster-ui" class="monster-ui">
-                <div class="monster-hp-bar"><div id="monster-hp-fill" class="monster-hp-fill"></div></div>
-                <div id="monster-hp-text" class="monster-hp-text">HP: 2/2</div>
+                <div class="speech-bubble" id="ui-speech">準備好了嗎？</div>
+                
+                <img src="" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" class="character monster" id="char-monster">
+                <div style="display:none; font-size: 70px;" class="character monster" id="fallback-monster">👾</div>
+
+                <div id="monster-ui" class="monster-ui">
+                    <div class="monster-hp-bar"><div id="monster-hp-fill" class="monster-hp-fill"></div></div>
+                    <div id="monster-hp-text" class="monster-hp-text">HP: 2/2</div>
+                </div>
             </div>
         </div>
         
@@ -440,6 +473,9 @@
     let currentViewingAdvanced = false; 
     let isAnimating = false; 
     let bubbleInterval = null; 
+    
+    // 背景卷軸變數
+    let currentBgPosX = 0;
 
     window.onload = function() {
         const overlay = document.getElementById('fade-overlay');
@@ -898,6 +934,10 @@
         state.level = level; state.monstersDefeated = 0; state.isBoss = false; state.isEndless = false;
         isAnimating = false; 
         
+        // 進入關卡時重置背景卷軸位置
+        currentBgPosX = 0;
+        document.getElementById('battle-stage-bg').style.backgroundPosition = '0vw top';
+
         let startMsg = applyBuffs();
         state.monsterMaxHp = 2; 
         
@@ -921,6 +961,10 @@
         state.level = 'endless'; state.monstersDefeated = 0; state.endlessScore = 0; state.isBoss = false; state.isEndless = true; state.isHardMode = true;
         isAnimating = false; 
 
+        // 進入關卡時重置背景卷軸位置
+        currentBgPosX = 0;
+        document.getElementById('battle-stage-bg').style.backgroundPosition = '0vw top';
+
         let startMsg = applyBuffs();
         state.monsterMaxHp = 2; state.monsterHp = state.monsterMaxHp;
         
@@ -938,19 +982,17 @@
         
         mermaid.classList.remove('anim-mermaid-enter', 'anim-mermaid-run', 'anim-attack', 'anim-hurt');
         partnerContainer.classList.remove('anim-mermaid-enter', 'anim-mermaid-run', 'anim-partner-atk');
-        
-        // 移除先前的背景移動動畫
-        gameplayBg.classList.remove('anim-dash-forward');
         void mermaid.offsetWidth; 
         void partnerContainer.offsetWidth;
-        void gameplayBg.offsetWidth; 
 
         if (isFirstSpawn) {
             mermaid.classList.add('anim-mermaid-enter');
             if(saveFile.equippedPartner !== null) partnerContainer.classList.add('anim-mermaid-enter');
         } else {
-            // 重新加上背景移動動畫 (現在是平滑移動 15vw)
-            gameplayBg.classList.add('anim-dash-forward');
+            // 平滑卷軸推進 15vw，而不使用會移動整個 DIV 的 transform
+            currentBgPosX -= 15;
+            gameplayBg.style.backgroundPosition = `${currentBgPosX}vw top`;
+            
             mermaid.classList.add('anim-mermaid-run');
             if(saveFile.equippedPartner !== null) partnerContainer.classList.add('anim-mermaid-run');
         }
@@ -1278,3 +1320,5 @@
 </script>
 </body>
 </html>
+
+```
