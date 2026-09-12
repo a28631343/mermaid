@@ -34,8 +34,8 @@
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
             display: flex; flex-direction: column; justify-content: flex-start; align-items: center; 
             z-index: 10; background-size: cover; background-position: center; overflow-y: auto; 
-            padding-top: max(25px, env(safe-area-inset-top, 25px));
-            padding-bottom: max(15px, env(safe-area-inset-bottom, 15px));
+            padding-top: max(45px, env(safe-area-inset-top, 45px));
+            padding-bottom: max(20px, env(safe-area-inset-bottom, 20px));
             padding-left: 15px; padding-right: 15px;
             opacity: 0; visibility: hidden; transition: opacity 0.5s ease, visibility 0.5s; 
         }
@@ -115,11 +115,11 @@
         @keyframes pulse-boss { 0% { box-shadow: 0 0 8px #ff4757; } 50% { box-shadow: 0 0 25px #ff0055, inset 0 0 10px #ff0055; transform: scale(1.02); } 100% { box-shadow: 0 0 8px #ff4757; } }
         .level-btn-wrapper.cleared .level-btn.boss-level-btn { border-color: #f1c40f; background: linear-gradient(135deg, #b33939, #660000); }
 
-        /* ====== 戰鬥畫面排版防遮擋終極修復 ====== */
+        /* ====== 戰鬥畫面：依照 Top Bar -> Question -> Stage -> Buttons 垂直排列 ====== */
         #gameplay-screen { 
             background-color: #000851; z-index: 5; 
             padding: 0 !important; overflow: hidden; background: none;
-            display: flex; flex-direction: column; justify-content: space-between; 
+            display: flex; flex-direction: column; justify-content: flex-start; 
             height: 100%; width: 100%;
         }
         
@@ -138,31 +138,17 @@
             text-align: center; color: #fff; text-shadow: 0 0 20px #00ffff, 0 4px 8px rgba(0,0,0,0.8); 
             margin-top: 10px; transition: all 0.2s; z-index: 10; flex-shrink: 0;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
+            width: 100%;
         }
-        
         #ui-question { font-size: 45px; font-weight: 900; margin-bottom: 5px; }
-
-        /* 新增：將對話氣泡放置在題目正下方 */
-        .speech-bubble { 
-            background-image: url('images/ui-speech-bg.png'); background-size: 100% 100%; 
-            background-color: transparent; background-repeat: no-repeat; 
-            display: flex; justify-content: center; align-items: center; text-align: center; 
-            color: #1e3799; font-size: 13px; font-weight: 900; 
-            width: 150px; min-height: 35px; padding: 5px 15px 10px 15px; margin-bottom: 5px;
-            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.5)); 
-            opacity: 0; transition: opacity 0.3s, transform 0.3s; 
-            transform: translateY(-10px) scale(0.9); pointer-events: none;
-        }
-        .speech-bubble.show { opacity: 1; transform: translateY(0) scale(1); }
-        .speech-bubble.boss-skill { color: #ff0055; text-shadow: 0 0 5px rgba(255,0,0,0.5); font-size: 14px; }
 
         .timer-bar-container { width: 260px; height: 12px; background: rgba(0,0,0,0.6); border-radius: 6px; overflow: hidden; border: 1px solid rgba(255,255,255,0.5); }
         .timer-bar { height: 100%; background: linear-gradient(90deg, #00ffcc, #00bfff); width: 100%; transition: width 0.1s linear;}
         
-        /* 戰鬥舞台：佔據剩餘空間，防止下方按鈕被遮蔽 */
         .battle-stage { 
-            flex: 1; position: relative; width: 100%; min-height: 25vh; 
-            z-index: 5; background-image: url('images/bg-underwater.jpg'); 
+            flex: 1; /* 自動填滿剩餘高度 */
+            position: relative; width: 100%; z-index: 5; 
+            background-image: url('images/bg-underwater.jpg'); 
             background-size: auto 100%; background-position: 0 center; background-repeat: repeat-x; 
         }
         
@@ -172,7 +158,34 @@
         
         .partner-container { position: absolute; left: 32%; bottom: 35%; width: 22vw; max-width: 85px; height: 22vw; max-height: 85px; z-index: 8; display: none; }
         .partner-img { width: 100%; height: 100%; object-fit: contain; transform: scaleX(-1); filter: drop-shadow(0 5px 10px rgba(255,255,255,0.5)); }
-        
+
+        /* ====== 對話氣泡：定位回公主頭部偏上方 ====== */
+        .speech-bubble { 
+            position: absolute; 
+            bottom: 60%; left: 8%; 
+            background-image: url('images/ui-speech-bg.png'); background-size: 100% 100%; 
+            background-color: transparent; background-repeat: no-repeat; 
+            display: flex; justify-content: center; align-items: center; text-align: center; 
+            color: #1e3799; font-size: 13px; font-weight: 900; 
+            width: 120px; min-height: 40px; padding: 5px 10px 10px 10px;
+            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.5)); 
+            opacity: 0; transition: opacity 0.3s, transform 0.3s; 
+            transform: translateY(15px) scale(0.9); z-index: 20; pointer-events: none;
+        }
+        .speech-bubble.show { opacity: 1; transform: translateY(0) scale(1); }
+        .speech-bubble.boss-skill { color: #ff0055; text-shadow: 0 0 5px rgba(255,0,0,0.5); font-size: 14px; }
+        /* ================================================= */
+
+        .bottom-controls { 
+            display: flex; justify-content: space-evenly; align-items: center; 
+            padding: 10px 10px max(15px, env(safe-area-inset-bottom, 15px)) 10px; 
+            width: 100%; background: linear-gradient(to top, rgba(0,5,30,1) 40%, rgba(0,5,30,0)); 
+            z-index: 10; flex-shrink: 0; 
+        }
+        .answer-btn { background-image: url('images/btn-answer.png'); background-color: transparent; background-size: contain; background-position: center; background-repeat: no-repeat; border: none; width: 28vw; max-width: 90px; height: 28vw; max-height: 90px; font-size: 32px; font-weight: 900; color: #fff; text-shadow: 0 3px 6px rgba(0,0,0,0.8), 0 0 10px rgba(0,255,255,0.5); cursor: pointer; display: flex; justify-content: center; align-items: center; filter: drop-shadow(0 5px 8px rgba(0,0,0,0.5)); transition: all 0.1s; }
+        .answer-btn:active { transform: scale(0.9) translateY(4px); filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5)); }
+        .answer-btn.flash { filter: brightness(1.5) drop-shadow(0 0 15px rgba(0,255,255,0.8)); transform: scale(1.05); }
+
         .adv-monster { filter: hue-rotate(150deg) saturate(1.5) drop-shadow(0 10px 15px rgba(0,0,0,0.5)); }
         .elite-monster { transform: scale(1.15); filter: drop-shadow(0 0 15px #ff4757) contrast(1.2) saturate(1.5); }
         .adv-monster.elite-monster { filter: hue-rotate(150deg) drop-shadow(0 0 15px #ff4757) contrast(1.2) saturate(1.5); }
@@ -185,18 +198,6 @@
         .monster-hp-bar { width: 100%; height: 12px; border: 2px solid #fff; border-radius: 6px; background: rgba(0,0,0,0.8); overflow: hidden; }
         .monster-hp-fill { height: 100%; background: linear-gradient(90deg, #ff4757, #ff0000); width: 100%; transition: width 0.2s ease-out; }
         .monster-hp-text { color: #fff; font-size: 13px; font-weight: 900; text-shadow: 1px 1px 3px #000; margin-top: 4px;}
-
-        /* 答題按鈕區塊：保留高度與安全下距，絕不變形 */
-        .bottom-controls { 
-            display: flex; justify-content: space-evenly; align-items: center; 
-            padding: 10px 10px max(15px, env(safe-area-inset-bottom, 15px)) 10px; 
-            width: 100%; background: linear-gradient(to top, rgba(0,5,30,1) 40%, rgba(0,5,30,0)); 
-            z-index: 10; flex-shrink: 0; 
-        }
-        .answer-btn { background-image: url('images/btn-answer.png'); background-color: transparent; background-size: contain; background-position: center; background-repeat: no-repeat; border: none; width: 28vw; max-width: 90px; height: 28vw; max-height: 90px; font-size: 32px; font-weight: 900; color: #fff; text-shadow: 0 3px 6px rgba(0,0,0,0.8), 0 0 10px rgba(0,255,255,0.5); cursor: pointer; display: flex; justify-content: center; align-items: center; filter: drop-shadow(0 5px 8px rgba(0,0,0,0.5)); transition: all 0.1s; }
-        .answer-btn:active { transform: scale(0.9) translateY(4px); filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5)); }
-        .answer-btn.flash { filter: brightness(1.5) drop-shadow(0 0 15px rgba(0,255,255,0.8)); transform: scale(1.05); }
-        /* ======================================================= */
 
         .anim-dash-forward { animation: bgRun 0.8s linear forwards; }
         @keyframes bgRun { 0% { background-position-x: 0; } 100% { background-position-x: -100vw; } }
@@ -364,23 +365,16 @@
     <!-- ====== 戰鬥畫面 ====== -->
     <div id="gameplay-screen" class="screen">
         
-        <!-- 頂部進度條 -->
         <div class="top-bar">
             <div class="hp-section"><div id="ui-hp"></div></div>
             <div class="progress-bar" id="ui-progress">🚩 進度: 0/3</div>
         </div>
         
-        <!-- 問題區域 (包含現在移到這裡的對話氣泡) -->
         <div class="question-area">
             <div id="ui-question">2 x 3 = ?</div>
-            
-            <!-- 對話氣泡已移至題目與計時條中間 -->
-            <div class="speech-bubble" id="ui-speech">準備好了嗎？</div>
-            
             <div class="timer-bar-container"><div class="timer-bar" id="ui-timer"></div></div>
         </div>
         
-        <!-- 戰鬥舞台 -->
         <div class="battle-stage" id="battle-stage-bg">
             <img src="images/char-mermaid.png" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" class="character mermaid" id="char-mermaid">
             <div style="display:none; font-size: 70px;" class="character mermaid" id="fallback-mermaid">🧜‍♀️</div>
@@ -390,7 +384,7 @@
                 <div style="display:none; font-size: 40px; transform: scaleX(-1);" id="fallback-partner">✨</div>
             </div>
 
-            <!-- 原本這裡的氣泡已被移除，移到上方的 question-area 中 -->
+            <div class="speech-bubble" id="ui-speech">準備好了嗎？</div>
             
             <img src="" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" class="character monster" id="char-monster">
             <div style="display:none; font-size: 70px;" class="character monster" id="fallback-monster">👾</div>
@@ -401,7 +395,6 @@
             </div>
         </div>
         
-        <!-- 底部答題按鈕區 -->
         <div class="bottom-controls">
             <button class="answer-btn" onclick="checkAnswer(0)" id="btn-ans-0">1</button>
             <button class="answer-btn" onclick="checkAnswer(1)" id="btn-ans-1">2</button>
@@ -436,8 +429,8 @@
 <script>
     let gameState = 'INTRO'; 
     let currentViewingAdvanced = false; 
-    let isAnimating = false; // 防呆鎖
-    let bubbleInterval = null; // 泡泡生成計時器
+    let isAnimating = false; 
+    let bubbleInterval = null; 
 
     window.onload = function() {
         const overlay = document.getElementById('fade-overlay');
@@ -888,6 +881,11 @@
     }
 
     function startGame(level) {
+        if ((level === 10 && saveFile.unlockedLevel < 10) || (level === 20 && saveFile.unlockedLevel < 20)) {
+            alert("此大魔王關卡尚未解鎖！");
+            return;
+        }
+
         state.level = level; state.monstersDefeated = 0; state.isBoss = false; state.isEndless = false;
         isAnimating = false; 
         
