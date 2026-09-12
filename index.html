@@ -17,6 +17,13 @@
             transition: transform 0.1s; 
         }
 
+        #fade-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #000; z-index: 99999; 
+            transition: opacity 1.5s ease-in-out;
+            pointer-events: none; 
+        }
+
         .screen { 
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
             display: flex; flex-direction: column; justify-content: flex-start; align-items: center; 
@@ -24,40 +31,11 @@
             opacity: 0; visibility: hidden; transition: opacity 0.5s ease, visibility 0.5s; 
         }
         .screen.active { opacity: 1; visibility: visible; }
-
-        /* ====== 新增：開場影片畫面設定 ====== */
-        #intro-screen {
-            z-index: 99999; /* 確保在最上層 */
-            background-color: #000;
-            padding: 0; /* 覆蓋預設的 padding */
-            justify-content: center;
-        }
         
-        #intro-video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover; /* 讓影片填滿畫面，可能會裁切邊緣以保持比例 */
-            pointer-events: none; /* 避免玩家誤點暫停 */
-        }
-        
-        #skip-intro-btn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            color: #fff;
-            padding: 8px 16px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: bold;
-            z-index: 100000;
-            transition: all 0.2s;
-        }
+        #intro-screen { z-index: 99999; background-color: #000; padding: 0; justify-content: center; }
+        #intro-video { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+        #skip-intro-btn { position: absolute; top: 20px; right: 20px; background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(5px); border: 1px solid rgba(255, 255, 255, 0.5); color: #fff; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-size: 14px; font-weight: bold; z-index: 100000; transition: all 0.2s; }
         #skip-intro-btn:hover { background: rgba(255, 255, 255, 0.4); }
-        /* =================================== */
         
         #main-screen, #level-screen, #gallery-screen { background-image: url('images/bg-main.jpg'); background-color: #1a2a6c; justify-content: center; }
         #gameplay-screen { background-image: url('images/bg-underwater.jpg'); background-color: #000851; z-index: 5; justify-content: space-between; padding: 0; overflow: hidden;}
@@ -66,11 +44,7 @@
         h1 { font-size: 34px; color: #fff; text-shadow: 0 0 10px #ff69b4, 0 0 20px #ff1493, 0 5px 5px rgba(0,0,0,0.5); text-align: center; margin-bottom: 10px; line-height: 1.2; letter-spacing: 2px;}
         .subtitle { font-size: 18px; color: #00ffff; text-shadow: 0 0 8px #00ffff, 1px 1px 2px #000; margin-bottom: 30px; font-weight: bold;}
         
-        #game-logo {
-            width: 85%; max-width: 450px; margin-bottom: 15px;
-            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5)) drop-shadow(0 0 15px rgba(0,255,255,0.4));
-            animation: floatLogo 3s ease-in-out infinite;
-        }
+        #game-logo { width: 85%; max-width: 450px; margin-bottom: 15px; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5)) drop-shadow(0 0 15px rgba(0,255,255,0.4)); animation: floatLogo 3s ease-in-out infinite; }
         @keyframes floatLogo { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
 
         .btn {
@@ -90,10 +64,7 @@
         .level-btn:active:not(.locked) { transform: scale(0.95); }
         .level-btn.locked { filter: grayscale(100%) brightness(0.5); cursor: not-allowed; }
 
-        .top-bar { 
-            display: flex; justify-content: space-between; align-items: center; padding: 10px 25px; width: 100%; 
-            background: rgba(10, 20, 50, 0.4); backdrop-filter: blur(8px); border-bottom: 1px solid rgba(255,255,255,0.2); box-shadow: 0 4px 15px rgba(0,0,0,0.3); z-index: 10;
-        }
+        .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 25px; width: 100%; background: rgba(10, 20, 50, 0.4); backdrop-filter: blur(8px); border-bottom: 1px solid rgba(255,255,255,0.2); box-shadow: 0 4px 15px rgba(0,0,0,0.3); z-index: 10; }
         .hp-section { display: flex; align-items: center; gap: 8px; }
         .hp-icon { width: 35px; height: 35px; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.5)); object-fit: contain;}
         .partner-icon { width: 45px; height: 45px; border-radius: 50%; border: 2px solid #00ffff; background: rgba(0,0,0,0.5); margin-right: 10px; display: none; object-fit: contain; box-shadow: 0 0 10px rgba(0,255,255,0.5);}
@@ -139,13 +110,7 @@
         .bubble { position: absolute; bottom: -20px; background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.8), rgba(0,255,255,0.2)); border-radius: 50%; border: 1px solid rgba(255,255,255,0.3); animation: floatUp 4s linear infinite; }
         @keyframes floatUp { 0% { transform: translateY(0) scale(1); opacity: 0.8; } 100% { transform: translateY(-600px) scale(1.5); opacity: 0; } }
 
-        @keyframes shake-screen {
-            0%, 100% { transform: translateX(0) rotate(0deg); }
-            20% { transform: translateX(-15px) rotate(-1deg); }
-            40% { transform: translateX(15px) rotate(1deg); }
-            60% { transform: translateX(-10px) rotate(-0.5deg); }
-            80% { transform: translateX(10px) rotate(0.5deg); }
-        }
+        @keyframes shake-screen { 0%, 100% { transform: translateX(0) rotate(0deg); } 20% { transform: translateX(-15px) rotate(-1deg); } 40% { transform: translateX(15px) rotate(1deg); } 60% { transform: translateX(-10px) rotate(-0.5deg); } 80% { transform: translateX(10px) rotate(0.5deg); } }
         .shake-screen { animation: shake-screen 0.4s ease; border: 3px solid #ff4757; }
 
         .anim-attack { animation: attack 0.4s ease; }
@@ -155,31 +120,19 @@
         .interference { animation: shake-blur 0.4s infinite alternate; }
         @keyframes shake-blur { 0% { transform: translate(2px, 1px) rotate(0deg); filter: blur(0px); } 100% { transform: translate(-2px, -2px) rotate(-2deg); filter: blur(3px) hue-rotate(90deg); color: #ffeb3b;} }
 
-        #settings-modal {
-            display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px); z-index: 9999;
-            justify-content: center; align-items: center;
-        }
-        .settings-content {
-            background: linear-gradient(135deg, #1a2a6c, #112240); border: 2px solid #00ffff;
-            border-radius: 15px; padding: 25px; width: 80%; max-width: 350px; text-align: center;
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5); position: relative;
-        }
-        .settings-close {
-            position: absolute; top: 10px; right: 15px; font-size: 24px; color: #fff; cursor: pointer; font-weight: bold;
-        }
+        #settings-modal { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px); z-index: 9999; justify-content: center; align-items: center; }
+        .settings-content { background: linear-gradient(135deg, #1a2a6c, #112240); border: 2px solid #00ffff; border-radius: 15px; padding: 25px; width: 80%; max-width: 350px; text-align: center; box-shadow: 0 0 20px rgba(0, 255, 255, 0.5); position: relative; }
+        .settings-close { position: absolute; top: 10px; right: 15px; font-size: 24px; color: #fff; cursor: pointer; font-weight: bold; }
         .settings-close:hover { color: #ff4757; }
         .slider-group { margin-bottom: 20px; text-align: left;}
         .slider-label { font-size: 16px; color: #00ffff; font-weight: bold; margin-bottom: 5px; display: block;}
-        input[type=range] {
-            width: 100%; margin: 10px 0; -webkit-appearance: none; background: transparent;
-        }
-        input[type=range]::-webkit-slider-runnable-track {
-            width: 100%; height: 8px; background: rgba(255,255,255,0.2); border-radius: 4px;
-        }
-        input[type=range]::-webkit-slider-thumb {
-            height: 20px; width: 20px; border-radius: 50%; background: #00ffff; cursor: pointer; -webkit-appearance: none; margin-top: -6px; box-shadow: 0 0 10px rgba(0,255,255,0.8);
-        }
+        input[type=range] { width: 100%; margin: 10px 0; -webkit-appearance: none; background: transparent; }
+        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 8px; background: rgba(255,255,255,0.2); border-radius: 4px; }
+        input[type=range]::-webkit-slider-thumb { height: 20px; width: 20px; border-radius: 50%; background: #00ffff; cursor: pointer; -webkit-appearance: none; margin-top: -6px; box-shadow: 0 0 10px rgba(0,255,255,0.8); }
+        
+        /* 緊急重置按鈕樣式 */
+        .btn-danger { background: rgba(231, 76, 60, 0.2); border: 1px solid #e74c3c; color: #ffcccc; padding: 10px; border-radius: 10px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 10px; transition: all 0.2s;}
+        .btn-danger:hover { background: rgba(231, 76, 60, 0.5); color: white; }
     </style>
 </head>
 <body>
@@ -188,18 +141,15 @@
 <audio id="bgm-battle" src="audio/bgm-battle.mp3" loop></audio>
 
 <div id="game-container">
+    <div id="fade-overlay"></div>
     
-    <!-- ====== 新增：開場動畫畫面 ====== -->
-    <!-- 網頁預設顯示的第一個畫面就是 active 的 intro-screen -->
     <div id="intro-screen" class="screen active">
         <video id="intro-video" src="images/intro.mp4" autoplay muted playsinline></video>
         <button id="skip-intro-btn" onclick="finishIntro()">跳過 (Skip)</button>
     </div>
-    <!-- =================================== -->
 
     <div class="bubbles" id="bubble-layer"></div>
 
-    <!-- 首頁 (把 active 移除了，因為預設要先播影片) -->
     <div id="main-screen" class="screen">
         <img src="images/logo.png" id="game-logo" alt="重返亞特蘭提斯：人魚公主與數靈聖域" onerror="this.outerHTML='<h1 style=\'margin-top:20px;\'>重返亞特蘭提斯<br>人魚公主與數靈聖域</h1>'">
         <div class="subtitle">✨ 魔法少女 x 九九乘法 ✨</div>
@@ -208,7 +158,6 @@
         <button class="btn" onclick="openSettings()">⚙️ 遊戲設定</button>
     </div>
 
-    <!-- 關卡選擇 -->
     <div id="level-screen" class="screen">
         <h2 style="color: #fff; text-shadow: 0 4px 6px rgba(0,0,0,0.8); margin-top: 0; margin-bottom: 15px; letter-spacing: 2px;">選擇關卡</h2>
         <div class="level-grid" id="level-grid"></div>
@@ -222,7 +171,6 @@
         <button class="btn" style="width: 150px;" onclick="showScreen('main-screen')">返回</button>
     </div>
 
-    <!-- 相簿 -->
     <div id="gallery-screen" class="screen">
         <h2 style="color: #fff; text-shadow: 0 4px 6px rgba(0,0,0,0.8); margin-top:0; margin-bottom: 5px; letter-spacing: 2px;">星光好朋友相簿</h2>
         <div style="font-size: 14px; margin-bottom: 15px; color: #00ffff; font-weight: bold; text-shadow: 1px 1px 2px #000;">點擊已解鎖的卡牌來裝備夥伴 Buff</div>
@@ -230,7 +178,6 @@
         <button class="btn" style="margin-top: 20px; width: 150px;" onclick="showScreen('main-screen')">返回</button>
     </div>
 
-    <!-- 戰鬥畫面主體 -->
     <div id="gameplay-screen" class="screen">
         <div class="top-bar">
             <div class="hp-section">
@@ -259,14 +206,13 @@
         </div>
     </div>
 
-    <!-- 結算畫面 -->
     <div id="result-screen" class="screen">
         <h1 id="result-title" style="font-size: 45px;">關卡完成！</h1>
         <div class="subtitle" id="result-desc" style="font-size: 22px; line-height: 1.5;"></div>
         <button class="btn" onclick="showScreen('level-screen')" style="margin-top: 20px;">確認</button>
     </div>
 
-    <!-- 設定面板 -->
+    <!-- 設定面板 (加入重置按鈕) -->
     <div id="settings-modal">
         <div class="settings-content">
             <div class="settings-close" onclick="closeSettings()">×</div>
@@ -281,39 +227,29 @@
                 <label class="slider-label">遊戲音效 (SFX) <span id="sfx-value" style="float: right;">50%</span></label>
                 <input type="range" id="sfx-slider" min="0" max="100" value="50" oninput="updateVolume('sfx')">
             </div>
+            
+            <button class="btn-danger" onclick="resetSaveData()">⚠️ 重置遊戲進度</button>
         </div>
     </div>
 </div>
 
 <script>
-    // ====== 開場影片邏輯 ======
+    window.onload = function() {
+        const overlay = document.getElementById('fade-overlay');
+        setTimeout(() => { overlay.style.opacity = '0'; }, 100);
+        setTimeout(() => { overlay.style.display = 'none'; }, 1600);
+    };
+
     const introVideo = document.getElementById('intro-video');
     let introFinished = false;
-
-    // 當影片自然播放結束時觸發
     introVideo.addEventListener('ended', finishIntro);
+    setTimeout(() => { if (!introFinished && introVideo.paused) finishIntro(); }, 1000);
 
-    // 如果瀏覽器阻擋自動播放，或是影片載入失敗，我們設定 1 秒後自動跳過，當作防呆機制
-    setTimeout(() => {
-        if (!introFinished && introVideo.paused) {
-            console.log("影片可能被阻擋或不存在，自動跳過開場。");
-            finishIntro();
-        }
-    }, 1000);
-
-    // 處理結束影片並進入主選單
     function finishIntro() {
         if (introFinished) return;
-        introFinished = true;
-        
-        introVideo.pause();
-        
-        // 進入主選單，並在背景同時啟動預設音量機制
+        introFinished = true; introVideo.pause();
         showScreen('main-screen');
-        
-        // 如果玩家還沒操作過音效，此時不強迫播放，等他們自己進設定或點選開始
     }
-    // ===================================
 
     const AudioContext = window.AudioContext || window.webkitAudioContext;
     let audioCtx;
@@ -383,67 +319,43 @@
     }
     initVolumeUI();
 
-    function openSettings() {
-        document.getElementById('settings-modal').style.display = 'flex';
-    }
-
-    function closeSettings() {
+    function openSettings() { document.getElementById('settings-modal').style.display = 'flex'; }
+    function closeSettings() { 
         document.getElementById('settings-modal').style.display = 'none';
-        if(!hasStartedAudio) {
-            initAudio();
-            hasStartedAudio = true;
-            updateBGM(); 
-        }
+        if(!hasStartedAudio) { initAudio(); hasStartedAudio = true; updateBGM(); }
     }
 
     function updateVolume(type) {
         if(type === 'bgm') {
             let val = document.getElementById('bgm-slider').value;
-            volBGM = val / 100;
-            document.getElementById('bgm-value').innerText = val + '%';
+            volBGM = val / 100; document.getElementById('bgm-value').innerText = val + '%';
             bgmMain.volume = volBGM; bgmBattle.volume = volBGM;
             localStorage.setItem('mermaidVolBGM', volBGM);
             if(volBGM > 0 && hasStartedAudio) updateBGM(); 
         } else if(type === 'sfx') {
             let val = document.getElementById('sfx-slider').value;
-            volSFX = val / 100;
-            document.getElementById('sfx-value').innerText = val + '%';
+            volSFX = val / 100; document.getElementById('sfx-value').innerText = val + '%';
             localStorage.setItem('mermaidVolSFX', volSFX);
-            
-            initAudio();
-            playSFX('correct');
+            initAudio(); playSFX('correct');
         }
     }
 
     function updateBGM() {
-        if (volBGM === 0) {
-            bgmMain.pause(); bgmBattle.pause(); return;
-        }
-        
+        if (volBGM === 0) { bgmMain.pause(); bgmBattle.pause(); return; }
         const activeScreen = document.querySelector('.screen.active').id;
-        
-        // 如果還在播開場影片，不要播音樂
         if (activeScreen === 'intro-screen') return;
         
         if (activeScreen === 'gameplay-screen') {
             bgmMain.pause();
-            if (bgmBattle.paused) {
-                bgmBattle.currentTime = 0; 
-                bgmBattle.play().catch(e => {});
-            }
+            if (bgmBattle.paused) { bgmBattle.currentTime = 0; bgmBattle.play().catch(e => {}); }
         } else {
             bgmBattle.pause();
-            if (bgmMain.paused) {
-                bgmMain.play().catch(e => {});
-            }
+            if (bgmMain.paused) { bgmMain.play().catch(e => {}); }
         }
     }
 
     function firstStart() {
-        if(!hasStartedAudio) {
-            initAudio();
-            hasStartedAudio = true;
-        }
+        if(!hasStartedAudio) { initAudio(); hasStartedAudio = true; }
         showScreen('level-screen');
     }
 
@@ -451,12 +363,57 @@
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById(id).classList.add('active');
         document.getElementById(id).scrollTop = 0; 
-        
         if(hasStartedAudio) updateBGM();
     }
 
-    let saveFile = JSON.parse(localStorage.getItem('mermaidSave')) || { unlockedLevel: 1, unlockedCards: [], equippedPartner: null };
-    if(saveFile.equippedPartner === undefined) saveFile.equippedPartner = null;
+    // ====== 存檔防護與驗證機制 ======
+    function loadAndVerifySaveData() {
+        let rawData = localStorage.getItem('mermaidSave');
+        let parsedData;
+        
+        try {
+            parsedData = JSON.parse(rawData);
+        } catch(e) {
+            // 如果 JSON 損壞，建立全新進度
+            parsedData = null; 
+        }
+
+        // 基本欄位防呆：如果沒有資料，或是核心變數型別錯誤、數值異常，強制重置
+        if (!parsedData || 
+            typeof parsedData.unlockedLevel !== 'number' || 
+            isNaN(parsedData.unlockedLevel) || 
+            parsedData.unlockedLevel < 1 || 
+            parsedData.unlockedLevel > 10) 
+        {
+            console.log("偵測到存檔異常，已還原為初始狀態。");
+            return { unlockedLevel: 1, unlockedCards: [], equippedPartner: null };
+        }
+        
+        // 確保夥伴屬性存在
+        if(parsedData.equippedPartner === undefined) parsedData.equippedPartner = null;
+        if(!Array.isArray(parsedData.unlockedCards)) parsedData.unlockedCards = [];
+        
+        return parsedData;
+    }
+
+    let saveFile = loadAndVerifySaveData();
+
+    function saveData() { 
+        localStorage.setItem('mermaidSave', JSON.stringify(saveFile)); 
+        updateLevelUI(); 
+    }
+
+    // 緊急重置按鈕功能
+    function resetSaveData() {
+        if(confirm("確定要清除所有遊戲進度嗎？（卡牌與解鎖關卡將全部重置）")) {
+            localStorage.removeItem('mermaidSave');
+            saveFile = { unlockedLevel: 1, unlockedCards: [], equippedPartner: null };
+            updateLevelUI();
+            alert("進度已成功重置！");
+            closeSettings();
+        }
+    }
+    // =================================
 
     let state = { 
         level: 1, hp: 3, maxHp: 3, progress: 0, maxProgress: 10, 
@@ -468,8 +425,6 @@
     const monsters = ["🐟","🐍","🦀","🐡","🌟","🦑","🦈","🐙","👿"]; 
     const monsterImg = ["monster-1.png", "monster-2.png", "monster-3.png", "monster-4.png", "monster-5.png", "monster-6.png", "monster-7.png", "monster-8.png", "monster-9.png"];
     const buffNames = ["生命守護<br>(愛心+1)", "時間魔法<br>(變慢25%)", "強力打擊<br>(Boss血-1)"];
-
-    function saveData() { localStorage.setItem('mermaidSave', JSON.stringify(saveFile)); updateLevelUI(); }
 
     function updateLevelUI() {
         const grid = document.getElementById('level-grid');
