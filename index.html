@@ -17,15 +17,6 @@
             transition: transform 0.1s; 
         }
 
-        /* ====== 新增：開場黑幕過場 ====== */
-        #fade-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: #000; z-index: 99999; 
-            transition: opacity 1.5s ease-in-out;
-            pointer-events: none; /* 讓滑鼠點擊可以穿透 */
-        }
-        /* ================================= */
-
         .screen { 
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
             display: flex; flex-direction: column; justify-content: flex-start; align-items: center; 
@@ -33,6 +24,40 @@
             opacity: 0; visibility: hidden; transition: opacity 0.5s ease, visibility 0.5s; 
         }
         .screen.active { opacity: 1; visibility: visible; }
+
+        /* ====== 新增：開場影片畫面設定 ====== */
+        #intro-screen {
+            z-index: 99999; /* 確保在最上層 */
+            background-color: #000;
+            padding: 0; /* 覆蓋預設的 padding */
+            justify-content: center;
+        }
+        
+        #intro-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* 讓影片填滿畫面，可能會裁切邊緣以保持比例 */
+            pointer-events: none; /* 避免玩家誤點暫停 */
+        }
+        
+        #skip-intro-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            z-index: 100000;
+            transition: all 0.2s;
+        }
+        #skip-intro-btn:hover { background: rgba(255, 255, 255, 0.4); }
+        /* =================================== */
         
         #main-screen, #level-screen, #gallery-screen { background-image: url('images/bg-main.jpg'); background-color: #1a2a6c; justify-content: center; }
         #gameplay-screen { background-image: url('images/bg-underwater.jpg'); background-color: #000851; z-index: 5; justify-content: space-between; padding: 0; overflow: hidden;}
@@ -163,13 +188,19 @@
 <audio id="bgm-battle" src="audio/bgm-battle.mp3" loop></audio>
 
 <div id="game-container">
-    <!-- 新增的黑幕遮罩，會自動淡出 -->
-    <div id="fade-overlay"></div>
+    
+    <!-- ====== 新增：開場動畫畫面 ====== -->
+    <!-- 網頁預設顯示的第一個畫面就是 active 的 intro-screen -->
+    <div id="intro-screen" class="screen active">
+        <video id="intro-video" src="images/intro.mp4" autoplay muted playsinline></video>
+        <button id="skip-intro-btn" onclick="finishIntro()">跳過 (Skip)</button>
+    </div>
+    <!-- =================================== -->
 
     <div class="bubbles" id="bubble-layer"></div>
 
-    <!-- 首頁 -->
-    <div id="main-screen" class="screen active">
+    <!-- 首頁 (把 active 移除了，因為預設要先播影片) -->
+    <div id="main-screen" class="screen">
         <img src="images/logo.png" id="game-logo" alt="重返亞特蘭提斯：人魚公主與數靈聖域" onerror="this.outerHTML='<h1 style=\'margin-top:20px;\'>重返亞特蘭提斯<br>人魚公主與數靈聖域</h1>'">
         <div class="subtitle">✨ 魔法少女 x 九九乘法 ✨</div>
         <button class="btn" onclick="firstStart()">開始冒險</button>
@@ -255,20 +286,34 @@
 </div>
 
 <script>
-    // ====== 網頁載入完成後觸發黑幕淡出 ======
-    window.onload = function() {
-        const overlay = document.getElementById('fade-overlay');
-        // 等待一點點時間確保畫面都畫好了，然後讓透明度變0
-        setTimeout(() => {
-            overlay.style.opacity = '0';
-        }, 100);
+    // ====== 開場影片邏輯 ======
+    const introVideo = document.getElementById('intro-video');
+    let introFinished = false;
+
+    // 當影片自然播放結束時觸發
+    introVideo.addEventListener('ended', finishIntro);
+
+    // 如果瀏覽器阻擋自動播放，或是影片載入失敗，我們設定 1 秒後自動跳過，當作防呆機制
+    setTimeout(() => {
+        if (!introFinished && introVideo.paused) {
+            console.log("影片可能被阻擋或不存在，自動跳過開場。");
+            finishIntro();
+        }
+    }, 1000);
+
+    // 處理結束影片並進入主選單
+    function finishIntro() {
+        if (introFinished) return;
+        introFinished = true;
         
-        // 等動畫結束後，把它移走避免擋住點擊
-        setTimeout(() => {
-            overlay.style.display = 'none';
-        }, 1600);
-    };
-    // ========================================
+        introVideo.pause();
+        
+        // 進入主選單，並在背景同時啟動預設音量機制
+        showScreen('main-screen');
+        
+        // 如果玩家還沒操作過音效，此時不強迫播放，等他們自己進設定或點選開始
+    }
+    // ===================================
 
     const AudioContext = window.AudioContext || window.webkitAudioContext;
     let audioCtx;
@@ -376,6 +421,9 @@
         }
         
         const activeScreen = document.querySelector('.screen.active').id;
+        
+        // 如果還在播開場影片，不要播音樂
+        if (activeScreen === 'intro-screen') return;
         
         if (activeScreen === 'gameplay-screen') {
             bgmMain.pause();
