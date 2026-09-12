@@ -11,35 +11,47 @@
         body { margin: 0; padding: 0; background-color: #050a1f; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; color: #fff; }
 
         #game-container {
-            position: relative; width: 100%; max-width: 900px; height: 100%; max-height: 550px;
-            border-radius: 20px; box-shadow: 0 0 30px rgba(0, 255, 255, 0.4), inset 0 0 20px rgba(255,255,255,0.1); 
-            overflow: hidden; display: flex; flex-direction: column; background-color: #0d1b2a;
-            transition: transform 0.1s; 
+            position: relative; width: 100%; max-width: 900px; height: 100%; max-height: 800px; 
+            border-radius: 0; box-shadow: none; overflow: hidden; display: flex; flex-direction: column; background-color: #0d1b2a;
         }
 
-        #fade-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: #000; z-index: 99999; 
-            transition: opacity 1.5s ease-in-out;
-            pointer-events: none; 
+        /* ====== 全域水底波光淋漓特效 (涵蓋整款遊戲) ====== */
+        #game-container::after {
+            content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(120deg, rgba(0,255,255,0.08) 0%, rgba(0,128,255,0.15) 50%, rgba(0,255,204,0.08) 100%);
+            mix-blend-mode: overlay; pointer-events: none;
+            animation: waterCaustics 6s ease-in-out infinite alternate;
+            z-index: 2; /* 浮在背景之上、UI之下 */
         }
+        @keyframes waterCaustics {
+            0% { transform: translateY(-10px) scale(1); opacity: 0.3; filter: blur(5px); }
+            50% { transform: translateY(10px) scale(1.05); opacity: 0.7; filter: blur(8px); }
+            100% { transform: translateY(-5px) scale(1); opacity: 0.4; filter: blur(6px); }
+        }
+        /* ================================================ */
 
-        .screen { 
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
-            display: flex; flex-direction: column; justify-content: flex-start; align-items: center; 
-            z-index: 10; background-size: cover; background-position: center; overflow-y: auto; padding: 20px 0;
-            opacity: 0; visibility: hidden; transition: opacity 0.5s ease, visibility 0.5s; 
-        }
+        #fade-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: #000; z-index: 99999; transition: opacity 1.5s ease-in-out; pointer-events: none; }
+
+        .screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; z-index: 10; background-size: cover; background-position: center; overflow-y: auto; padding: 20px 0; opacity: 0; visibility: hidden; transition: opacity 0.5s ease, visibility 0.5s; }
         .screen.active { opacity: 1; visibility: visible; }
         
         #intro-screen { z-index: 99999; background-color: #000; padding: 0; justify-content: center; }
         #intro-video { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
         #skip-intro-btn { position: absolute; top: 20px; right: 20px; background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(5px); border: 1px solid rgba(255, 255, 255, 0.5); color: #fff; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-size: 14px; font-weight: bold; z-index: 100000; transition: all 0.2s; }
-        #skip-intro-btn:hover { background: rgba(255, 255, 255, 0.4); }
         
-        #main-screen, #level-screen, #gallery-screen { background-image: url('images/bg-main.jpg'); background-color: #1a2a6c; justify-content: center; }
-        #gameplay-screen { background-image: url('images/bg-underwater.jpg'); background-color: #000851; z-index: 5; justify-content: space-between; padding: 0; overflow: hidden;}
-        #result-screen { background-image: url('images/bg-result.jpg'); background-color: rgba(0,8,81,0.9); justify-content: center; backdrop-filter: blur(10px);}
+        #main-screen { background-image: url('images/bg-main.jpg'); background-color: #1a2a6c; justify-content: center; }
+        #level-screen { background-image: url('images/bg-main.jpg'); background-color: #1a2a6c; justify-content: center; }
+        
+        #result-screen { 
+            background: radial-gradient(circle at center, #1b2856 0%, #050a1f 100%);
+            background-image: url('images/bg-result.jpg'); background-color: rgba(0,8,81,0.9); 
+            justify-content: center; backdrop-filter: blur(10px); padding: 30px 20px;
+        }
+        #gallery-screen {
+            background: radial-gradient(circle at center, #112240 0%, #050a1f 100%);
+            background-image: url('images/bg-main.jpg'); background-color: #112240;
+            justify-content: center; padding: 20px 10px;
+        }
 
         h1 { font-size: 34px; color: #fff; text-shadow: 0 0 10px #ff69b4, 0 0 20px #ff1493, 0 5px 5px rgba(0,0,0,0.5); text-align: center; margin-bottom: 10px; line-height: 1.2; letter-spacing: 2px;}
         .subtitle { font-size: 18px; color: #00ffff; text-shadow: 0 0 8px #00ffff, 1px 1px 2px #000; margin-bottom: 30px; font-weight: bold;}
@@ -47,77 +59,166 @@
         #game-logo { width: 85%; max-width: 450px; margin-bottom: 15px; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5)) drop-shadow(0 0 15px rgba(0,255,255,0.4)); animation: floatLogo 3s ease-in-out infinite; }
         @keyframes floatLogo { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
 
-        .btn {
-            background-image: url('images/btn-primary.png'); background-color: transparent; 
-            background-size: contain; background-position: center; background-repeat: no-repeat;
-            border: none; border-radius: 30px; width: 240px; height: 80px; font-size: 20px; color: white; font-weight: bold; text-shadow: 1px 2px 3px rgba(0,0,0,0.8); cursor: pointer; transition: transform 0.1s, filter 0.3s; display: flex; justify-content: center; align-items: center; margin-bottom: 15px; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.5));
-        }
-        .btn:hover { filter: drop-shadow(0 5px 15px rgba(255,255,255,0.4)) brightness(1.1); }
+        .btn { background-image: url('images/btn-primary.png'); background-color: transparent; background-size: contain; background-position: center; background-repeat: no-repeat; border: none; border-radius: 30px; width: 240px; height: 80px; font-size: 20px; color: white; font-weight: bold; text-shadow: 1px 2px 3px rgba(0,0,0,0.8); cursor: pointer; transition: transform 0.1s, filter 0.3s; display: flex; justify-content: center; align-items: center; margin-bottom: 15px; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.5)); z-index: 3; }
         .btn:active { transform: scale(0.95) translateY(2px); filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5)); }
+        
+        .btn-boss { background-image: none; background: linear-gradient(135deg, #ff0055, #660000); border: 2px solid #ff4757; box-shadow: 0 0 15px #ff4757, inset 0 0 10px #000; width: 90%; margin: 5px auto 15px auto; height: 60px; animation: pulse-boss 2s infinite; }
+        @keyframes pulse-boss { 0% { box-shadow: 0 0 15px #ff4757; } 50% { box-shadow: 0 0 30px #ff0055, inset 0 0 15px #ff0055; } 100% { box-shadow: 0 0 15px #ff4757; } }
 
         .level-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 15px; padding: 0 20px;}
-        .level-btn {
-            background-image: url('images/btn-level.png'); background-color: transparent; background-size: 100% 100%; background-repeat: no-repeat;
-            border: none; border-radius: 15px; width: 85px; height: 85px; font-size: 16px; color: white; font-weight: bold; text-shadow: 1px 2px 3px #000; cursor: pointer; display: flex; justify-content: center; align-items: center; text-align: center; line-height: 1.3; transition: all 0.2s; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4));
-        }
+        .level-btn { background-image: url('images/btn-level.png'); background-color: transparent; background-size: 100% 100%; background-repeat: no-repeat; border: none; border-radius: 15px; width: 85px; height: 85px; font-size: 16px; color: white; font-weight: bold; text-shadow: 1px 2px 3px #000; cursor: pointer; display: flex; justify-content: center; align-items: center; text-align: center; line-height: 1.3; transition: all 0.2s; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4)); }
         .level-btn.locked { filter: grayscale(100%) brightness(0.5); cursor: not-allowed; }
+        .level-btn.adv-btn { filter: hue-rotate(150deg) saturate(1.5) drop-shadow(0 4px 8px rgba(255,0,0,0.4)); }
 
-        .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 25px; width: 100%; background: rgba(10, 20, 50, 0.4); backdrop-filter: blur(8px); border-bottom: 1px solid rgba(255,255,255,0.2); box-shadow: 0 4px 15px rgba(0,0,0,0.3); z-index: 10; }
-        .hp-section { display: flex; align-items: center; gap: 8px; }
-        .hp-icon { width: 35px; height: 35px; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.5)); object-fit: contain;}
-        .partner-icon { width: 45px; height: 45px; border-radius: 50%; border: 2px solid #00ffff; background: rgba(0,0,0,0.5); margin-right: 10px; display: none; object-fit: contain; box-shadow: 0 0 10px rgba(0,255,255,0.5);}
-        .progress-bar { font-size: 18px; color: #f1c40f; font-weight: 900; text-shadow: 0 2px 4px rgba(0,0,0,0.8), 0 0 10px rgba(241,196,15,0.5);}
-
-        .question-area { text-align: center; font-size: 50px; font-weight: 900; color: #fff; text-shadow: 0 0 20px #00ffff, 0 4px 8px rgba(0,0,0,0.8); margin-top: 10px; transition: all 0.2s; z-index: 10;}
-        .timer-bar-container { width: 260px; height: 12px; background: rgba(0,0,0,0.6); border-radius: 6px; margin: 10px auto; overflow: hidden; border: 1px solid rgba(255,255,255,0.5); box-shadow: inset 0 2px 5px rgba(0,0,0,0.5); }
-        .timer-bar { height: 100%; background: linear-gradient(90deg, #00ffcc, #00bfff); width: 100%; box-shadow: 0 0 10px #00ffcc;}
+        #gameplay-screen { background-color: #000851; z-index: 5; justify-content: space-between; padding: 0; overflow: hidden; background: none;}
         
-        .battle-stage { flex: 1; position: relative; width: 100%; z-index: 5;}
-        
-        .character { position: absolute; bottom: 30px; transition: all 0.3s ease; height: auto; max-height: 250px; object-fit: contain; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5));}
-        .mermaid { left: 5%; width: 200px; font-size: 70px; transform-origin: bottom left;} 
-        .monster { right: 5%; width: 200px; font-size: 70px; transform-origin: bottom right;}
-        .boss { max-height: 280px; width: 260px; filter: drop-shadow(0 0 25px rgba(255,0,0,0.8)); transform: scale(1.1); transform-origin: bottom right;}
+        .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 8px 15px; width: 100%; background: rgba(10, 20, 50, 0.8); border-bottom: 1px solid rgba(255,255,255,0.2); z-index: 10; flex-shrink: 0;}
+        .hp-section { display: flex; align-items: center; gap: 8px; max-width: 50%; }
+        #ui-hp { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+        .hp-icon { width: 22px; height: 22px; object-fit: contain; }
+        .progress-bar { font-size: 15px; color: #f1c40f; font-weight: 900; text-shadow: 0 2px 4px rgba(0,0,0,0.8); text-align: right; line-height: 1.2; }
 
-        .speech-bubble {
-            position: absolute; bottom: 250px; left: 8%; width: 150px; min-height: 60px; z-index: 20;
-            background-image: url('images/ui-speech-bg.png'); background-size: 100% 100%; background-color: transparent; background-repeat: no-repeat;
-            display: flex; justify-content: center; align-items: center; text-align: center; color: #1e3799; font-size: 15px; font-weight: 900; opacity: 0; transition: opacity 0.3s, transform 0.3s; transform: translateY(10px); padding: 5px 15px 15px 15px; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3));
+        .question-area { text-align: center; font-size: 45px; font-weight: 900; color: #fff; text-shadow: 0 0 20px #00ffff, 0 4px 8px rgba(0,0,0,0.8); margin-top: 10px; transition: all 0.2s; z-index: 10; flex-shrink: 0;}
+        .timer-bar-container { width: 260px; height: 12px; background: rgba(0,0,0,0.6); border-radius: 6px; margin: 10px auto; overflow: hidden; border: 1px solid rgba(255,255,255,0.5); }
+        .timer-bar { height: 100%; background: linear-gradient(90deg, #00ffcc, #00bfff); width: 100%; transition: width 0.1s linear;}
+        
+        .battle-stage { 
+            flex: 1; position: relative; width: 100%; z-index: 5;
+            background-image: url('images/bg-underwater.jpg'); background-size: auto 100%; 
+            background-position: 0 center; background-repeat: repeat-x; 
         }
+        
+        .character { position: absolute; bottom: 8%; transition: all 0.3s ease; height: auto; max-height: 40%; max-width: 42vw; object-fit: contain; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5));}
+        .mermaid { left: 2%; transform-origin: bottom center;} 
+        .monster { right: 2%; transform-origin: bottom center;}
+        
+        .partner-container { 
+            position: absolute; left: 32%; bottom: 28%; width: 22vw; max-width: 85px; 
+            height: 22vw; max-height: 85px; z-index: 8; display: none; 
+        }
+        .partner-img { 
+            width: 100%; height: 100%; object-fit: contain; 
+            transform: scaleX(-1); 
+            filter: drop-shadow(0 5px 10px rgba(255,255,255,0.5)); 
+        }
+        
+        .adv-monster { filter: hue-rotate(150deg) saturate(1.5) drop-shadow(0 10px 15px rgba(0,0,0,0.5)); }
+        .elite-monster { transform: scale(1.15); filter: drop-shadow(0 0 15px #ff4757) contrast(1.2) saturate(1.5); }
+        .adv-monster.elite-monster { filter: hue-rotate(150deg) drop-shadow(0 0 15px #ff4757) contrast(1.2) saturate(1.5); }
+        .boss { max-height: 48%; max-width: 55vw; right: 0; filter: drop-shadow(0 0 25px rgba(255,0,0,0.8)); transform: scale(1.1); }
+        .adv-monster.boss { filter: hue-rotate(150deg) drop-shadow(0 0 25px rgba(255,0,0,0.8)); }
+
+        .monster-ui { position: absolute; right: 5%; bottom: calc(48% + 15px); width: 35vw; max-width: 150px; text-align: center; transition: all 0.3s; z-index: 15; display: none; }
+        .monster-ui.boss-ui { bottom: calc(56% + 15px); width: 45vw; max-width: 200px; right: 5%; } 
+        .monster-ui.elite-ui { bottom: calc(50% + 15px); } 
+        .monster-hp-bar { width: 100%; height: 12px; border: 2px solid #fff; border-radius: 6px; background: rgba(0,0,0,0.8); overflow: hidden; }
+        .monster-hp-fill { height: 100%; background: linear-gradient(90deg, #ff4757, #ff0000); width: 100%; transition: width 0.2s ease-out; }
+        .monster-hp-text { color: #fff; font-size: 13px; font-weight: 900; text-shadow: 1px 1px 3px #000; margin-top: 4px;}
+
+        .anim-dash-forward { animation: bgRun 0.8s linear forwards; }
+        @keyframes bgRun { 0% { background-position-x: 0; } 100% { background-position-x: -100vw; } }
+        
+        .anim-mermaid-enter { animation: mermaidEnter 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        @keyframes mermaidEnter { 0% { transform: translateX(-150vw); opacity: 0; } 100% { transform: translateX(0); opacity: 1; } }
+
+        .anim-mermaid-run { animation: mermaidRun 0.8s ease-in-out forwards; }
+        @keyframes mermaidRun { 0% { transform: translateX(0) rotate(0deg); } 20% { transform: translateX(20px) translateY(-15px) rotate(8deg); } 80% { transform: translateX(20px) translateY(-15px) rotate(8deg); } 100% { transform: translateX(0) rotate(0deg); } }
+
+        .anim-monster-enter { animation: monsterEnter 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        @keyframes monsterEnter { 0% { transform: translateX(150vw); opacity: 0; } 100% { transform: translateX(0); opacity: 1; } }
+        
+        .anim-attack { animation: attack 0.4s ease; }
+        @keyframes attack { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(20px) scale(1.05); filter: brightness(1.2); } }
+        
+        .anim-partner-atk { animation: partnerAtk 0.4s ease; }
+        @keyframes partnerAtk { 
+            0%, 100% { transform: translate(0, 0) scale(1); } 
+            50% { transform: translate(40px, -20px) scale(1.2); filter: brightness(1.5) drop-shadow(0 0 15px #00ffff); } 
+        }
+
+        .anim-monster-hurt { animation: monster-hurt 0.4s cubic-bezier(.36,.07,.19,.97); }
+        @keyframes monster-hurt { 0% { transform: translateX(0); filter: brightness(2) sepia(1) hue-rotate(-50deg) saturate(5) drop-shadow(0 0 20px red); } 20% { transform: translateX(15px) scale(0.95); filter: brightness(2) sepia(1) hue-rotate(-50deg) saturate(5) drop-shadow(0 0 20px red); } 50% { transform: translateX(-15px) scale(0.95); filter: brightness(1.5) drop-shadow(0 0 10px red); } 80% { transform: translateX(10px) scale(0.95); } 100% { transform: translateX(0); } }
+        
+        .anim-monster-die { animation: monster-die 0.6s ease-in forwards; }
+        @keyframes monster-die { 0% { transform: rotate(0deg) scale(1); filter: brightness(2); } 50% { transform: rotate(20deg) scale(0.8) translateY(20px); filter: brightness(1) opacity(0.8); } 100% { transform: rotate(45deg) scale(0.5) translateY(50px); filter: brightness(0) opacity(0); } }
+
+        .boss-victory-flash { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #fff; z-index: 90; opacity: 0; pointer-events: none; }
+        .boss-victory-flash.show { animation: victory-flash 1.5s ease-out forwards; }
+        @keyframes victory-flash { 0% { opacity: 0; } 10% { opacity: 1; } 100% { opacity: 0; } }
+
+        .warning-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 0, 0, 0.85); z-index: 50; display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: opacity 0.3s; overflow: hidden;}
+        .warning-screen.show { opacity: 1; visibility: visible; }
+        .warning-boss-silhouette { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; height: 90%; background-size: contain; background-repeat: no-repeat; background-position: center; filter: brightness(0.2) drop-shadow(0 0 25px rgba(255,0,50,0.8)); opacity: 0.6; z-index: -1; }
+        .warning-stripes { width: 100%; height: 40px; background: repeating-linear-gradient(45deg, #ff0000, #ff0000 20px, #000 20px, #000 40px); opacity: 0.8; }
+        .warning-content { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; }
+        .warning-title { color: #ff4757; font-size: 50px; font-weight: 900; text-shadow: 0 0 25px #ff0000; animation: flash-warning 0.4s infinite alternate; margin: 0; letter-spacing: 2px;}
+        .boss-name-display { color: #fff; font-size: 28px; font-weight: 900; text-shadow: 0 0 20px #ff0055, 2px 2px 4px #000; margin-top: 15px; letter-spacing: 2px; text-align: center; padding: 0 10px; line-height: 1.3;}
+        @keyframes flash-warning { from { opacity: 1; transform: scale(1); } to { opacity: 0.7; transform: scale(1.05); } }
+
+        .speech-bubble { position: absolute; bottom: calc(48% + 10px); left: 8%; width: 120px; min-height: 40px; z-index: 20; background-image: url('images/ui-speech-bg.png'); background-size: 100% 100%; background-color: transparent; background-repeat: no-repeat; display: flex; justify-content: center; align-items: center; text-align: center; color: #1e3799; font-size: 13px; font-weight: 900; opacity: 0; transition: opacity 0.3s, transform 0.3s; transform: translateY(10px); padding: 5px 10px 10px 10px; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3)); }
         .speech-bubble.show { opacity: 1; transform: translateY(0); }
+        .speech-bubble.boss-skill { color: #ff0055; text-shadow: 0 0 5px rgba(255,0,0,0.5); font-size: 15px; }
 
-        .bottom-controls { display: flex; justify-content: flex-end; padding: 20px 30px; gap: 20px; background: linear-gradient(to top, rgba(0,5,30,0.8), rgba(0,5,30,0)); z-index: 10; }
-        .answer-btn {
-            background-image: url('images/btn-answer.png'); background-color: transparent; background-size: contain; background-position: center; background-repeat: no-repeat;
-            border: none; width: 95px; height: 95px; font-size: 38px; font-weight: 900; color: #fff; text-shadow: 0 3px 6px rgba(0,0,0,0.8), 0 0 10px rgba(0,255,255,0.5); cursor: pointer; display: flex; justify-content: center; align-items: center; filter: drop-shadow(0 8px 10px rgba(0,0,0,0.5)); transition: all 0.1s;
-        }
+        .bottom-controls { display: flex; justify-content: space-evenly; align-items: center; padding: 15px 10px; width: 100%; background: linear-gradient(to top, rgba(0,5,30,1) 30%, rgba(0,5,30,0)); z-index: 10; flex-shrink: 0;}
+        .answer-btn { background-image: url('images/btn-answer.png'); background-color: transparent; background-size: contain; background-position: center; background-repeat: no-repeat; border: none; width: 28vw; max-width: 90px; height: 28vw; max-height: 90px; font-size: 32px; font-weight: 900; color: #fff; text-shadow: 0 3px 6px rgba(0,0,0,0.8), 0 0 10px rgba(0,255,255,0.5); cursor: pointer; display: flex; justify-content: center; align-items: center; filter: drop-shadow(0 5px 8px rgba(0,0,0,0.5)); transition: all 0.1s; }
         .answer-btn:active { transform: scale(0.9) translateY(4px); filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5)); }
 
-        .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; width: 85%; max-height: 50%; overflow-y: auto; padding: 20px; background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.2); border-radius: 15px; box-shadow: inset 0 0 20px rgba(0,0,0,0.5);}
-        .card { position: relative; width: 100%; aspect-ratio: 1; background: linear-gradient(135deg, #2c3e50, #000000); border: 2px solid rgba(255,255,255,0.5); border-radius: 12px; display: flex; flex-direction: column; justify-content: center; align-items: center; font-size: 40px; color: #fff; cursor: pointer; overflow: hidden; transition: all 0.2s; box-shadow: 0 5px 10px rgba(0,0,0,0.5);}
-        .card.locked { background: #111; color: #444; cursor: not-allowed; border-color: #333;}
-        .card.equipped { border: 3px solid #00ffcc; box-shadow: 0 0 20px #00ffcc; background: linear-gradient(135deg, #16a085, #000000); }
-        .equip-tag { position: absolute; bottom: 0; left: 0; width: 100%; background: #00ffcc; color: #000; font-size: 13px; font-weight: 900; text-align: center; padding: 4px 0; }
-        .buff-desc { position: absolute; top: 0; left: 0; width: 100%; background: rgba(0,0,0,0.8); color: #00ffcc; font-size: 11px; font-weight: bold; text-align: center; padding: 3px 0; border-bottom: 1px solid rgba(255,255,255,0.2);}
+        /* ====== 完美修正：手機與 PC 兩用、永不重疊的響應式相簿格線 ====== */
+        .gallery-grid { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); /* 手機與 PC 皆強制 3 欄並自動均分 */
+            gap: 12px; width: 94%; max-width: 480px; max-height: 62%; overflow-y: auto; padding: 15px; 
+            background: rgba(5, 10, 31, 0.85); backdrop-filter: blur(8px); 
+            border: 2px solid rgba(0, 255, 255, 0.3); border-radius: 20px; 
+            box-shadow: inset 0 0 15px rgba(0,255,255,0.2); 
+        }
         
-        .special-modes { display: none; flex-direction: column; align-items: center; gap: 12px; margin-top: 10px; border-top: 1px solid rgba(255,255,255,0.3); padding-top: 15px; margin-bottom: 15px; width: 80%;}
+        .poker-card { 
+            position: relative; width: 100%; aspect-ratio: 2.2 / 3.3; 
+            background: rgba(0,0,0,0.5); border-radius: 8px; cursor: pointer; transition: all 0.25s; 
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.6)); overflow: hidden;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+        .poker-card:hover { transform: translateY(-3px) scale(1.02); filter: drop-shadow(0 6px 12px rgba(0,255,255,0.4)); }
+        .poker-card.locked { filter: grayscale(100%) brightness(0.35); cursor: not-allowed; }
         
-        .bubbles { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: hidden; z-index: 1; }
-        .bubble { position: absolute; bottom: -20px; background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.8), rgba(0,255,255,0.2)); border-radius: 50%; border: 1px solid rgba(255,255,255,0.3); animation: floatUp 4s linear infinite; }
-        @keyframes floatUp { 0% { transform: translateY(0) scale(1); opacity: 0.8; } 100% { transform: translateY(-600px) scale(1.5); opacity: 0; } }
+        .card-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1;}
+        .card-partner-img { position: absolute; top: 15%; width: 75%; height: 50%; object-fit: contain; z-index: 2; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.6)); }
+        
+        .card-buff-desc { 
+            position: absolute; bottom: 6%; width: 92%; text-align: center; 
+            color: #fff; font-size: 9px; font-weight: 900; z-index: 3; 
+            text-shadow: 0 1px 3px rgba(0,0,0,0.9); line-height: 1.1;
+            background: rgba(0,0,0,0.65); padding: 3px 2px; border-radius: 4px;
+            border: 1px solid rgba(0,255,255,0.3);
+        }
+        
+        .poker-card.equipped { border: 2px solid #00ffff; filter: drop-shadow(0 0 10px #00ffff) brightness(1.1); transform: translateY(-2px); }
+        .equip-tag {
+            position: absolute; top: 4px; right: 4px; background: linear-gradient(135deg, #00ffcc, #00bfff); color: #000;
+            font-size: 8px; font-weight: 900; padding: 2px 5px; border-radius: 6px;
+            z-index: 4; box-shadow: 0 2px 4px rgba(0,0,0,0.6); letter-spacing: 0.5px;
+        }
 
-        @keyframes shake-screen { 0%, 100% { transform: translateX(0) rotate(0deg); } 20% { transform: translateX(-15px) rotate(-1deg); } 40% { transform: translateX(15px) rotate(1deg); } 60% { transform: translateX(-10px) rotate(-0.5deg); } 80% { transform: translateX(10px) rotate(0.5deg); } }
-        .shake-screen { animation: shake-screen 0.4s ease; border: 3px solid #ff4757; }
+        .result-card-container {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            margin: 10px auto; animation: cardEntrance 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        @keyframes cardEntrance {
+            0% { transform: scale(0.3) rotate(-10deg); opacity: 0; }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+        /* ========================================================== */
 
-        .anim-attack { animation: attack 0.4s ease; }
+        .special-modes { display: flex; flex-direction: column; align-items: center; gap: 8px; border-top: 1px solid rgba(255,255,255,0.3); padding-top: 10px; width: 100%;}
+        
         .anim-hurt { animation: hurt 0.5s ease; }
-        @keyframes attack { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(40px) scale(1.05); filter: brightness(1.2); } }
-        @keyframes hurt { 0%, 100% { transform: translateX(0); filter: brightness(1); } 50% { transform: translateX(-15px); filter: brightness(0.5) sepia(1) hue-rotate(-50deg) saturate(5); } }
+        @keyframes hurt { 0%, 100% { transform: translateX(0); filter: brightness(1); } 50% { transform: translateX(-10px); filter: brightness(0.5) sepia(1) hue-rotate(-50deg) saturate(5); } }
         .interference { animation: shake-blur 0.4s infinite alternate; }
-        @keyframes shake-blur { 0% { transform: translate(2px, 1px) rotate(0deg); filter: blur(0px); } 100% { transform: translate(-2px, -2px) rotate(-2deg); filter: blur(3px) hue-rotate(90deg); color: #ffeb3b;} }
+        @keyframes shake-blur { 0% { transform: translate(2px, 1px) rotate(0deg); filter: blur(0px); } 100% { transform: translate(-2px, -2px) rotate(-2deg); filter: blur(4px) hue-rotate(180deg); color: #ff00ff;} }
 
         #settings-modal { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px); z-index: 9999; justify-content: center; align-items: center; }
-        .settings-content { background: linear-gradient(135deg, #1a2a6c, #112240); border: 2px solid #00ffff; border-radius: 15px; padding: 25px; width: 80%; max-width: 350px; text-align: center; box-shadow: 0 0 20px rgba(0, 255, 255, 0.5); position: relative; }
+        .settings-content { background: linear-gradient(135deg, #1a2a6c, #112240); border: 2px solid #00ffff; border-radius: 15px; padding: 25px; width: 85%; max-width: 350px; text-align: center; box-shadow: 0 0 20px rgba(0, 255, 255, 0.5); position: relative; }
         .settings-close { position: absolute; top: 10px; right: 15px; font-size: 24px; color: #fff; cursor: pointer; font-weight: bold; }
         .settings-close:hover { color: #ff4757; }
         .slider-group { margin-bottom: 20px; text-align: left;}
@@ -127,6 +228,8 @@
         input[type=range]::-webkit-slider-thumb { height: 20px; width: 20px; border-radius: 50%; background: #00ffff; cursor: pointer; -webkit-appearance: none; margin-top: -6px; box-shadow: 0 0 10px rgba(0,255,255,0.8); }
         .btn-danger { background: rgba(231, 76, 60, 0.2); border: 1px solid #e74c3c; color: #ffcccc; padding: 10px; border-radius: 10px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 10px; transition: all 0.2s;}
         .btn-danger:hover { background: rgba(231, 76, 60, 0.5); color: white; }
+        .btn-test { background: rgba(0, 255, 204, 0.2); border: 1px solid #00ffcc; color: #00ffcc; padding: 10px; border-radius: 10px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 15px; transition: all 0.2s;}
+        .btn-test:hover { background: rgba(0, 255, 204, 0.5); color: #fff; }
     </style>
 </head>
 <body>
@@ -142,7 +245,18 @@
         <button id="skip-intro-btn" onclick="finishIntro()">跳過 (Skip)</button>
     </div>
 
-    <div class="bubbles" id="bubble-layer"></div>
+    <!-- Boss 警告畫面 -->
+    <div id="boss-warning" class="warning-screen">
+        <div id="warning-boss-silhouette" class="warning-boss-silhouette"></div>
+        <div class="warning-stripes"></div>
+        <div class="warning-content">
+            <h1 class="warning-title">⚠️ WARNING ⚠️</h1>
+            <div id="boss-name-display" class="boss-name-display">深淵大魔王</div>
+        </div>
+        <div class="warning-stripes"></div>
+    </div>
+
+    <div id="victory-flash" class="boss-victory-flash"></div>
 
     <div id="main-screen" class="screen">
         <img src="images/logo.png" id="game-logo" alt="重返亞特蘭提斯：人魚公主與數靈聖域" onerror="this.outerHTML='<h1 style=\'margin-top:20px;\'>重返亞特蘭提斯<br>人魚公主與數靈聖域</h1>'">
@@ -153,46 +267,62 @@
     </div>
 
     <div id="level-screen" class="screen">
-        <h2 style="color: #fff; text-shadow: 0 4px 6px rgba(0,0,0,0.8); margin-top: 0; margin-bottom: 15px; letter-spacing: 2px;">選擇關卡</h2>
-        <div class="level-grid" id="level-grid"></div>
-        
-        <div class="special-modes" id="special-modes-ui">
-            <label style="font-size: 16px; color: #ffeb3b; font-weight: bold; cursor: pointer; text-shadow: 1px 1px 2px #000;">
-                <input type="checkbox" id="hard-mode-toggle" style="transform: scale(1.3); margin-right: 5px;"> 🔥 開啟進階難度 (海怪干擾)
+        <h2 style="color: #fff; text-shadow: 0 4px 6px rgba(0,0,0,0.8); margin-top: 0; margin-bottom: 10px; letter-spacing: 2px;">選擇關卡</h2>
+        <div id="advanced-mode-ui" style="display:none; width: 100%; justify-content: center; margin-bottom: 10px;">
+            <label style="color: #ff4757; font-weight: bold; font-size: 16px; text-shadow: 0 0 10px rgba(255,0,0,0.5); cursor: pointer;">
+                <input type="checkbox" id="adv-toggle" onchange="updateLevelUI()" style="transform: scale(1.3); margin-right: 5px;"> 🔥 啟用進階模式 (Boss 技能)
             </label>
-            <button class="btn" onclick="startEndlessMode()" style="width: 220px;">♾️ 無限大挑戰</button>
         </div>
-        <button class="btn" style="width: 150px;" onclick="showScreen('main-screen', 'MENU')">返回</button>
+        <div class="level-grid" id="level-grid"></div>
+        <div id="level-10-container" style="width: 100%; text-align: center; display: none;">
+            <button class="btn btn-boss" onclick="startGame(10)">👑 第 10 關：最終大魔王</button>
+        </div>
+        <div id="level-20-container" style="width: 100%; text-align: center; display: none;">
+            <button class="btn btn-boss" onclick="startGame(20)" style="filter: hue-rotate(150deg);">👑 進階 10 關：真・大魔王</button>
+        </div>
+        <div class="special-modes" id="special-modes-ui" style="display:none;">
+            <button class="btn" onclick="startEndlessMode()" style="width: 220px; height: 50px; font-size: 16px;">♾️ 無限大挑戰</button>
+        </div>
+        <button class="btn" style="width: 150px; height: 50px; font-size: 16px;" onclick="showScreen('main-screen', 'MENU')">返回</button>
     </div>
 
     <div id="gallery-screen" class="screen">
         <h2 style="color: #fff; text-shadow: 0 4px 6px rgba(0,0,0,0.8); margin-top:0; margin-bottom: 5px; letter-spacing: 2px;">星光好朋友相簿</h2>
-        <div style="font-size: 14px; margin-bottom: 15px; color: #00ffff; font-weight: bold; text-shadow: 1px 1px 2px #000;">點擊已解鎖的卡牌來裝備夥伴 Buff</div>
+        <div style="font-size: 13px; margin-bottom: 10px; color: #00ffff; font-weight: bold; text-shadow: 1px 1px 2px #000;">點擊已解鎖的卡牌來裝備守護夥伴</div>
         <div class="gallery-grid" id="gallery-grid"></div>
-        <button class="btn" style="margin-top: 20px; width: 150px;" onclick="showScreen('main-screen', 'MENU')">返回</button>
+        <button class="btn" style="margin-top: 15px; width: 150px; height: 50px; font-size: 16px;" onclick="showScreen('main-screen', 'MENU')">返回</button>
     </div>
 
     <div id="gameplay-screen" class="screen">
         <div class="top-bar">
-            <div class="hp-section">
-                <img src="" id="ui-partner-icon" class="partner-icon">
-                <div id="ui-hp"></div>
-            </div>
-            <div class="progress-bar" id="ui-progress">距離 Boss: 0/10</div>
+            <div class="hp-section"><div id="ui-hp"></div></div>
+            <div class="progress-bar" id="ui-progress">🚩 進度: 0/3</div>
         </div>
         <div class="question-area">
             <div id="ui-question">2 x 3 = ?</div>
             <div class="timer-bar-container"><div class="timer-bar" id="ui-timer"></div></div>
         </div>
-        <div class="battle-stage">
+        
+        <div class="battle-stage" id="battle-stage-bg">
             <img src="images/char-mermaid.png" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" class="character mermaid" id="char-mermaid">
             <div style="display:none; font-size: 70px;" class="character mermaid" id="fallback-mermaid">🧜‍♀️</div>
             
+            <div id="char-partner-container" class="partner-container">
+                <img src="" id="char-partner" class="partner-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                <div style="display:none; font-size: 40px; transform: scaleX(-1);" id="fallback-partner">✨</div>
+            </div>
+
             <div class="speech-bubble" id="ui-speech">準備好了嗎？</div>
             
             <img src="" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" class="character monster" id="char-monster">
             <div style="display:none; font-size: 70px;" class="character monster" id="fallback-monster">👾</div>
+
+            <div id="monster-ui" class="monster-ui">
+                <div class="monster-hp-bar"><div id="monster-hp-fill" class="monster-hp-fill"></div></div>
+                <div id="monster-hp-text" class="monster-hp-text">HP: 2/2</div>
+            </div>
         </div>
+        
         <div class="bottom-controls">
             <button class="answer-btn" onclick="checkAnswer(0)" id="btn-ans-0">1</button>
             <button class="answer-btn" onclick="checkAnswer(1)" id="btn-ans-1">2</button>
@@ -201,34 +331,31 @@
     </div>
 
     <div id="result-screen" class="screen">
-        <h1 id="result-title" style="font-size: 45px;">關卡完成！</h1>
-        <div class="subtitle" id="result-desc" style="font-size: 22px; line-height: 1.5;"></div>
-        <button class="btn" onclick="showScreen('level-screen', 'LEVEL_SELECT')" style="margin-top: 20px;">確認</button>
+        <h1 id="result-title" style="font-size: 40px; margin-bottom: 5px;">關卡完成！</h1>
+        <div class="subtitle" id="result-desc" style="font-size: 15px; line-height: 1.4; text-align: center; padding: 0 15px;"></div>
+        <button class="btn" onclick="showScreen('level-screen', 'LEVEL_SELECT')" style="margin-top: 15px; width: 200px; height: 60px; font-size: 18px;">確認</button>
     </div>
 
     <div id="settings-modal">
         <div class="settings-content">
             <div class="settings-close" onclick="closeSettings()">×</div>
             <h2 style="color: #fff; margin-top: 0;">設定</h2>
-            
             <div class="slider-group">
                 <label class="slider-label">背景音樂 (BGM) <span id="bgm-value" style="float: right;">50%</span></label>
                 <input type="range" id="bgm-slider" min="0" max="100" value="50" oninput="updateVolume('bgm')">
             </div>
-            
             <div class="slider-group">
                 <label class="slider-label">遊戲音效 (SFX) <span id="sfx-value" style="float: right;">50%</span></label>
                 <input type="range" id="sfx-slider" min="0" max="100" value="50" oninput="updateVolume('sfx')">
             </div>
-            
+            <button class="btn-test" onclick="testUnlockAll()">🛠️ 測試：全關卡與圖鑑解鎖</button>
             <button class="btn-danger" onclick="resetSaveData()">⚠️ 重置遊戲進度</button>
         </div>
     </div>
 </div>
 
 <script>
-    // ====== 核心狀態標籤系統 (GameState Machine) ======
-    let gameState = 'INTRO'; // 可選值: 'INTRO', 'MENU', 'LEVEL_SELECT', 'PLAYING', 'PAUSED', 'RESULT'
+    let gameState = 'INTRO'; 
 
     window.onload = function() {
         const overlay = document.getElementById('fade-overlay');
@@ -279,19 +406,43 @@
             osc.type = 'triangle'; osc.frequency.setValueAtTime(300, now); osc.frequency.setValueAtTime(250, now + 0.2); osc.frequency.setValueAtTime(200, now + 0.4);
             gainNode.gain.setValueAtTime(baseGain, now); gainNode.gain.linearRampToValueAtTime(0, now + 0.8);
             osc.start(now); osc.stop(now + 0.8);
+        } else if (type === 'warning') {
+            osc.type = 'square'; osc.frequency.setValueAtTime(400, now); osc.frequency.setValueAtTime(600, now + 0.3); osc.frequency.setValueAtTime(400, now + 0.6); osc.frequency.setValueAtTime(600, now + 0.9);
+            gainNode.gain.setValueAtTime(baseGain * 0.5, now); gainNode.gain.linearRampToValueAtTime(0, now + 1.2);
+            osc.start(now); osc.stop(now + 1.2);
         }
     }
 
+    // 持續生成泡泡（全域常態演出）
     function createBubbles() {
-        const layer = document.getElementById('bubble-layer');
+        const container = document.getElementById('game-container');
         setInterval(() => {
             if (document.hidden) return; 
             const bubble = document.createElement('div');
-            bubble.classList.add('bubble');
-            const size = Math.random() * 20 + 5; 
-            bubble.style.width = `${size}px`; bubble.style.height = `${size}px`;
-            bubble.style.left = `${Math.random() * 100}%`; bubble.style.animationDuration = `${Math.random() * 3 + 3}s`; 
-            layer.appendChild(bubble); setTimeout(() => bubble.remove(), 6000);
+            bubble.style.position = 'absolute';
+            bubble.style.bottom = '-30px';
+            bubble.style.background = 'radial-gradient(circle at 30% 30%, rgba(255,255,255,0.9), rgba(0,255,255,0.3))';
+            bubble.style.borderRadius = '50%';
+            bubble.style.border = '1px solid rgba(255,255,255,0.5)';
+            bubble.style.pointerEvents = 'none';
+            bubble.style.zIndex = '4'; // 位於波光與背景之上，UI之下
+            
+            const size = Math.random() * 25 + 8; 
+            bubble.style.width = `${size}px`; 
+            bubble.style.height = `${size}px`;
+            bubble.style.left = `${Math.random() * 100}%`;
+            
+            const duration = Math.random() * 3 + 3;
+            bubble.style.transition = `transform ${duration}s linear, opacity ${duration}s linear`;
+            
+            container.appendChild(bubble);
+            
+            setTimeout(() => {
+                bubble.style.transform = `translateY(-${container.clientHeight + 50}px) scale(1.3)`;
+                bubble.style.opacity = '0';
+            }, 50);
+
+            setTimeout(() => { bubble.remove(); }, (duration + 0.1) * 1000);
         }, 300);
     }
     createBubbles();
@@ -313,24 +464,18 @@
     initVolumeUI();
 
     function openSettings() { 
-        gameState = 'PAUSED'; // 切換狀態為暫停
+        if (gameState === 'PLAYING') gameState = 'PAUSED'; 
         document.getElementById('settings-modal').style.display = 'flex'; 
     }
     
     function closeSettings() { 
         document.getElementById('settings-modal').style.display = 'none';
-        
-        // 恢復原本的狀態標籤
         const activeScreen = document.querySelector('.screen.active').id;
-        if (activeScreen === 'gameplay-screen') {
-            gameState = 'PLAYING';
-        } else if (activeScreen === 'level-screen') {
-            gameState = 'LEVEL_SELECT';
-        } else if (activeScreen === 'result-screen') {
-            gameState = 'RESULT';
-        } else {
-            gameState = 'MENU';
-        }
+        
+        if (gameState === 'PAUSED' && activeScreen === 'gameplay-screen') gameState = 'PLAYING';
+        else if (activeScreen === 'level-screen') gameState = 'LEVEL_SELECT';
+        else if (activeScreen === 'result-screen') gameState = 'RESULT';
+        else if (activeScreen === 'main-screen') gameState = 'MENU';
 
         if(!hasStartedAudio) { initAudio(); hasStartedAudio = true; updateBGM(); }
     }
@@ -353,7 +498,7 @@
     function updateBGM() {
         if (volBGM === 0 || gameState === 'PAUSED') { bgmMain.pause(); bgmBattle.pause(); return; }
         
-        if (gameState === 'PLAYING') {
+        if (gameState === 'PLAYING' || gameState === 'WARNING') {
             bgmMain.pause();
             if (bgmBattle.paused) { bgmBattle.currentTime = 0; bgmBattle.play().catch(e => {}); }
         } else if (gameState === 'MENU' || gameState === 'LEVEL_SELECT') {
@@ -371,8 +516,6 @@
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById(id).classList.add('active');
         document.getElementById(id).scrollTop = 0; 
-        
-        // 更新狀態標籤
         gameState = stateTag;
         if(hasStartedAudio) updateBGM();
     }
@@ -382,7 +525,7 @@
         let parsedData;
         try { parsedData = JSON.parse(rawData); } catch(e) { parsedData = null; }
 
-        if (!parsedData || typeof parsedData.unlockedLevel !== 'number' || isNaN(parsedData.unlockedLevel) || parsedData.unlockedLevel < 1 || parsedData.unlockedLevel > 10) {
+        if (!parsedData || typeof parsedData.unlockedLevel !== 'number' || isNaN(parsedData.unlockedLevel) || parsedData.unlockedLevel < 1 || parsedData.unlockedLevel > 25) {
             return { unlockedLevel: 1, unlockedCards: [], equippedPartner: null };
         }
         if(parsedData.equippedPartner === undefined) parsedData.equippedPartner = null;
@@ -394,39 +537,86 @@
     function saveData() { localStorage.setItem('mermaidSave', JSON.stringify(saveFile)); updateLevelUI(); }
 
     function resetSaveData() {
-        if(confirm("確定要清除所有遊戲進度嗎？（卡牌與解鎖關卡將全部重置）")) {
+        if(confirm("確定要清除所有遊戲進度嗎？")) {
             localStorage.removeItem('mermaidSave');
             saveFile = { unlockedLevel: 1, unlockedCards: [], equippedPartner: null };
-            updateLevelUI();
-            alert("進度已成功重置！");
-            closeSettings();
+            updateLevelUI(); alert("進度已重置！"); closeSettings();
+        }
+    }
+
+    function testUnlockAll() {
+        if(confirm("確定要解鎖所有關卡與圖鑑嗎？")) {
+            saveFile.unlockedLevel = 25; 
+            saveFile.unlockedCards = [0, 1, 2, 3, 4, 5, 6, 7, 8]; 
+            saveData(); alert("測試模式啟動！全解鎖！"); closeSettings();
         }
     }
 
     let state = { 
-        level: 1, hp: 3, maxHp: 3, progress: 0, maxProgress: 10, 
+        level: 1, hp: 3, maxHp: 3, 
+        monstersDefeated: 0, maxMonsters: 3, 
+        monsterHp: 2, monsterMaxHp: 2,       
         isBoss: false, bossHp: 3, baseBossHp: 3, 
         correctAnswer: 0, timer: 100, timerInterval: null, 
         isEndless: false, isHardMode: false, endlessScore: 0, timeBuff: false
     };
 
-    const monsters = ["🐟","🐍","🦀","🐡","🌟","🦑","🦈","🐙","👿"]; 
-    const monsterImg = ["monster-1.png", "monster-2.png", "monster-3.png", "monster-4.png", "monster-5.png", "monster-6.png", "monster-7.png", "monster-8.png", "monster-9.png"];
+    const mobImg = ["mob-1.png", "mob-2.png", "mob-3.png"];
+    const mobEmojis = ["🦑", "🦀", "🦈"]; 
+    const monsters = ["🐟","🐍","🦀","🐡","🌟","🦑","🦈","🐙","👿", "☠️"]; 
+    const monsterImg = ["monster-1.png", "monster-2.png", "monster-3.png", "monster-4.png", "monster-5.png", "monster-6.png", "monster-7.png", "monster-8.png", "monster-9.png", "monster-10.png"];
+    const partnerImg = ["partner-1.png", "partner-2.png", "partner-3.png", "partner-4.png", "partner-5.png", "partner-6.png", "partner-7.png", "partner-8.png", "partner-9.png"];
+    const partnerNames = ["聖光小海馬", "雙子水靈蛇", "晨曦引路魚", "天使四翼魚", "星晶守護者", "柔波小海鯊", "幻彩治癒傘", "智慧八爪仙", "九星祈願鯤"];
     const buffNames = ["生命守護<br>(愛心+1)", "時間魔法<br>(變慢25%)", "強力打擊<br>(Boss血-1)"];
+    
+    const baseBossNames = [
+        "獨角海馬", "雙頭海蛇", "三尾燈籠魚", "四翼魔化飛魚", "巨型裝甲海星",
+        "六鰓異化鯊魚", "七彩毒素水母", "八爪深海大章魚", "九眼深海魔魚"
+    ];
+
+    function getBossName(levelIndex, isEndless = false) {
+        if (isEndless) {
+            let prefix = Math.random() > 0.5 ? "深淵" : "";
+            if (levelIndex === 9) return prefix ? "十面埋伏-深淵海神克蘇魯" : "十面埋伏-海神克蘇魯的虛影";
+            return prefix + baseBossNames[levelIndex];
+        }
+        if (state.level === 10) return "十面埋伏-海神克蘇魯的虛影";
+        if (state.level === 20) return "十面埋伏-深淵海神克蘇魯";
+        if (state.level > 10) return "深淵" + baseBossNames[levelIndex];
+        return baseBossNames[levelIndex];
+    }
 
     function updateLevelUI() {
         const grid = document.getElementById('level-grid');
+        const isAdvMode = document.getElementById('adv-toggle') ? document.getElementById('adv-toggle').checked : false;
         grid.innerHTML = '';
+        
         for(let i = 1; i <= 9; i++) {
+            let actualLevel = isAdvMode ? i + 10 : i;
             let btn = document.createElement('button');
-            if (i <= saveFile.unlockedLevel) {
-                btn.className = 'level-btn'; btn.innerHTML = `第 ${i} 關<br>(x${i})`; btn.onclick = () => startGame(i, false);
+            if (saveFile.unlockedLevel >= actualLevel) {
+                btn.className = isAdvMode ? 'level-btn adv-btn' : 'level-btn'; 
+                btn.innerHTML = isAdvMode ? `進階 ${i}<br>(x${i})` : `第 ${i} 關<br>(x${i})`; 
+                btn.onclick = () => startGame(actualLevel);
             } else {
                 btn.className = 'level-btn locked'; btn.innerHTML = `🔒<br>未解鎖`;
             }
             grid.appendChild(btn);
         }
-        document.getElementById('special-modes-ui').style.display = saveFile.unlockedLevel > 9 ? 'flex' : 'none';
+
+        const bossContainer = document.getElementById('level-10-container');
+        const advBossContainer = document.getElementById('level-20-container');
+
+        if (!isAdvMode) {
+            bossContainer.style.display = saveFile.unlockedLevel >= 10 ? 'block' : 'none';
+            advBossContainer.style.display = 'none';
+        } else {
+            bossContainer.style.display = 'none';
+            advBossContainer.style.display = saveFile.unlockedLevel >= 20 ? 'block' : 'none';
+        }
+
+        document.getElementById('advanced-mode-ui').style.display = saveFile.unlockedLevel >= 11 ? 'flex' : 'none';
+        document.getElementById('special-modes-ui').style.display = saveFile.unlockedLevel >= 21 ? 'flex' : 'none';
     }
     updateLevelUI();
 
@@ -438,18 +628,18 @@
             let buffType = i % 3; 
 
             if (saveFile.unlockedCards.includes(i)) {
-                card.className = 'card';
+                card.className = 'poker-card';
                 if (saveFile.equippedPartner === i) card.classList.add('equipped');
-                
                 card.innerHTML = `
-                    <div class="buff-desc">${buffNames[buffType].replace('<br>',' ')}</div>
-                    <img src="images/${monsterImg[i]}" style="width:60%;" onerror="this.outerHTML='${monsters[i]}'">
-                    ${saveFile.equippedPartner === i ? '<div class="equip-tag">✅ 已裝備</div>' : ''}
+                    <img src="images/ui-card-front.png" class="card-bg" onerror="this.src=''; this.style.backgroundColor='#1a2a6c';">
+                    <img src="images/${partnerImg[i]}" class="card-partner-img" onerror="this.src='images/${monsterImg[i]}'; this.style.filter='hue-rotate(90deg) drop-shadow(0 2px 5px rgba(0,0,0,0.5))';">
+                    <div class="card-buff-desc">${partnerNames[i]}<br><span style="font-size:8px; color:#00ffcc;">${buffNames[buffType].replace('<br>',' ')}</span></div>
+                    ${saveFile.equippedPartner === i ? '<div class="equip-tag">裝備中</div>' : ''}
                 `;
                 card.onclick = () => equipPartner(i);
             } else {
-                card.className = 'card locked';
-                card.innerHTML = '🔒';
+                card.className = 'poker-card locked'; 
+                card.innerHTML = `<img src="images/ui-card-back.png" class="card-bg" onerror="this.src=''; this.style.backgroundColor='#050a1f'; this.style.border='2px solid #333';">`;
             }
             grid.appendChild(card);
         }
@@ -461,10 +651,17 @@
         saveData(); showGallery();
     }
 
-    function showSpeech(text, isGood = true) {
+    function showSpeech(text, isGood = true, isBossSkill = false) {
         const bubble = document.getElementById('ui-speech');
         bubble.innerHTML = text; 
-        bubble.style.color = isGood ? '#1e3799' : '#e84118'; 
+        
+        if (isBossSkill) {
+            bubble.classList.add('boss-skill');
+        } else {
+            bubble.classList.remove('boss-skill');
+            bubble.style.color = isGood ? '#1e3799' : '#e84118'; 
+        }
+        
         bubble.classList.add('show');
         setTimeout(() => { bubble.classList.remove('show'); }, 2000);
     }
@@ -477,16 +674,36 @@
         }
         document.getElementById('ui-hp').innerHTML = hpHTML;
         
-        if (state.isEndless) {
-            document.getElementById('ui-progress').innerText = state.isBoss ? `Boss 血量: ${state.bossHp}/${state.baseBossHp}` : `擊退海怪: ${state.endlessScore}`;
-        } else {
-            document.getElementById('ui-progress').innerText = state.isBoss ? `Boss 血量: ${state.bossHp}/${state.baseBossHp}` : `距離 Boss: ${state.progress}/${state.maxProgress}`;
+        const progressUI = document.getElementById('ui-progress');
+        if (state.isEndless) progressUI.innerHTML = `🏆 總擊退: <span style="color:#fff;">${state.endlessScore}</span>`;
+        else progressUI.innerHTML = `🚩 進度: <span style="color:#fff;">${state.monstersDefeated}/${state.maxMonsters}</span>`;
+
+        const monsterUi = document.getElementById('monster-ui');
+        const hpFill = document.getElementById('monster-hp-fill');
+        const hpText = document.getElementById('monster-hp-text');
+        
+        if (monsterUi.style.display !== 'none') {
+            if (state.isBoss) {
+                monsterUi.className = 'monster-ui boss-ui';
+                let pct = (state.bossHp / state.baseBossHp) * 100;
+                hpFill.style.width = Math.max(pct, 0) + '%';
+                hpText.innerText = `Boss HP: ${Math.max(state.bossHp, 0)} / ${state.baseBossHp}`;
+            } else {
+                let isElite = state.isEndless ? (state.endlessScore % 5 === 4) : (state.monstersDefeated === state.maxMonsters - 1);
+                monsterUi.className = isElite ? 'monster-ui elite-ui' : 'monster-ui';
+                let pct = (state.monsterHp / state.monsterMaxHp) * 100;
+                hpFill.style.width = Math.max(pct, 0) + '%';
+                hpText.innerText = `HP: ${Math.max(state.monsterHp, 0)} / ${state.monsterMaxHp}`;
+            }
         }
     }
 
     function applyBuffs() {
         state.maxHp = 3; state.baseBossHp = 3; state.timeBuff = false;
-        const pIcon = document.getElementById('ui-partner-icon');
+        
+        const pContainer = document.getElementById('char-partner-container');
+        const pImg = document.getElementById('char-partner');
+        const pFallback = document.getElementById('fallback-partner');
         let buffMsg = "星光魔法，出擊！✨";
 
         if(saveFile.equippedPartner !== null) {
@@ -495,63 +712,136 @@
             if(pType === 1) { state.timeBuff = true; buffMsg = "發動技能：<br>⏳ 時間變慢！"; }
             if(pType === 2) { state.baseBossHp = 2; buffMsg = "發動技能：<br>⚔️ Boss血量-1！"; }
             
-            pIcon.style.display = "block";
-            pIcon.src = `images/${monsterImg[saveFile.equippedPartner]}`;
-            pIcon.onerror = function() { this.style.display='none'; } 
+            pContainer.style.display = "block";
+            pImg.style.display = "block";
+            pImg.src = `images/${partnerImg[saveFile.equippedPartner]}`;
+            pImg.onerror = function() { 
+                this.src = `images/${monsterImg[saveFile.equippedPartner]}`; 
+                this.style.filter = "hue-rotate(90deg) drop-shadow(0 5px 10px rgba(255,255,255,0.4))";
+            };
+            pFallback.style.display = "none";
         } else {
-            pIcon.style.display = "none";
+            pContainer.style.display = "none";
         }
         state.hp = state.maxHp;
         return buffMsg;
     }
 
     function startGame(level) {
-        state.level = level; state.progress = 0; state.isBoss = false; state.isEndless = false;
-        state.isHardMode = document.getElementById('hard-mode-toggle').checked && saveFile.unlockedLevel > 9;
+        state.level = level; state.monstersDefeated = 0; state.isBoss = false; state.isEndless = false;
         
         let startMsg = applyBuffs();
-        if(state.isHardMode) startMsg = "進階難度！<br>小心干擾！";
+        state.monsterMaxHp = 2; 
+        
+        if (level === 10) { state.isHardMode = true; state.baseBossHp += 7; state.maxMonsters = 8; startMsg = "最終決戰！<br>打倒大魔王！"; }
+        else if (level === 20) { state.isHardMode = true; state.baseBossHp += 12; state.maxMonsters = 5; startMsg = "進階最終戰！<br>歷代魔王降臨！"; }
+        else if (level > 10) { state.isHardMode = true; state.baseBossHp += 2; state.maxMonsters = 5; startMsg = "進階挑戰！<br>Boss技能解放！"; }
+        else { state.isHardMode = false; state.maxMonsters = 3; }
 
-        setupMonster(level - 1);
+        document.getElementById('monster-ui').style.display = 'none'; 
+        state.monsterHp = state.monsterMaxHp;
+        
+        spawnNextMonster(true); 
+        
         updateUI(); 
-        showScreen('gameplay-screen', 'PLAYING'); // 設定狀態為 PLAYING
+        showScreen('gameplay-screen', 'PLAYING'); 
         showSpeech(startMsg);
         generateQuestion();
     }
 
     function startEndlessMode() {
-        state.level = 'endless'; state.progress = 0; state.endlessScore = 0; state.isBoss = false; state.isEndless = true; state.isHardMode = false;
+        state.level = 'endless'; state.monstersDefeated = 0; state.endlessScore = 0; state.isBoss = false; state.isEndless = true; state.isHardMode = true;
         let startMsg = applyBuffs();
-        setupMonster(Math.floor(Math.random() * 9));
-        updateUI(); 
-        showScreen('gameplay-screen', 'PLAYING'); 
-        showSpeech(startMsg + "<br>無限挑戰開始！");
+        state.monsterMaxHp = 2; state.monsterHp = state.monsterMaxHp;
+        
+        document.getElementById('monster-ui').style.display = 'none';
+        
+        spawnNextMonster(true);
+        updateUI(); showScreen('gameplay-screen', 'PLAYING'); showSpeech(startMsg + "<br>無限挑戰開始！");
         generateQuestion();
     }
 
-    function setupMonster(index) {
-        const monsterPic = document.getElementById('char-monster');
-        const fallbackPic = document.getElementById('fallback-monster');
+    function spawnNextMonster(isFirstSpawn = false) {
+        const gameplayBg = document.getElementById('battle-stage-bg');
+        const mermaid = document.getElementById('char-mermaid');
+        const partnerContainer = document.getElementById('char-partner-container');
         
-        monsterPic.style.display = 'block';
-        fallbackPic.style.display = 'none';
+        mermaid.classList.remove('anim-mermaid-enter', 'anim-mermaid-run', 'anim-attack', 'anim-hurt');
+        partnerContainer.classList.remove('anim-mermaid-enter', 'anim-mermaid-run', 'anim-partner-atk');
+        gameplayBg.classList.remove('anim-dash-forward');
+        void mermaid.offsetWidth; 
+        void partnerContainer.offsetWidth;
+        void gameplayBg.offsetWidth; 
+
+        if (isFirstSpawn) {
+            mermaid.classList.add('anim-mermaid-enter');
+            if(saveFile.equippedPartner !== null) partnerContainer.classList.add('anim-mermaid-enter');
+        } else {
+            gameplayBg.classList.add('anim-dash-forward');
+            mermaid.classList.add('anim-mermaid-run');
+            if(saveFile.equippedPartner !== null) partnerContainer.classList.add('anim-mermaid-run');
+        }
+
+        let mobIndex = 0; let actualLevel = state.level; let isBossAsMob = false;
         
-        monsterPic.src = `images/${monsterImg[index]}`;
-        fallbackPic.innerText = monsters[index];
-        monsterPic.className = 'character monster';
-        fallbackPic.className = 'character monster';
+        if (actualLevel === 'endless') mobIndex = Math.floor(Math.random() * 3); 
+        else if (actualLevel === 20) { mobIndex = Math.floor(Math.random() * 9); isBossAsMob = true; }
+        else if (actualLevel === 10) mobIndex = Math.floor(Math.random() * 3);
+        else {
+            if (actualLevel > 10) actualLevel -= 10; 
+            if (actualLevel <= 3) mobIndex = 0; else if (actualLevel <= 6) mobIndex = 1; else mobIndex = 2;                       
+        }
+
+        let isElite = state.isEndless ? (state.endlessScore % 5 === 4) : (state.monstersDefeated === state.maxMonsters - 1);
+        
+        setTimeout(() => {
+            if (isBossAsMob) setupSprite('boss-as-mob', mobIndex, isElite, isFirstSpawn);
+            else setupSprite('mob', mobIndex, isElite, isFirstSpawn);
+
+            document.getElementById('monster-hp-fill').style.width = '100%';
+            document.getElementById('monster-ui').style.display = 'block';
+        }, isFirstSpawn ? 0 : 400);
+    }
+
+    function setupSprite(type, index, isElite = false, isFirstSpawn = false) {
+        const pic = document.getElementById('char-monster');
+        const fallback = document.getElementById('fallback-monster');
+        
+        pic.classList.remove('anim-monster-hurt', 'anim-monster-die', 'anim-monster-enter');
+        fallback.classList.remove('anim-monster-hurt', 'anim-monster-die', 'anim-monster-enter');
+        
+        pic.style.display = 'block'; fallback.style.display = 'none';
+
+        let classBase = 'character monster ';
+        if (!isFirstSpawn) classBase += 'anim-monster-enter ';
+        
+        if (state.level > 10 || state.level === 'endless') classBase += 'adv-monster ';
+        
+        if (type === 'boss') {
+            pic.src = `images/${monsterImg[index]}`; fallback.innerText = monsters[index] || "☠️";
+            pic.className = classBase + 'boss'; fallback.className = classBase + 'boss';
+        } else if (type === 'boss-as-mob') {
+            pic.src = `images/${monsterImg[index]}`; fallback.innerText = monsters[index] || "👾";
+            pic.className = classBase + (isElite ? 'elite-monster' : ''); fallback.className = classBase + (isElite ? 'elite-monster' : '');
+        } else {
+            pic.src = `images/${mobImg[index]}`; fallback.innerText = mobEmojis[index] || "👾";
+            pic.className = classBase + (isElite ? 'elite-monster' : ''); fallback.className = classBase + (isElite ? 'elite-monster' : '');
+        }
     }
 
     function generateQuestion() {
         resetTimer();
-        let num1 = state.isEndless ? Math.floor(Math.random() * 9) + 1 : state.level;
+        for(let i=0; i<3; i++) document.getElementById(`btn-ans-${i}`).style.color = "#fff";
+        document.getElementById('ui-question').classList.remove('interference');
+
+        let num1;
+        if (state.level === 'endless' || state.level === 10 || state.level === 20) num1 = Math.floor(Math.random() * 9) + 1; 
+        else if (state.level > 10) num1 = state.level - 10; 
+        else num1 = state.level; 
+        
         let num2 = Math.floor(Math.random() * 9) + 1;
         state.correctAnswer = num1 * num2;
-        
-        const qArea = document.getElementById('ui-question');
-        qArea.innerText = `${num1} x ${num2} = ?`;
-        if (state.isHardMode && Math.random() > 0.5) qArea.classList.add('interference');
-        else qArea.classList.remove('interference');
+        document.getElementById('ui-question').innerText = `${num1} x ${num2} = ?`;
 
         let wrong1 = state.correctAnswer + (Math.floor(Math.random() * 5) + 1);
         let wrong2 = state.correctAnswer - (Math.floor(Math.random() * 5) + 1);
@@ -559,6 +849,21 @@
 
         let options = [state.correctAnswer, wrong1, wrong2].sort(() => Math.random() - 0.5);
         for(let i=0; i<3; i++) document.getElementById(`btn-ans-${i}`).innerText = options[i];
+
+        if (state.isBoss && state.isHardMode) {
+            if (Math.random() > 0.4) { 
+                let skillType = Math.floor(Math.random() * 3);
+                if (skillType === 0) { document.getElementById('ui-question').classList.add('interference'); showSpeech("深海迷霧！", false, true); }
+                else if (skillType === 1) { state.timer -= 30; showSpeech("時間吞噬！", false, true); }
+                else if (skillType === 2) {
+                    for(let i=0; i<3; i++) {
+                        document.getElementById(`btn-ans-${i}`).style.color = "transparent";
+                        setTimeout(() => { const btn = document.getElementById(`btn-ans-${i}`); if(btn) btn.style.color = "#fff"; }, 1500);
+                    }
+                    showSpeech("暗影遮蔽！", false, true);
+                }
+            }
+        }
     }
 
     function resetTimer() {
@@ -567,13 +872,11 @@
         const timerBar = document.getElementById('ui-timer');
         timerBar.style.width = '100%'; timerBar.style.background = 'linear-gradient(90deg, #00ffcc, #00bfff)';
         
-        let speed = (state.isHardMode || state.isEndless) ? 60 : 100;
+        let speed = state.isHardMode ? 60 : 100;
         if(state.timeBuff) speed = Math.floor(speed * 1.25); 
 
         state.timerInterval = setInterval(() => {
-            // ★ 核心優化：如果目前狀態不是 PLAYING，計時器直接跳過，不扣時間！
             if (gameState !== 'PLAYING') return;
-
             state.timer -= 1;
             timerBar.style.width = state.timer + '%';
             if(state.timer < 30) timerBar.style.background = 'linear-gradient(90deg, #ff4757, #ff6b81)';
@@ -582,22 +885,24 @@
     }
 
     function checkAnswer(btnIndex) {
-        // ★ 如果非戰鬥狀態，禁止點擊答題
         if (gameState !== 'PLAYING') return;
-
         clearInterval(state.timerInterval);
         document.getElementById('ui-question').classList.remove('interference'); 
         const selected = parseInt(document.getElementById(`btn-ans-${btnIndex}`).innerText);
         
         let mermaid = document.getElementById('char-mermaid');
+        let partnerContainer = document.getElementById('char-partner-container');
         if(mermaid.style.display === 'none') mermaid = document.getElementById('fallback-mermaid');
-        mermaid.classList.remove('anim-attack', 'anim-hurt'); void mermaid.offsetWidth;
+        
+        mermaid.classList.remove('anim-attack', 'anim-hurt', 'anim-mermaid-enter', 'anim-mermaid-run'); 
+        partnerContainer.classList.remove('anim-partner-atk', 'anim-mermaid-enter', 'anim-mermaid-run');
+        void mermaid.offsetWidth; void partnerContainer.offsetWidth;
 
-        if(selected === state.correctAnswer) handleCorrect(mermaid);
+        if(selected === state.correctAnswer) handleCorrect(mermaid, partnerContainer);
         else handleWrong("哎呀，答錯了！", mermaid);
     }
 
-    function handleCorrect(mermaid) {
+    function handleCorrect(mermaid, partnerContainer) {
         playSFX('correct'); 
 
         if (mermaid.id === 'char-mermaid') { 
@@ -605,44 +910,85 @@
             mermaid.onerror = function() { this.src = 'images/char-mermaid.png'; };
             setTimeout(() => { mermaid.src = 'images/char-mermaid.png'; }, 400); 
         }
-
         mermaid.classList.add('anim-attack');
-        showSpeech(["太棒了！", "答對了！", "真理魔法！"][Math.floor(Math.random()*3)], true);
-        
+        if(saveFile.equippedPartner !== null) partnerContainer.classList.add('anim-partner-atk');
+
         let monster = document.getElementById('char-monster');
         if(monster.style.display === 'none') monster = document.getElementById('fallback-monster');
-        monster.style.opacity = 0.3; setTimeout(() => monster.style.opacity = 1, 200);
+        
+        monster.classList.remove('anim-monster-hurt', 'anim-monster-enter');
+        void monster.offsetWidth; 
+        monster.classList.add('anim-monster-hurt');
 
         if (state.isEndless) {
             if (state.isBoss) {
-                state.bossHp--;
+                state.bossHp--; updateUI();
                 if(state.bossHp <= 0) {
-                    if (state.hp < state.maxHp) state.hp++; 
-                    showSpeech("擊退Boss！<br>愛心回復！");
-                    state.isBoss = false; setupMonster(Math.floor(Math.random() * 9));
+                    handleMonsterDeath(monster, () => {
+                        if (state.hp < state.maxHp) state.hp++; 
+                        showSpeech("擊退Boss！<br>愛心回復！");
+                        state.isBoss = false; state.monsterHp = state.monsterMaxHp;
+                        spawnNextMonster(false); setTimeout(generateQuestion, 800);
+                    }); return;
                 }
             } else {
-                state.endlessScore++;
-                if (state.endlessScore > 0 && state.endlessScore % 10 === 0) triggerBoss();
-                else setupMonster(Math.floor(Math.random() * 9)); 
+                state.monsterHp--; updateUI();
+                if(state.monsterHp <= 0) {
+                    state.endlessScore++;
+                    handleMonsterDeath(monster, () => {
+                        if (state.endlessScore > 0 && state.endlessScore % 5 === 0) triggerBoss();
+                        else {
+                            showSpeech(["小怪消滅！", "下一隻！"][Math.floor(Math.random()*2)], true);
+                            state.monsterHp = state.monsterMaxHp; spawnNextMonster(false); setTimeout(generateQuestion, 800);
+                        }
+                    }); return;
+                } else showSpeech("造成傷害！", true);
             }
-            updateUI(); setTimeout(generateQuestion, 600);
-            return;
+            setTimeout(generateQuestion, 600); return;
         }
 
         if(state.isBoss) {
-            state.bossHp--;
-            if(state.bossHp <= 0) endGame(true);
+            state.bossHp--; updateUI();
+            if(state.bossHp <= 0) {
+                showSpeech("擊敗Boss！", true);
+                handleMonsterDeath(monster, () => { endGame(true); }, true); 
+                return;
+            }
+            showSpeech("造成傷害！", true);
         } else {
-            state.progress++;
-            if(state.progress >= state.maxProgress) triggerBoss();
+            state.monsterHp--; updateUI();
+            if (state.monsterHp <= 0) {
+                state.monstersDefeated++;
+                handleMonsterDeath(monster, () => {
+                    if (state.monstersDefeated >= state.maxMonsters) triggerBoss();
+                    else {
+                        showSpeech(["小怪消滅！", "下一隻！"][Math.floor(Math.random()*2)], true);
+                        state.monsterHp = state.monsterMaxHp; spawnNextMonster(false); setTimeout(generateQuestion, 800);
+                    }
+                }); return;
+            } else showSpeech("造成傷害！", true);
         }
-        updateUI(); setTimeout(generateQuestion, 600);
+        setTimeout(generateQuestion, 600);
+    }
+
+    function handleMonsterDeath(monsterElement, callback, isBossKill = false) {
+        document.getElementById('monster-ui').style.display = 'none'; 
+        monsterElement.classList.add('anim-monster-die');
+        
+        if (isBossKill) {
+            const flash = document.getElementById('victory-flash');
+            flash.classList.add('show');
+            setTimeout(() => {
+                flash.classList.remove('show');
+                callback();
+            }, 1500); 
+        } else {
+            setTimeout(callback, 600); 
+        }
     }
 
     function handleWrong(msg, mermaid) {
         playSFX('wrong'); 
-
         const gameContainer = document.getElementById('game-container');
         gameContainer.classList.add('shake-screen');
         setTimeout(() => gameContainer.classList.remove('shake-screen'), 400);
@@ -657,35 +1003,77 @@
 
     function triggerBoss() {
         state.isBoss = true; state.bossHp = state.baseBossHp; 
-        if (state.isEndless) setupMonster(8); 
-        let monster = document.getElementById('char-monster');
-        if(monster.style.display === 'none') monster = document.getElementById('fallback-monster');
-        monster.classList.add('boss');
-        showSpeech("警告！<br>海怪Boss來襲！", false); updateUI(); setTimeout(generateQuestion, 1500);
+        clearInterval(state.timerInterval); gameState = 'WARNING'; 
+        document.getElementById('monster-ui').style.display = 'none'; 
+        document.getElementById('char-monster').style.display = 'none';
+        
+        let bossIndex = 0; 
+        if (state.level === 10 || state.level === 20) bossIndex = 9; 
+        else if (state.level > 10 && state.level !== 'endless') bossIndex = state.level - 11; 
+        else if (state.level <= 9) bossIndex = state.level - 1; 
+        else if (state.level === 'endless') bossIndex = Math.floor(Math.random() * 10);
+
+        const warningScreen = document.getElementById('boss-warning');
+        const bossSilhouette = document.getElementById('warning-boss-silhouette');
+        
+        const bossImageUrl = `images/${monsterImg[bossIndex]}`;
+        bossSilhouette.style.backgroundImage = `url('${bossImageUrl}')`;
+        
+        document.getElementById('boss-name-display').innerText = getBossName(bossIndex, state.level === 'endless');
+        
+        warningScreen.classList.add('show');
+        playSFX('warning');
+
+        setTimeout(() => {
+            warningScreen.classList.remove('show');
+            setupSprite('boss', bossIndex, false, false); 
+            
+            document.getElementById('monster-hp-fill').style.width = '100%';
+            document.getElementById('monster-ui').style.display = 'block';
+            showSpeech("海怪Boss來襲！", false); 
+            updateUI(); gameState = 'PLAYING'; generateQuestion(); 
+        }, 2500);
     }
 
     function endGame(isWin) {
         clearInterval(state.timerInterval);
+        document.getElementById('monster-ui').style.display = 'none';
         
-        if(isWin) playSFX('win');
-        else playSFX('lose');
+        if(isWin) playSFX('win'); else playSFX('lose');
 
-        // ★ 切換狀態為結算畫面
         gameState = 'RESULT';
-        document.getElementById('fade-overlay').style.display = 'none'; // 確保遮罩不影響
+        document.getElementById('fade-overlay').style.display = 'none';
 
         const title = document.getElementById('result-title');
         const desc = document.getElementById('result-desc');
         
         if (state.isEndless) {
             title.innerText = "⭐ 挑戰結束 ⭐"; title.style.color = "#ffeb3b"; title.style.textShadow = "0 0 15px #ffeb3b";
-            desc.innerHTML = `你總共淨化了 <b style="color:#00ffcc; font-size:36px; text-shadow: 0 0 10px #00ffcc;">${state.endlessScore}</b> 隻海怪！`;
+            desc.innerHTML = `你總共淨化了 <b style="color:#00ffcc; font-size:32px; text-shadow: 0 0 10px #00ffcc;">${state.endlessScore}</b> 隻海怪！`;
         } else if(isWin) {
             title.innerText = "⭐ 關卡完成！ ⭐"; title.style.color = "#ffeb3b"; title.style.textShadow = "0 0 15px #ffeb3b";
             
-            if (!saveFile.unlockedCards.includes(state.level - 1)) {
-                desc.innerHTML = `星光魔法成功淨化了海怪！<br><span style="color:#00ffcc; font-weight:bold;">獲得了新夥伴，可以到相簿裝備囉！</span>`;
-                saveFile.unlockedCards.push(state.level - 1);
+            if (state.level <= 9 && !saveFile.unlockedCards.includes(state.level - 1)) {
+                let unlockedIndex = state.level - 1;
+                let buffType = unlockedIndex % 3;
+                
+                desc.innerHTML = `星光魔法成功淨化了海怪！<br>
+                <span style="color:#00ffcc; font-weight:bold; font-size: 13px;">海怪化為星光，成為了妳的專屬夥伴！</span>
+                <div class="result-card-container">
+                    <div class="poker-card equipped" style="width: 100px; height: 140px; cursor: default;">
+                        <img src="images/ui-card-front.png" class="card-bg" onerror="this.src=''; this.style.backgroundColor='#1a2a6c';">
+                        <img src="images/${partnerImg[unlockedIndex]}" class="card-partner-img" onerror="this.src='images/${monsterImg[unlockedIndex]}'; this.style.filter='hue-rotate(90deg) drop-shadow(0 2px 5px rgba(0,0,0,0.5))';">
+                        <div class="card-buff-desc" style="font-size:8px;">${partnerNames[unlockedIndex]}<br><span style="color:#00ffcc;">${buffNames[buffType].replace('<br>',' ')}</span></div>
+                        <div class="equip-tag" style="font-size:8px;">NEW!</div>
+                    </div>
+                </div>`;
+                saveFile.unlockedCards.push(unlockedIndex);
+            } else if (state.level === 10) {
+                desc.innerHTML = `太強了！你擊敗了最終大魔王！<br><span style="color:#ff4757; font-weight:bold; font-size:15px;">🔥 已為您解鎖【進階模式】 🔥</span>`;
+            } else if (state.level === 19) {
+                desc.innerHTML = `進階考驗通過！<br><span style="color:#ff4757; font-weight:bold; font-size:15px;">👑 已解鎖【進階第10關】真・大魔王 🔥</span>`;
+            } else if (state.level === 20) {
+                desc.innerHTML = `不可思議！你擊敗了真・大魔王！<br><span style="color:#00ffcc; font-weight:bold; font-size:15px;">✨ 已為您解鎖【無限挑戰模式】 ✨</span>`;
             } else {
                 desc.innerHTML = `星光魔法成功淨化了海怪！`;
             }
