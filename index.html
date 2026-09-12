@@ -30,12 +30,11 @@
 
         #fade-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: #000; z-index: 99999; transition: opacity 1.5s ease-in-out; pointer-events: none; }
 
-        /* ====== 防手機頂部瀏覽器搜尋列遮擋：全面拉開安全距離 ====== */
         .screen { 
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
             display: flex; flex-direction: column; justify-content: flex-start; align-items: center; 
             z-index: 10; background-size: cover; background-position: center; overflow-y: auto; 
-            padding: env(safe-area-inset-top, 25px) 15px env(safe-area-inset-bottom, 15px) 15px; 
+            padding: env(safe-area-inset-top, 20px) 15px env(safe-area-inset-bottom, 15px) 15px; 
             opacity: 0; visibility: hidden; transition: opacity 0.5s ease, visibility 0.5s; 
         }
         .screen.active { opacity: 1; visibility: visible; }
@@ -72,7 +71,6 @@
         .tab-btn.active { background: linear-gradient(135deg, #16a085, #00bfff); color: #fff; border-color: #00ffff; box-shadow: 0 0 15px rgba(0,255,255,0.5); transform: scale(1.02); }
         .tab-btn.locked-tab { filter: grayscale(100%) brightness(0.4); cursor: not-allowed; }
 
-        /* ====== 全新：將第 10 關 / 第 20 關改為獨立方格排版 ====== */
         .level-container { width: 92%; max-width: 420px; display: flex; flex-direction: column; align-items: center; gap: 10px; z-index: 5; margin-bottom: 10px; }
         .level-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 100%; }
         
@@ -86,7 +84,6 @@
         .level-btn.locked { filter: grayscale(100%) brightness(0.5); cursor: not-allowed; }
         .level-btn.adv-btn { filter: hue-rotate(150deg) saturate(1.5) drop-shadow(0 4px 8px rgba(255,0,0,0.4)); }
 
-        /* 第 10 關 / 第 20 關專屬大魔王方格 (紅色炫光外框) */
         .level-btn.boss-level-btn {
             background-image: none; background: linear-gradient(135deg, #ff0055, #660000);
             border: 2px solid #ff4757; box-shadow: 0 0 15px #ff4757;
@@ -94,7 +91,6 @@
         }
         .level-btn.boss-level-btn.locked { filter: grayscale(100%) brightness(0.4); animation: none; box-shadow: none; }
         @keyframes pulse-boss { 0% { box-shadow: 0 0 8px #ff4757; } 50% { box-shadow: 0 0 20px #ff0055; } 100% { box-shadow: 0 0 8px #ff4757; } }
-        /* ==================================================== */
 
         #gameplay-screen { background-color: #000851; z-index: 5; justify-content: space-between; padding: 0 !important; overflow: hidden; background: none;}
         
@@ -172,7 +168,7 @@
 
         .speech-bubble { position: absolute; bottom: calc(48% + 10px); left: 8%; width: 120px; min-height: 40px; z-index: 20; background-image: url('images/ui-speech-bg.png'); background-size: 100% 100%; background-color: transparent; background-repeat: no-repeat; display: flex; justify-content: center; align-items: center; text-align: center; color: #1e3799; font-size: 13px; font-weight: 900; opacity: 0; transition: opacity 0.3s, transform 0.3s; transform: translateY(10px); padding: 5px 10px 10px 10px; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3)); }
         .speech-bubble.show { opacity: 1; transform: translateY(0); }
-        .speech-bubble.boss-skill { color: #ff0055; text-shadow: 0 0 5px rgba(255,0,0,0.5); font-size: 15px; }
+        .speech-bubble.boss-skill { color: #ff0055; text-shadow: 0 0 5px rgba(255,0,0,0.5); font-size: 16px; }
 
         .bottom-controls { display: flex; justify-content: space-evenly; align-items: center; padding: 15px 10px; width: 100%; background: linear-gradient(to top, rgba(0,5,30,1) 30%, rgba(0,5,30,0)); z-index: 10; flex-shrink: 0;}
         .answer-btn { background-image: url('images/btn-answer.png'); background-color: transparent; background-size: contain; background-position: center; background-repeat: no-repeat; border: none; width: 28vw; max-width: 90px; height: 28vw; max-height: 90px; font-size: 32px; font-weight: 900; color: #fff; text-shadow: 0 3px 6px rgba(0,0,0,0.8), 0 0 10px rgba(0,255,255,0.5); cursor: pointer; display: flex; justify-content: center; align-items: center; filter: drop-shadow(0 5px 8px rgba(0,0,0,0.5)); transition: all 0.1s; }
@@ -287,7 +283,7 @@
         </div>
 
         <div class="level-container">
-            <!-- 包含 1~10 關的完整網格方格 -->
+            <!-- 包含 1~10 關的完整獨立方格（第10格為大魔王） -->
             <div class="level-grid" id="level-grid"></div>
             
             <div class="special-modes" id="special-modes-ui" style="display:none; width: 100%;">
@@ -621,7 +617,7 @@
         updateLevelUI();
     }
 
-    // ====== 完美呈現：10 個格子全部獨立渲染（包含第 10 關 / 第 20 關大魔王方格） ======
+    // ====== 完美修正：渲染 1~10 關獨立方格（第10格為大魔王） ======
     function updateLevelUI() {
         const grid = document.getElementById('level-grid');
         const tabAdvanced = document.getElementById('tab-advanced');
@@ -633,14 +629,15 @@
         if (!isUnlockedAdv) tabAdvanced.classList.add('locked-tab');
         else tabAdvanced.classList.remove('locked-tab');
 
-        // 渲染 1 ~ 10 關（每一關都是獨立方格）
+        // 渲染 1~10 關
         for(let i = 1; i <= 10; i++) {
-            let actualLevel = currentViewingAdvanced ? i + 10 : i;
+            // 普通海域：1~9為一般關，10為第10關大魔王
+            // 進階海域：1~9對應11~19關，10對應第20關大魔王
+            let actualLevel = currentViewingAdvanced ? (i === 10 ? 20 : i + 10) : i;
             let btn = document.createElement('button');
             
             if (saveFile.unlockedLevel >= actualLevel) {
                 if (i === 10) {
-                    // 第 10 關 / 第 20 關大魔王方格
                     btn.className = currentViewingAdvanced ? 'level-btn adv-btn boss-level-btn' : 'level-btn boss-level-btn';
                     btn.innerHTML = currentViewingAdvanced ? `👑 進階<br>大魔王` : `👑 最終<br>大魔王`;
                 } else {
@@ -663,7 +660,7 @@
         else specialUI.style.display = 'none';
     }
     updateLevelUI();
-    // =================================================================================
+    // ==============================================================
 
     function showGallery() {
         const grid = document.getElementById('gallery-grid');
