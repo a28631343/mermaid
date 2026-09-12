@@ -15,20 +15,18 @@
             border-radius: 0; box-shadow: none; overflow: hidden; display: flex; flex-direction: column; background-color: #0d1b2a;
         }
 
-        /* ====== 全域水底波光淋漓特效 (涵蓋整款遊戲) ====== */
         #game-container::after {
             content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: linear-gradient(120deg, rgba(0,255,255,0.08) 0%, rgba(0,128,255,0.15) 50%, rgba(0,255,204,0.08) 100%);
             mix-blend-mode: overlay; pointer-events: none;
             animation: waterCaustics 6s ease-in-out infinite alternate;
-            z-index: 2; /* 浮在背景之上、UI之下 */
+            z-index: 2; 
         }
         @keyframes waterCaustics {
             0% { transform: translateY(-10px) scale(1); opacity: 0.3; filter: blur(5px); }
             50% { transform: translateY(10px) scale(1.05); opacity: 0.7; filter: blur(8px); }
             100% { transform: translateY(-5px) scale(1); opacity: 0.4; filter: blur(6px); }
         }
-        /* ================================================ */
 
         #fade-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: #000; z-index: 99999; transition: opacity 1.5s ease-in-out; pointer-events: none; }
 
@@ -40,7 +38,13 @@
         #skip-intro-btn { position: absolute; top: 20px; right: 20px; background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(5px); border: 1px solid rgba(255, 255, 255, 0.5); color: #fff; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-size: 14px; font-weight: bold; z-index: 100000; transition: all 0.2s; }
         
         #main-screen { background-image: url('images/bg-main.jpg'); background-color: #1a2a6c; justify-content: center; }
-        #level-screen { background-image: url('images/bg-main.jpg'); background-color: #1a2a6c; justify-content: center; }
+        
+        /* ====== 關卡選單介面專屬質感背景 ====== */
+        #level-screen { 
+            background: radial-gradient(circle at center, #162247 0%, #050a1f 100%);
+            background-image: url('images/bg-main.jpg'); background-color: #1a2a6c; 
+            justify-content: flex-start; padding-top: 15px;
+        }
         
         #result-screen { 
             background: radial-gradient(circle at center, #1b2856 0%, #050a1f 100%);
@@ -61,14 +65,48 @@
 
         .btn { background-image: url('images/btn-primary.png'); background-color: transparent; background-size: contain; background-position: center; background-repeat: no-repeat; border: none; border-radius: 30px; width: 240px; height: 80px; font-size: 20px; color: white; font-weight: bold; text-shadow: 1px 2px 3px rgba(0,0,0,0.8); cursor: pointer; transition: transform 0.1s, filter 0.3s; display: flex; justify-content: center; align-items: center; margin-bottom: 15px; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.5)); z-index: 3; }
         .btn:active { transform: scale(0.95) translateY(2px); filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5)); }
-        
-        .btn-boss { background-image: none; background: linear-gradient(135deg, #ff0055, #660000); border: 2px solid #ff4757; box-shadow: 0 0 15px #ff4757, inset 0 0 10px #000; width: 90%; margin: 5px auto 15px auto; height: 60px; animation: pulse-boss 2s infinite; }
-        @keyframes pulse-boss { 0% { box-shadow: 0 0 15px #ff4757; } 50% { box-shadow: 0 0 30px #ff0055, inset 0 0 15px #ff0055; } 100% { box-shadow: 0 0 15px #ff4757; } }
 
-        .level-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 15px; padding: 0 20px;}
-        .level-btn { background-image: url('images/btn-level.png'); background-color: transparent; background-size: 100% 100%; background-repeat: no-repeat; border: none; border-radius: 15px; width: 85px; height: 85px; font-size: 16px; color: white; font-weight: bold; text-shadow: 1px 2px 3px #000; cursor: pointer; display: flex; justify-content: center; align-items: center; text-align: center; line-height: 1.3; transition: all 0.2s; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4)); }
-        .level-btn.locked { filter: grayscale(100%) brightness(0.5); cursor: not-allowed; }
+        /* ====== 優化：全新分頁式關卡選單排版 ====== */
+        .chapter-tabs {
+            display: flex; gap: 10px; margin-bottom: 15px; z-index: 5; width: 90%; max-width: 450px; justify-content: center;
+        }
+        .tab-btn {
+            flex: 1; padding: 10px 0; background: rgba(0, 0, 0, 0.5); border: 2px solid rgba(255,255,255,0.3);
+            color: #aaa; font-weight: bold; font-size: 15px; border-radius: 12px; cursor: pointer; transition: all 0.2s;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+        }
+        .tab-btn.active {
+            background: linear-gradient(135deg, #16a085, #00bfff); color: #fff; border-color: #00ffff;
+            box-shadow: 0 0 15px rgba(0,255,255,0.5); transform: scale(1.02);
+        }
+        .tab-btn.locked-tab { filter: grayscale(100%) brightness(0.4); cursor: not-allowed; }
+
+        .level-container {
+            width: 90%; max-width: 450px; display: flex; flex-direction: column; align-items: center; gap: 12px; z-index: 5; margin-bottom: 10px;
+        }
+
+        .level-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; width: 100%; }
+        .level-btn { 
+            background-image: url('images/btn-level.png'); background-color: transparent; background-size: 100% 100%; background-repeat: no-repeat; 
+            border: none; border-radius: 15px; width: 100%; aspect-ratio: 1; font-size: 15px; color: white; font-weight: bold; 
+            text-shadow: 1px 2px 3px #000; cursor: pointer; display: flex; justify-content: center; align-items: center; text-align: center; 
+            line-height: 1.3; transition: all 0.2s; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4)); 
+        }
+        .level-btn:hover:not(.locked) { transform: scale(1.05); filter: brightness(1.15) drop-shadow(0 6px 12px rgba(0,255,255,0.4)); }
+        .level-btn.locked { filter: grayscale(100%) brightness(0.4); cursor: not-allowed; }
         .level-btn.adv-btn { filter: hue-rotate(150deg) saturate(1.5) drop-shadow(0 4px 8px rgba(255,0,0,0.4)); }
+
+        .btn-boss {
+            background-image: none; background: linear-gradient(135deg, #ff0055, #660000);
+            border: 2px solid #ff4757; box-shadow: 0 0 15px #ff4757, inset 0 0 10px #000;
+            width: 100%; height: 55px; border-radius: 15px; font-size: 17px; color: #fff; font-weight: 900;
+            cursor: pointer; display: flex; justify-content: center; align-items: center; letter-spacing: 1px;
+            animation: pulse-boss 2s infinite; transition: all 0.2s;
+        }
+        .btn-boss:hover { transform: scale(1.02); filter: brightness(1.2); }
+        .btn-boss.locked { filter: grayscale(100%) brightness(0.4); cursor: not-allowed; animation: none; }
+        @keyframes pulse-boss { 0% { box-shadow: 0 0 10px #ff4757; } 50% { box-shadow: 0 0 25px #ff0055, inset 0 0 10px #ff0055; } 100% { box-shadow: 0 0 10px #ff4757; } }
+        /* ======================================================= */
 
         #gameplay-screen { background-color: #000851; z-index: 5; justify-content: space-between; padding: 0; overflow: hidden; background: none;}
         
@@ -163,16 +201,13 @@
         .answer-btn { background-image: url('images/btn-answer.png'); background-color: transparent; background-size: contain; background-position: center; background-repeat: no-repeat; border: none; width: 28vw; max-width: 90px; height: 28vw; max-height: 90px; font-size: 32px; font-weight: 900; color: #fff; text-shadow: 0 3px 6px rgba(0,0,0,0.8), 0 0 10px rgba(0,255,255,0.5); cursor: pointer; display: flex; justify-content: center; align-items: center; filter: drop-shadow(0 5px 8px rgba(0,0,0,0.5)); transition: all 0.1s; }
         .answer-btn:active { transform: scale(0.9) translateY(4px); filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5)); }
 
-        /* ====== 完美修正：手機與 PC 兩用、永不重疊的響應式相簿格線 ====== */
         .gallery-grid { 
-            display: grid; 
-            grid-template-columns: repeat(3, 1fr); /* 手機與 PC 皆強制 3 欄並自動均分 */
+            display: grid; grid-template-columns: repeat(3, 1fr); 
             gap: 12px; width: 94%; max-width: 480px; max-height: 62%; overflow-y: auto; padding: 15px; 
             background: rgba(5, 10, 31, 0.85); backdrop-filter: blur(8px); 
             border: 2px solid rgba(0, 255, 255, 0.3); border-radius: 20px; 
             box-shadow: inset 0 0 15px rgba(0,255,255,0.2); 
         }
-        
         .poker-card { 
             position: relative; width: 100%; aspect-ratio: 2.2 / 3.3; 
             background: rgba(0,0,0,0.5); border-radius: 8px; cursor: pointer; transition: all 0.25s; 
@@ -208,7 +243,6 @@
             0% { transform: scale(0.3) rotate(-10deg); opacity: 0; }
             100% { transform: scale(1) rotate(0deg); opacity: 1; }
         }
-        /* ========================================================== */
 
         .special-modes { display: flex; flex-direction: column; align-items: center; gap: 8px; border-top: 1px solid rgba(255,255,255,0.3); padding-top: 10px; width: 100%;}
         
@@ -266,25 +300,33 @@
         <button class="btn" onclick="openSettings()">⚙️ 遊戲設定</button>
     </div>
 
+    <!-- ====== 升級版：分頁式章節關卡選單 ====== -->
     <div id="level-screen" class="screen">
-        <h2 style="color: #fff; text-shadow: 0 4px 6px rgba(0,0,0,0.8); margin-top: 0; margin-bottom: 10px; letter-spacing: 2px;">選擇關卡</h2>
-        <div id="advanced-mode-ui" style="display:none; width: 100%; justify-content: center; margin-bottom: 10px;">
-            <label style="color: #ff4757; font-weight: bold; font-size: 16px; text-shadow: 0 0 10px rgba(255,0,0,0.5); cursor: pointer;">
-                <input type="checkbox" id="adv-toggle" onchange="updateLevelUI()" style="transform: scale(1.3); margin-right: 5px;"> 🔥 啟用進階模式 (Boss 技能)
-            </label>
+        <h2 style="color: #fff; text-shadow: 0 4px 6px rgba(0,0,0,0.8); margin-top: 10px; margin-bottom: 10px; letter-spacing: 2px;">選擇冒險章節</h2>
+        
+        <!-- 章節分頁標籤 -->
+        <div class="chapter-tabs">
+            <button class="tab-btn active" id="tab-normal" onclick="switchChapter(false)">🌟 普通海域 (1-10)</button>
+            <button class="tab-btn" id="tab-advanced" onclick="switchChapter(true)">🔥 進階海域 (11-20)</button>
         </div>
-        <div class="level-grid" id="level-grid"></div>
-        <div id="level-10-container" style="width: 100%; text-align: center; display: none;">
-            <button class="btn btn-boss" onclick="startGame(10)">👑 第 10 關：最終大魔王</button>
+
+        <!-- 關卡容器 -->
+        <div class="level-container">
+            <div class="level-grid" id="level-grid"></div>
+            
+            <!-- 第 10 關 / 第 20 關大魔王橫幅按鈕 -->
+            <div id="level-boss-container" style="width: 100%;">
+                <button class="btn-boss" id="boss-stage-btn" onclick="startChapterBoss()">👑 最終大魔王戰</button>
+            </div>
+            
+            <div class="special-modes" id="special-modes-ui" style="display:none; width: 100%;">
+                <button class="btn" onclick="startEndlessMode()" style="width: 100%; height: 50px; font-size: 16px; border-radius: 12px; background-image:none; background:linear-gradient(135deg, #00ffcc, #16a085);">♾️ 無限大挑戰 (解鎖)</button>
+            </div>
         </div>
-        <div id="level-20-container" style="width: 100%; text-align: center; display: none;">
-            <button class="btn btn-boss" onclick="startGame(20)" style="filter: hue-rotate(150deg);">👑 進階 10 關：真・大魔王</button>
-        </div>
-        <div class="special-modes" id="special-modes-ui" style="display:none;">
-            <button class="btn" onclick="startEndlessMode()" style="width: 220px; height: 50px; font-size: 16px;">♾️ 無限大挑戰</button>
-        </div>
-        <button class="btn" style="width: 150px; height: 50px; font-size: 16px;" onclick="showScreen('main-screen', 'MENU')">返回</button>
+
+        <button class="btn" style="width: 140px; height: 45px; font-size: 15px; margin-top: 15px;" onclick="showScreen('main-screen', 'MENU')">返回主選單</button>
     </div>
+    <!-- ====================================== -->
 
     <div id="gallery-screen" class="screen">
         <h2 style="color: #fff; text-shadow: 0 4px 6px rgba(0,0,0,0.8); margin-top:0; margin-bottom: 5px; letter-spacing: 2px;">星光好朋友相簿</h2>
@@ -356,6 +398,7 @@
 
 <script>
     let gameState = 'INTRO'; 
+    let currentViewingAdvanced = false; // 記錄目前關卡選單是否在看進階海域
 
     window.onload = function() {
         const overlay = document.getElementById('fade-overlay');
@@ -413,39 +456,7 @@
         }
     }
 
-    // 持續生成泡泡（全域常態演出）
-    function createBubbles() {
-        const container = document.getElementById('game-container');
-        setInterval(() => {
-            if (document.hidden) return; 
-            const bubble = document.createElement('div');
-            bubble.style.position = 'absolute';
-            bubble.style.bottom = '-30px';
-            bubble.style.background = 'radial-gradient(circle at 30% 30%, rgba(255,255,255,0.9), rgba(0,255,255,0.3))';
-            bubble.style.borderRadius = '50%';
-            bubble.style.border = '1px solid rgba(255,255,255,0.5)';
-            bubble.style.pointerEvents = 'none';
-            bubble.style.zIndex = '4'; // 位於波光與背景之上，UI之下
-            
-            const size = Math.random() * 25 + 8; 
-            bubble.style.width = `${size}px`; 
-            bubble.style.height = `${size}px`;
-            bubble.style.left = `${Math.random() * 100}%`;
-            
-            const duration = Math.random() * 3 + 3;
-            bubble.style.transition = `transform ${duration}s linear, opacity ${duration}s linear`;
-            
-            container.appendChild(bubble);
-            
-            setTimeout(() => {
-                bubble.style.transform = `translateY(-${container.clientHeight + 50}px) scale(1.3)`;
-                bubble.style.opacity = '0';
-            }, 50);
-
-            setTimeout(() => { bubble.remove(); }, (duration + 0.1) * 1000);
-        }, 300);
-    }
-    createBubbles();
+    createBubbles(); // 啟動全域常態泡泡飄浮
 
     const bgmMain = document.getElementById('bgm-main');
     const bgmBattle = document.getElementById('bgm-battle');
@@ -586,39 +597,96 @@
         return baseBossNames[levelIndex];
     }
 
+    // ====== 切換章節分頁邏輯 ======
+    function switchChapter(isAdvanced) {
+        currentViewingAdvanced = isAdvanced;
+        const tabNormal = document.getElementById('tab-normal');
+        const tabAdvanced = document.getElementById('tab-advanced');
+        
+        // 檢查是否解鎖進階海域 (需通關第10關，即 unlockedLevel >= 11)
+        const isUnlockedAdv = saveFile.unlockedLevel >= 11;
+
+        if (isAdvanced && !isUnlockedAdv) {
+            alert("請先通關「普通海域」的最終大魔王，才能解鎖進階海域！");
+            return;
+        }
+
+        if (isAdvanced) {
+            tabAdvanced.classList.add('active');
+            tabNormal.classList.remove('active');
+        } else {
+            tabNormal.classList.add('active');
+            tabAdvanced.classList.remove('active');
+        }
+        updateLevelUI();
+    }
+
+    function startChapterBoss() {
+        if (currentViewingAdvanced) {
+            startGame(20); // 進階第10關 (真・大魔王)
+        } else {
+            startGame(10); // 普通第10關 (大魔王)
+        }
+    }
+
     function updateLevelUI() {
         const grid = document.getElementById('level-grid');
-        const isAdvMode = document.getElementById('adv-toggle') ? document.getElementById('adv-toggle').checked : false;
+        const bossBtn = document.getElementById('boss-stage-btn');
+        const tabAdvanced = document.getElementById('tab-advanced');
+        const specialUI = document.getElementById('special-modes-ui');
+        
         grid.innerHTML = '';
         
+        // 檢查進階海域是否解鎖
+        const isUnlockedAdv = saveFile.unlockedLevel >= 11;
+        if (!isUnlockedAdv) {
+            tabAdvanced.classList.add('locked-tab');
+        } else {
+            tabAdvanced.classList.remove('locked-tab');
+        }
+
+        // 渲染 1~9 關 (普通) 或 1~9 關 (進階對應 11~19)
         for(let i = 1; i <= 9; i++) {
-            let actualLevel = isAdvMode ? i + 10 : i;
+            let actualLevel = currentViewingAdvanced ? i + 10 : i;
             let btn = document.createElement('button');
+            
             if (saveFile.unlockedLevel >= actualLevel) {
-                btn.className = isAdvMode ? 'level-btn adv-btn' : 'level-btn'; 
-                btn.innerHTML = isAdvMode ? `進階 ${i}<br>(x${i})` : `第 ${i} 關<br>(x${i})`; 
+                btn.className = currentViewingAdvanced ? 'level-btn adv-btn' : 'level-btn'; 
+                btn.innerHTML = currentViewingAdvanced ? `進階 ${i}<br>(x${i})` : `第 ${i} 關<br>(x${i})`; 
                 btn.onclick = () => startGame(actualLevel);
             } else {
-                btn.className = 'level-btn locked'; btn.innerHTML = `🔒<br>未解鎖`;
+                btn.className = 'level-btn locked'; 
+                btn.innerHTML = `🔒<br>未解鎖`;
             }
             grid.appendChild(btn);
         }
 
-        const bossContainer = document.getElementById('level-10-container');
-        const advBossContainer = document.getElementById('level-20-container');
-
-        if (!isAdvMode) {
-            bossContainer.style.display = saveFile.unlockedLevel >= 10 ? 'block' : 'none';
-            advBossContainer.style.display = 'none';
+        // 渲染底部的大魔王按鈕
+        if (!currentViewingAdvanced) {
+            bossBtn.innerHTML = "👑 第 10 關：最終大魔王";
+            if (saveFile.unlockedLevel >= 10) {
+                bossBtn.classList.remove('locked');
+            } else {
+                bossBtn.classList.add('locked');
+            }
         } else {
-            bossContainer.style.display = 'none';
-            advBossContainer.style.display = saveFile.unlockedLevel >= 20 ? 'block' : 'none';
+            bossBtn.innerHTML = "👑 進階 10 關：真・大魔王";
+            if (saveFile.unlockedLevel >= 20) {
+                bossBtn.classList.remove('locked');
+            } else {
+                bossBtn.classList.add('locked');
+            }
         }
 
-        document.getElementById('advanced-mode-ui').style.display = saveFile.unlockedLevel >= 11 ? 'flex' : 'none';
-        document.getElementById('special-modes-ui').style.display = saveFile.unlockedLevel >= 21 ? 'flex' : 'none';
+        // 無限挑戰模式解鎖條件：通關進階第10關 (unlockedLevel >= 21)
+        if (saveFile.unlockedLevel >= 21) {
+            specialUI.style.display = 'flex';
+        } else {
+            specialUI.style.display = 'none';
+        }
     }
     updateLevelUI();
+    // ======================================
 
     function showGallery() {
         const grid = document.getElementById('gallery-grid');
@@ -728,6 +796,12 @@
     }
 
     function startGame(level) {
+        // 如果點擊的是第10關或第20關大魔王，但尚未解鎖則阻擋
+        if ((level === 10 && saveFile.unlockedLevel < 10) || (level === 20 && saveFile.unlockedLevel < 20)) {
+            alert("此大魔王關卡尚未解鎖！");
+            return;
+        }
+
         state.level = level; state.monstersDefeated = 0; state.isBoss = false; state.isEndless = false;
         
         let startMsg = applyBuffs();
@@ -1058,7 +1132,7 @@
                 let buffType = unlockedIndex % 3;
                 
                 desc.innerHTML = `星光魔法成功淨化了海怪！<br>
-                <span style="color:#00ffcc; font-weight:bold; font-size: 13px;">海怪化為星光，成為了妳的專屬夥伴！</span>
+                <span style="color:#00ffcc; font-weight:bold; font-size: 14px;">海怪化為星光，成為了妳的專屬夥伴！</span>
                 <div class="result-card-container">
                     <div class="poker-card equipped" style="width: 100px; height: 140px; cursor: default;">
                         <img src="images/ui-card-front.png" class="card-bg" onerror="this.src=''; this.style.backgroundColor='#1a2a6c';">
