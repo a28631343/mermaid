@@ -34,16 +34,18 @@
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
             display: flex; flex-direction: column; justify-content: flex-start; align-items: center; 
             z-index: 10; background-size: cover; background-position: center; overflow-y: auto; 
-            padding: env(safe-area-inset-top, 20px) 15px env(safe-area-inset-bottom, 15px) 15px; 
+            padding-top: max(45px, env(safe-area-inset-top, 45px));
+            padding-bottom: max(20px, env(safe-area-inset-bottom, 20px));
+            padding-left: 15px; padding-right: 15px;
             opacity: 0; visibility: hidden; transition: opacity 0.5s ease, visibility 0.5s; 
         }
         .screen.active { opacity: 1; visibility: visible; }
         
         #intro-screen { z-index: 99999; background-color: #000; padding: 0; justify-content: center; cursor: pointer; }
         #intro-video { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
-        #skip-intro-btn { position: absolute; top: 30px; right: 20px; background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(5px); border: 1px solid rgba(255, 255, 255, 0.5); color: #fff; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-size: 14px; font-weight: bold; z-index: 100000; transition: all 0.2s; }
+        #skip-intro-btn { position: absolute; top: 40px; right: 20px; background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(5px); border: 1px solid rgba(255, 255, 255, 0.5); color: #fff; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-size: 14px; font-weight: bold; z-index: 100000; transition: all 0.2s; }
         
-        #main-screen { background-image: url('images/bg-main.jpg'); background-color: #1a2a6c; justify-content: center; }
+        #main-screen { background-image: url('images/bg-main.jpg'); background-color: #1a2a6c; justify-content: center; padding-top: 0; }
         #level-screen { background-image: url('images/bg-main.jpg'); background-color: #1a2a6c; justify-content: flex-start; }
         
         #result-screen { 
@@ -66,7 +68,7 @@
         .btn { background-image: url('images/btn-primary.png'); background-color: transparent; background-size: contain; background-position: center; background-repeat: no-repeat; border: none; border-radius: 30px; width: 240px; height: 80px; font-size: 20px; color: white; font-weight: bold; text-shadow: 1px 2px 3px rgba(0,0,0,0.8); cursor: pointer; transition: transform 0.1s, filter 0.3s; display: flex; justify-content: center; align-items: center; margin-bottom: 15px; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.5)); z-index: 3; flex-shrink: 0; }
         .btn:active { transform: scale(0.95) translateY(2px); filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5)); }
 
-        .chapter-tabs { display: flex; gap: 10px; margin-bottom: 12px; z-index: 5; width: 92%; max-width: 420px; justify-content: center; flex-shrink: 0; }
+        .chapter-tabs { display: flex; gap: 10px; margin-bottom: 10px; z-index: 5; width: 92%; max-width: 420px; justify-content: center; flex-shrink: 0; }
         .tab-btn { flex: 1; padding: 10px 0; background: rgba(0, 0, 0, 0.5); border: 2px solid rgba(255,255,255,0.3); color: #aaa; font-weight: bold; font-size: 14px; border-radius: 12px; cursor: pointer; transition: all 0.2s; text-shadow: 1px 1px 2px rgba(0,0,0,0.8); }
         .tab-btn.active { background: linear-gradient(135deg, #16a085, #00bfff); color: #fff; border-color: #00ffff; box-shadow: 0 0 15px rgba(0,255,255,0.5); transform: scale(1.02); }
         .tab-btn.locked-tab { filter: grayscale(100%) brightness(0.4); cursor: not-allowed; }
@@ -168,11 +170,13 @@
 
         .speech-bubble { position: absolute; bottom: calc(48% + 10px); left: 8%; width: 120px; min-height: 40px; z-index: 20; background-image: url('images/ui-speech-bg.png'); background-size: 100% 100%; background-color: transparent; background-repeat: no-repeat; display: flex; justify-content: center; align-items: center; text-align: center; color: #1e3799; font-size: 13px; font-weight: 900; opacity: 0; transition: opacity 0.3s, transform 0.3s; transform: translateY(10px); padding: 5px 10px 10px 10px; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3)); }
         .speech-bubble.show { opacity: 1; transform: translateY(0); }
-        .speech-bubble.boss-skill { color: #ff0055; text-shadow: 0 0 5px rgba(255,0,0,0.5); font-size: 16px; }
+        .speech-bubble.boss-skill { color: #ff0055; text-shadow: 0 0 5px rgba(255,0,0,0.5); font-size: 15px; }
 
         .bottom-controls { display: flex; justify-content: space-evenly; align-items: center; padding: 15px 10px; width: 100%; background: linear-gradient(to top, rgba(0,5,30,1) 30%, rgba(0,5,30,0)); z-index: 10; flex-shrink: 0;}
         .answer-btn { background-image: url('images/btn-answer.png'); background-color: transparent; background-size: contain; background-position: center; background-repeat: no-repeat; border: none; width: 28vw; max-width: 90px; height: 28vw; max-height: 90px; font-size: 32px; font-weight: 900; color: #fff; text-shadow: 0 3px 6px rgba(0,0,0,0.8), 0 0 10px rgba(0,255,255,0.5); cursor: pointer; display: flex; justify-content: center; align-items: center; filter: drop-shadow(0 5px 8px rgba(0,0,0,0.5)); transition: all 0.1s; }
         .answer-btn:active { transform: scale(0.9) translateY(4px); filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5)); }
+        /* ====== 強化：按鈕發光回饋 ====== */
+        .answer-btn.flash { filter: brightness(1.5) drop-shadow(0 0 15px rgba(0,255,255,0.8)); transform: scale(1.05); }
 
         .gallery-grid { 
             display: grid; grid-template-columns: repeat(3, 1fr); 
@@ -186,6 +190,7 @@
             background: rgba(0,0,0,0.5); border-radius: 8px; cursor: pointer; transition: all 0.25s; 
             filter: drop-shadow(0 4px 6px rgba(0,0,0,0.6)); overflow: hidden;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
+            border: 2px solid transparent;
         }
         .poker-card:hover { transform: translateY(-3px) scale(1.02); filter: drop-shadow(0 6px 12px rgba(0,255,255,0.4)); }
         .poker-card.locked { filter: grayscale(100%) brightness(0.35); cursor: not-allowed; }
@@ -283,7 +288,6 @@
         </div>
 
         <div class="level-container">
-            <!-- 包含 1~10 關的完整獨立方格（第10格為大魔王） -->
             <div class="level-grid" id="level-grid"></div>
             
             <div class="special-modes" id="special-modes-ui" style="display:none; width: 100%;">
@@ -365,6 +369,7 @@
 <script>
     let gameState = 'INTRO'; 
     let currentViewingAdvanced = false; 
+    let isAnimating = false; // 防呆鎖：動畫播放中禁止作答
 
     window.onload = function() {
         const overlay = document.getElementById('fade-overlay');
@@ -427,7 +432,7 @@
     function createBubbles() {
         const container = document.getElementById('game-container');
         setInterval(() => {
-            if (document.hidden) return; 
+            if (document.hidden) return; // 離開畫面時不生成泡泡
             const bubble = document.createElement('div');
             bubble.style.position = 'absolute';
             bubble.style.bottom = '-30px';
@@ -597,15 +602,16 @@
     }
 
     function switchChapter(isAdvanced) {
-        currentViewingAdvanced = isAdvanced;
-        const tabNormal = document.getElementById('tab-normal');
-        const tabAdvanced = document.getElementById('tab-advanced');
         const isUnlockedAdv = saveFile.unlockedLevel >= 11;
 
         if (isAdvanced && !isUnlockedAdv) {
             alert("請先通關「普通海域」的最終大魔王，才能解鎖進階海域！");
             return;
         }
+        
+        currentViewingAdvanced = isAdvanced;
+        const tabNormal = document.getElementById('tab-normal');
+        const tabAdvanced = document.getElementById('tab-advanced');
 
         if (isAdvanced) {
             tabAdvanced.classList.add('active');
@@ -617,7 +623,6 @@
         updateLevelUI();
     }
 
-    // ====== 完美修正：渲染 1~10 關獨立方格（第10格為大魔王） ======
     function updateLevelUI() {
         const grid = document.getElementById('level-grid');
         const tabAdvanced = document.getElementById('tab-advanced');
@@ -629,10 +634,7 @@
         if (!isUnlockedAdv) tabAdvanced.classList.add('locked-tab');
         else tabAdvanced.classList.remove('locked-tab');
 
-        // 渲染 1~10 關
         for(let i = 1; i <= 10; i++) {
-            // 普通海域：1~9為一般關，10為第10關大魔王
-            // 進階海域：1~9對應11~19關，10對應第20關大魔王
             let actualLevel = currentViewingAdvanced ? (i === 10 ? 20 : i + 10) : i;
             let btn = document.createElement('button');
             
@@ -652,6 +654,7 @@
                 } else {
                     btn.innerHTML = `🔒<br>未解鎖`;
                 }
+                btn.onclick = () => alert("請先通關前面的關卡來解鎖！");
             }
             grid.appendChild(btn);
         }
@@ -660,7 +663,6 @@
         else specialUI.style.display = 'none';
     }
     updateLevelUI();
-    // ==============================================================
 
     function showGallery() {
         const grid = document.getElementById('gallery-grid');
@@ -672,8 +674,11 @@
             if (saveFile.unlockedCards.includes(i)) {
                 card.className = 'poker-card';
                 if (saveFile.equippedPartner === i) card.classList.add('equipped');
+                
+                // 優化：提供預設卡背漸層，避免破圖
                 card.innerHTML = `
-                    <img src="images/ui-card-front.png" class="card-bg" onerror="this.src=''; this.style.backgroundColor='#1a2a6c';">
+                    <div style="position:absolute; width:100%; height:100%; background:linear-gradient(135deg, #1a2a6c, #0d1b2a); border-radius:8px;"></div>
+                    <img src="images/ui-card-front.png" class="card-bg" onerror="this.style.display='none';">
                     <img src="images/${partnerImg[i]}" class="card-partner-img" onerror="this.src='images/${monsterImg[i]}'; this.style.filter='hue-rotate(90deg) drop-shadow(0 2px 5px rgba(0,0,0,0.5))';">
                     <div class="card-buff-desc">${partnerNames[i]}<br><span style="font-size:8px; color:#00ffcc;">${buffNames[buffType].replace('<br>',' ')}</span></div>
                     ${saveFile.equippedPartner === i ? '<div class="equip-tag">裝備中</div>' : ''}
@@ -681,7 +686,11 @@
                 card.onclick = () => equipPartner(i);
             } else {
                 card.className = 'poker-card locked'; 
-                card.innerHTML = `<img src="images/ui-card-back.png" class="card-bg" onerror="this.src=''; this.style.backgroundColor='#050a1f'; this.style.border='2px solid #333';">`;
+                card.innerHTML = `
+                    <div style="position:absolute; width:100%; height:100%; background:linear-gradient(135deg, #050a1f, #111); border-radius:8px; border:1px solid #333;"></div>
+                    <img src="images/ui-card-back.png" class="card-bg" onerror="this.style.display='none';">
+                    <span style="position:absolute; color:#555; font-size:30px;">🔒</span>
+                `;
             }
             grid.appendChild(card);
         }
@@ -770,12 +779,8 @@
     }
 
     function startGame(level) {
-        if ((level === 10 && saveFile.unlockedLevel < 10) || (level === 20 && saveFile.unlockedLevel < 20)) {
-            alert("此大魔王關卡尚未解鎖！");
-            return;
-        }
-
         state.level = level; state.monstersDefeated = 0; state.isBoss = false; state.isEndless = false;
+        isAnimating = false; // 解除防呆鎖
         
         let startMsg = applyBuffs();
         state.monsterMaxHp = 2; 
@@ -798,6 +803,8 @@
 
     function startEndlessMode() {
         state.level = 'endless'; state.monstersDefeated = 0; state.endlessScore = 0; state.isBoss = false; state.isEndless = true; state.isHardMode = true;
+        isAnimating = false; // 解除防呆鎖
+
         let startMsg = applyBuffs();
         state.monsterMaxHp = 2; state.monsterHp = state.monsterMaxHp;
         
@@ -847,6 +854,7 @@
 
             document.getElementById('monster-hp-fill').style.width = '100%';
             document.getElementById('monster-ui').style.display = 'block';
+            isAnimating = false; // 怪物滑入完畢，允許作答
         }, isFirstSpawn ? 0 : 400);
     }
 
@@ -878,7 +886,11 @@
 
     function generateQuestion() {
         resetTimer();
-        for(let i=0; i<3; i++) document.getElementById(`btn-ans-${i}`).style.color = "#fff";
+        for(let i=0; i<3; i++) {
+            let btn = document.getElementById(`btn-ans-${i}`);
+            btn.style.color = "#fff";
+            btn.classList.remove('flash'); // 清除發光狀態
+        }
         document.getElementById('ui-question').classList.remove('interference');
 
         let num1;
@@ -923,7 +935,7 @@
         if(state.timeBuff) speed = Math.floor(speed * 1.25); 
 
         state.timerInterval = setInterval(() => {
-            if (gameState !== 'PLAYING') return;
+            if (gameState !== 'PLAYING' || isAnimating) return; // 動畫期間計時器暫停
             state.timer -= 1;
             timerBar.style.width = state.timer + '%';
             if(state.timer < 30) timerBar.style.background = 'linear-gradient(90deg, #ff4757, #ff6b81)';
@@ -932,11 +944,18 @@
     }
 
     function checkAnswer(btnIndex) {
-        if (gameState !== 'PLAYING') return;
+        if (gameState !== 'PLAYING' || isAnimating) return; // 防呆鎖：防止連點
+        isAnimating = true; 
+
         clearInterval(state.timerInterval);
         document.getElementById('ui-question').classList.remove('interference'); 
-        const selected = parseInt(document.getElementById(`btn-ans-${btnIndex}`).innerText);
         
+        const btn = document.getElementById(`btn-ans-${btnIndex}`);
+        const selected = parseInt(btn.innerText);
+        
+        // 按鈕視覺發光回饋
+        btn.classList.add('flash');
+
         let mermaid = document.getElementById('char-mermaid');
         let partnerContainer = document.getElementById('char-partner-container');
         if(mermaid.style.display === 'none') mermaid = document.getElementById('fallback-mermaid');
@@ -991,7 +1010,7 @@
                     }); return;
                 } else showSpeech("造成傷害！", true);
             }
-            setTimeout(generateQuestion, 600); return;
+            setTimeout(() => { isAnimating = false; generateQuestion(); }, 600); return;
         }
 
         if(state.isBoss) {
@@ -1015,7 +1034,7 @@
                 }); return;
             } else showSpeech("造成傷害！", true);
         }
-        setTimeout(generateQuestion, 600);
+        setTimeout(() => { isAnimating = false; generateQuestion(); }, 600);
     }
 
     function handleMonsterDeath(monsterElement, callback, isBossKill = false) {
@@ -1045,12 +1064,14 @@
         state.hp--; showSpeech(msg + "<br>加油！", false); updateUI();
         
         if(state.hp <= 0) endGame(false);
-        else setTimeout(generateQuestion, 1000);
+        else setTimeout(() => { isAnimating = false; generateQuestion(); }, 1000);
     }
 
     function triggerBoss() {
         state.isBoss = true; state.bossHp = state.baseBossHp; 
         clearInterval(state.timerInterval); gameState = 'WARNING'; 
+        isAnimating = true; // 防護鎖：警告期間禁止任何操作
+        
         document.getElementById('monster-ui').style.display = 'none'; 
         document.getElementById('char-monster').style.display = 'none';
         
@@ -1078,7 +1099,9 @@
             document.getElementById('monster-hp-fill').style.width = '100%';
             document.getElementById('monster-ui').style.display = 'block';
             showSpeech("海怪Boss來襲！", false); 
-            updateUI(); gameState = 'PLAYING'; generateQuestion(); 
+            updateUI(); gameState = 'PLAYING'; 
+            isAnimating = false; // 解除防護鎖
+            generateQuestion(); 
         }, 2500);
     }
 
@@ -1108,7 +1131,8 @@
                 <span style="color:#00ffcc; font-weight:bold; font-size: 14px;">海怪化為星光，成為了妳的專屬夥伴！</span>
                 <div class="result-card-container">
                     <div class="poker-card equipped" style="width: 100px; height: 140px; cursor: default;">
-                        <img src="images/ui-card-front.png" class="card-bg" onerror="this.src=''; this.style.backgroundColor='#1a2a6c';">
+                        <div style="position:absolute; width:100%; height:100%; background:linear-gradient(135deg, #1a2a6c, #0d1b2a); border-radius:8px;"></div>
+                        <img src="images/ui-card-front.png" class="card-bg" onerror="this.style.display='none';">
                         <img src="images/${partnerImg[unlockedIndex]}" class="card-partner-img" onerror="this.src='images/${monsterImg[unlockedIndex]}'; this.style.filter='hue-rotate(90deg) drop-shadow(0 2px 5px rgba(0,0,0,0.5))';">
                         <div class="card-buff-desc" style="font-size:8px;">${partnerNames[unlockedIndex]}<br><span style="color:#00ffcc;">${buffNames[buffType].replace('<br>',' ')}</span></div>
                         <div class="equip-tag" style="font-size:8px;">NEW!</div>
