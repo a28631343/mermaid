@@ -16,7 +16,6 @@
             background-color: #0d1b2a;
         }
 
-        /* 修正版面問題：加入 overflow-y 讓內容過多時可滑動 */
         .screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: none; flex-direction: column; justify-content: flex-start; align-items: center; z-index: 10; background-size: cover; background-position: center; overflow-y: auto; padding: 20px 0; }
         .screen.active { display: flex; }
         
@@ -27,20 +26,17 @@
         h1 { font-size: 32px; color: #fff; text-shadow: 0 0 10px #ff69b4, 0 0 20px #ff1493, 2px 2px 4px #000; text-align: center; margin-bottom: 10px; line-height: 1.2; }
         .subtitle { font-size: 18px; color: #fff; text-shadow: 1px 1px 3px #000; margin-bottom: 30px; }
 
-        /* 右上角音樂按鈕 */
         #music-btn {
             position: absolute; top: 15px; right: 15px; z-index: 20; background: rgba(0,0,0,0.6); border: 2px solid #fff; border-radius: 20px;
             color: #fff; padding: 8px 15px; font-size: 14px; cursor: pointer; font-weight: bold;
         }
 
-        /* UI 按鈕 */
         .btn {
             background-image: url('images/btn-primary.png'); background-color: #ff69b4; background-size: 100% 100%; background-position: center;
             border: 2px solid #fff; border-radius: 30px; width: 220px; height: 60px; font-size: 20px; color: white; font-weight: bold; text-shadow: 1px 1px 2px #000; cursor: pointer; transition: transform 0.1s; display: flex; justify-content: center; align-items: center; margin-bottom: 15px;
         }
         .btn:active { transform: scale(0.95); }
 
-        /* 修正版面問題：縮小關卡按鈕，避免塞爆畫面 */
         .level-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 15px; padding: 0 20px;}
         .level-btn {
             background-image: url('images/btn-level.png'); background-color: #1e90ff; background-size: 100% 100%;
@@ -49,12 +45,14 @@
         .level-btn:active { transform: scale(0.95); }
         .level-btn.locked { filter: grayscale(100%) brightness(0.5); cursor: not-allowed; border-color: #555; }
 
-        /* 頂部資訊列 */
-        .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 15px 25px; width: 100%; background: rgba(0,0,0,0.5); }
-        .hp-icon { width: 30px; height: 30px; margin-right: 5px; }
+        /* 戰鬥頂部資訊 */
+        .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 25px; width: 100%; background: rgba(0,0,0,0.5); }
+        .hp-section { display: flex; align-items: center; gap: 5px; }
+        .hp-icon { width: 30px; height: 30px; }
+        /* 裝備夥伴的頭像顯示 */
+        .partner-icon { width: 40px; height: 40px; border-radius: 50%; border: 2px solid #ffeb3b; background: rgba(255,255,255,0.2); margin-right: 10px; display: none; object-fit: contain; }
         .progress-bar { font-size: 16px; color: #f1c40f; font-weight: bold; text-shadow: 1px 1px 2px #000;}
 
-        /* 題目區與干擾特效 */
         .question-area { text-align: center; font-size: 45px; font-weight: 900; color: #fff; text-shadow: 0 0 15px #00ffff, 2px 2px 5px #000; margin-top: -10px; transition: all 0.2s;}
         .timer-bar-container { width: 250px; height: 10px; background: rgba(0,0,0,0.5); border-radius: 5px; margin: 10px auto; overflow: hidden; border: 1px solid #fff; }
         .timer-bar { height: 100%; background: #00ffcc; width: 100%; }
@@ -65,7 +63,6 @@
             100% { transform: translate(-1px, -2px) rotate(-2deg); filter: blur(3px) hue-rotate(90deg); color: #ffeb3b;} 
         }
 
-        /* 戰鬥角色 */
         .battle-stage { flex: 1; position: relative; width: 100%; }
         .character { position: absolute; bottom: 20px; transition: all 0.3s ease; height: auto; object-fit: contain; }
         .mermaid { left: 10%; width: 180px; font-size: 70px;} 
@@ -73,12 +70,11 @@
         .boss { width: 220px; filter: drop-shadow(0 0 20px rgba(255,0,0,0.8)); transform: scale(1.2); }
 
         .speech-bubble {
-            position: absolute; bottom: 180px; left: 15%; width: 160px; height: 70px;
+            position: absolute; bottom: 180px; left: 15%; width: 180px; height: 75px;
             background-image: url('images/ui-speech-bg.png'); background-color: rgba(255,255,255,0.9); border-radius: 15px;
-            display: flex; justify-content: center; align-items: center; color: #1e3799; font-size: 14px; font-weight: bold; opacity: 0; transition: opacity 0.3s;
+            display: flex; justify-content: center; align-items: center; text-align: center; color: #1e3799; font-size: 14px; font-weight: bold; opacity: 0; transition: opacity 0.3s; line-height: 1.2; padding: 5px;
         }
 
-        /* 底部按鈕 */
         .bottom-controls { display: flex; justify-content: flex-end; padding: 15px 30px; gap: 15px; background: rgba(0,0,0,0.4); }
         .answer-btn {
             background-image: url('images/btn-answer.png'); background-color: #feca57; border: 3px solid #fff; border-radius: 50%;
@@ -86,10 +82,14 @@
         }
         .answer-btn:active { transform: scale(0.9); }
 
-        /* 相簿系統 */
-        .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 80%; max-height: 50%; overflow-y: auto; padding: 10px; background: rgba(0,0,0,0.5); border-radius: 10px;}
-        .card { width: 100%; aspect-ratio: 1; background: #333; border: 2px solid #fff; border-radius: 10px; display: flex; justify-content: center; align-items: center; font-size: 40px; color: #fff; cursor: pointer;}
-        .card.locked { background: #222; color: #555; }
+        /* 相簿與夥伴系統 */
+        .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; width: 85%; max-height: 50%; overflow-y: auto; padding: 15px; background: rgba(0,0,0,0.5); border-radius: 10px;}
+        .card { position: relative; width: 100%; aspect-ratio: 1; background: #333; border: 2px solid #fff; border-radius: 10px; display: flex; flex-direction: column; justify-content: center; align-items: center; font-size: 40px; color: #fff; cursor: pointer; overflow: hidden; transition: transform 0.1s;}
+        .card:active { transform: scale(0.95); }
+        .card.locked { background: #222; color: #555; cursor: not-allowed; }
+        .card.equipped { border: 4px solid #00ffcc; box-shadow: 0 0 15px #00ffcc; }
+        .equip-tag { position: absolute; bottom: 0; left: 0; width: 100%; background: #00ffcc; color: #000; font-size: 12px; font-weight: bold; text-align: center; padding: 2px 0; }
+        .buff-desc { position: absolute; top: 0; left: 0; width: 100%; background: rgba(0,0,0,0.7); color: #fff; font-size: 10px; text-align: center; padding: 2px 0; }
         
         .special-modes { display: none; flex-direction: column; align-items: center; gap: 10px; margin-top: 10px; border-top: 2px dashed #fff; padding-top: 15px; margin-bottom: 15px;}
         
@@ -101,42 +101,35 @@
 </head>
 <body>
 
-<!-- 音樂播放器 (隱藏) -->
 <audio id="bgm" src="audio/bgm.mp3" loop></audio>
 
 <div id="game-container">
-    
-    <!-- 全域音樂切換按鈕 -->
     <button id="music-btn" onclick="toggleMusic()">🎵 音樂: 關</button>
 
-    <!-- 首頁 -->
     <div id="main-screen" class="screen active">
         <h1>重返亞特蘭提斯<br>人魚公主與數靈聖域</h1>
         <div class="subtitle">✨ 魔法少女 x 九九乘法 ✨</div>
         <button class="btn" onclick="firstStart()">開始冒險</button>
-        <button class="btn" onclick="showGallery()" style="background-color: #9b59b6;">人魚的夢幻相簿</button>
+        <button class="btn" onclick="showGallery()" style="background-color: #9b59b6;">夢幻相簿 & 夥伴裝備</button>
     </div>
 
-    <!-- 關卡選擇與進階模式 -->
     <div id="level-screen" class="screen">
         <h2 style="color: #fff; text-shadow: 2px 2px 5px #000; margin-top: 0; margin-bottom: 10px;">選擇關卡</h2>
         <div class="level-grid" id="level-grid"></div>
         
-        <!-- 全破後解鎖的區域 -->
         <div class="special-modes" id="special-modes-ui">
             <label style="font-size: 16px; color: #ffeb3b; font-weight: bold; cursor: pointer;">
                 <input type="checkbox" id="hard-mode-toggle" style="transform: scale(1.3); margin-right: 5px;"> 🔥 開啟進階難度 (海怪干擾)
             </label>
             <button class="btn" onclick="startEndlessMode()" style="background-color: #e74c3c; width: 220px;">♾️ 無限大挑戰</button>
         </div>
-
-        <!-- 確保返回按鈕不會被擋住 -->
         <button class="btn" style="width: 150px; background-color: #555;" onclick="showScreen('main-screen')">返回</button>
     </div>
 
-    <!-- 夢幻相簿 (蒐藏卡系統) -->
+    <!-- 夢幻相簿 -->
     <div id="gallery-screen" class="screen">
-        <h2 style="color: #fff; text-shadow: 2px 2px 5px #000; margin-top:0;">星光好朋友相簿</h2>
+        <h2 style="color: #fff; text-shadow: 2px 2px 5px #000; margin-top:0; margin-bottom: 5px;">星光好朋友相簿</h2>
+        <div style="font-size: 14px; margin-bottom: 10px;">點擊已解鎖的卡牌來裝備夥伴 Buff</div>
         <div class="gallery-grid" id="gallery-grid"></div>
         <button class="btn" style="margin-top: 20px; width: 150px; background-color: #555;" onclick="showScreen('main-screen')">返回</button>
     </div>
@@ -144,7 +137,11 @@
     <!-- 遊戲畫面 -->
     <div id="gameplay-screen" class="screen">
         <div class="top-bar">
-            <div id="ui-hp"></div>
+            <div class="hp-section">
+                <!-- 夥伴頭像 -->
+                <img src="" id="ui-partner-icon" class="partner-icon">
+                <div id="ui-hp"></div>
+            </div>
             <div class="progress-bar" id="ui-progress">距離 Boss: 0/10</div>
         </div>
         <div class="question-area">
@@ -180,33 +177,36 @@
     let isMusicPlaying = false;
     const bgm = document.getElementById('bgm');
     const musicBtn = document.getElementById('music-btn');
-
     function toggleMusic() {
         if (isMusicPlaying) {
-            bgm.pause();
-            musicBtn.innerText = "🎵 音樂: 關";
-            isMusicPlaying = false;
+            bgm.pause(); musicBtn.innerText = "🎵 音樂: 關"; isMusicPlaying = false;
         } else {
-            bgm.play().then(() => {
-                musicBtn.innerText = "🎵 音樂: 開";
-                isMusicPlaying = true;
-            }).catch(e => {
-                console.log("瀏覽器擋住了自動播放");
-            });
+            bgm.play().then(() => { musicBtn.innerText = "🎵 音樂: 開"; isMusicPlaying = true; }).catch(e => { console.log("瀏覽器擋住了自動播放"); });
         }
     }
-
-    // 第一次按下「開始冒險」時，嘗試播放音樂
     function firstStart() {
         if (!isMusicPlaying) toggleMusic();
         showScreen('level-screen');
     }
 
     // --- 遊戲邏輯與存檔 ---
-    let saveFile = JSON.parse(localStorage.getItem('mermaidSave')) || { unlockedLevel: 1, unlockedCards: [] };
-    let state = { level: 1, hp: 3, progress: 0, maxProgress: 10, isBoss: false, bossHp: 3, correctAnswer: 0, timer: 100, timerInterval: null, isEndless: false, isHardMode: false, endlessScore: 0 };
+    let saveFile = JSON.parse(localStorage.getItem('mermaidSave')) || { unlockedLevel: 1, unlockedCards: [], equippedPartner: null };
+    // 確保舊存檔有 equippedPartner 欄位
+    if(saveFile.equippedPartner === undefined) saveFile.equippedPartner = null;
+
+    let state = { 
+        level: 1, hp: 3, maxHp: 3, progress: 0, maxProgress: 10, 
+        isBoss: false, bossHp: 3, baseBossHp: 3, 
+        correctAnswer: 0, timer: 100, timerInterval: null, 
+        isEndless: false, isHardMode: false, endlessScore: 0,
+        timeBuff: false
+    };
+
     const monsters = ["🐟","🐍","🦀","🐡","🌟","🦑","🦈","🐙","👿"]; 
     const monsterImg = ["monster-1.png", "monster-2.png", "monster-3.png", "monster-4.png", "monster-5.png", "monster-6.png", "monster-7.png", "monster-8.png", "monster-9.png"];
+    
+    // 定義 3 種 Buff
+    const buffNames = ["生命守護<br>(愛心+1)", "時間魔法<br>(變慢25%)", "強力打擊<br>(Boss血-1)"];
 
     function saveData() { localStorage.setItem('mermaidSave', JSON.stringify(saveFile)); updateLevelUI(); }
 
@@ -216,12 +216,9 @@
         for(let i = 1; i <= 9; i++) {
             let btn = document.createElement('button');
             if (i <= saveFile.unlockedLevel) {
-                btn.className = 'level-btn';
-                btn.innerHTML = `第 ${i} 關<br>(x${i})`;
-                btn.onclick = () => startGame(i, false);
+                btn.className = 'level-btn'; btn.innerHTML = `第 ${i} 關<br>(x${i})`; btn.onclick = () => startGame(i, false);
             } else {
-                btn.className = 'level-btn locked';
-                btn.innerHTML = `🔒<br>未解鎖`;
+                btn.className = 'level-btn locked'; btn.innerHTML = `🔒<br>未解鎖`;
             }
             grid.appendChild(btn);
         }
@@ -232,18 +229,27 @@
     function showScreen(id) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById(id).classList.add('active');
-        // 自動滾動回頂部
         document.getElementById(id).scrollTop = 0; 
     }
 
+    // --- 夥伴相簿系統 ---
     function showGallery() {
         const grid = document.getElementById('gallery-grid');
         grid.innerHTML = '';
         for(let i = 0; i < 9; i++) {
             let card = document.createElement('div');
+            let buffType = i % 3; // 0=HP, 1=Time, 2=Atk
+
             if (saveFile.unlockedCards.includes(i)) {
                 card.className = 'card';
-                card.innerHTML = `<img src="images/${monsterImg[i]}" style="width:80%;" onerror="this.outerHTML='${monsters[i]}'">`;
+                if (saveFile.equippedPartner === i) card.classList.add('equipped');
+                
+                card.innerHTML = `
+                    <div class="buff-desc">${buffNames[buffType].replace('<br>',' ')}</div>
+                    <img src="images/${monsterImg[i]}" style="width:60%;" onerror="this.outerHTML='${monsters[i]}'">
+                    ${saveFile.equippedPartner === i ? '<div class="equip-tag">✅ 已裝備</div>' : ''}
+                `;
+                card.onclick = () => equipPartner(i);
             } else {
                 card.className = 'card locked';
                 card.innerHTML = '🔒';
@@ -253,40 +259,83 @@
         showScreen('gallery-screen');
     }
 
+    function equipPartner(index) {
+        if(saveFile.equippedPartner === index) {
+            saveFile.equippedPartner = null; // 取消裝備
+        } else {
+            saveFile.equippedPartner = index; // 裝備
+        }
+        saveData();
+        showGallery(); // 重新渲染相簿
+    }
+
     function showSpeech(text, isGood = true) {
         const bubble = document.getElementById('ui-speech');
-        bubble.innerText = text; bubble.style.color = isGood ? '#e84118' : '#273c75'; 
-        bubble.style.opacity = 1; setTimeout(() => { bubble.style.opacity = 0; }, 2000);
+        bubble.innerHTML = text; bubble.style.color = isGood ? '#e84118' : '#273c75'; 
+        bubble.style.opacity = 1; setTimeout(() => { bubble.style.opacity = 0; }, 2500);
     }
 
     function updateUI() {
         let hpHTML = "";
-        for(let i = 0; i < 3; i++) {
+        for(let i = 0; i < state.maxHp; i++) {
             if(i < state.hp) hpHTML += `<img src="images/icon-heart-full.png" class="hp-icon" onerror="this.outerHTML='❤️'">`;
             else hpHTML += `<img src="images/icon-heart-empty.png" class="hp-icon" onerror="this.outerHTML='🖤'">`;
         }
         document.getElementById('ui-hp').innerHTML = hpHTML;
         
         if (state.isEndless) {
-            document.getElementById('ui-progress').innerText = state.isBoss ? `Boss 血量: ${state.bossHp}/3` : `擊退海怪: ${state.endlessScore}`;
+            document.getElementById('ui-progress').innerText = state.isBoss ? `Boss 血量: ${state.bossHp}/${state.baseBossHp}` : `擊退海怪: ${state.endlessScore}`;
         } else {
-            document.getElementById('ui-progress').innerText = state.isBoss ? `Boss 血量: ${state.bossHp}/3` : `距離 Boss: ${state.progress}/${state.maxProgress}`;
+            document.getElementById('ui-progress').innerText = state.isBoss ? `Boss 血量: ${state.bossHp}/${state.baseBossHp}` : `距離 Boss: ${state.progress}/${state.maxProgress}`;
         }
     }
 
+    // --- 初始化戰鬥與 Buff ---
+    function applyBuffs() {
+        state.maxHp = 3;
+        state.baseBossHp = 3;
+        state.timeBuff = false;
+        
+        const pIcon = document.getElementById('ui-partner-icon');
+        let buffMsg = "星光魔法，出擊！✨";
+
+        if(saveFile.equippedPartner !== null) {
+            let pType = saveFile.equippedPartner % 3;
+            if(pType === 0) { state.maxHp = 4; buffMsg = "發動夥伴技能：<br>💖 生命守護！"; }
+            if(pType === 1) { state.timeBuff = true; buffMsg = "發動夥伴技能：<br>⏳ 時間變慢！"; }
+            if(pType === 2) { state.baseBossHp = 2; buffMsg = "發動夥伴技能：<br>⚔️ Boss血量-1！"; }
+            
+            // 顯示夥伴頭像
+            pIcon.style.display = "block";
+            pIcon.src = `images/${monsterImg[saveFile.equippedPartner]}`;
+            // 簡單處理沒有圖素時的情況
+            pIcon.onerror = function() { this.style.display='none'; } 
+        } else {
+            pIcon.style.display = "none";
+        }
+        
+        state.hp = state.maxHp;
+        return buffMsg;
+    }
+
     function startGame(level) {
-        state.level = level; state.hp = 3; state.progress = 0; state.isBoss = false; state.bossHp = 3; state.isEndless = false;
+        state.level = level; state.progress = 0; state.isBoss = false; state.isEndless = false;
         state.isHardMode = document.getElementById('hard-mode-toggle').checked && saveFile.unlockedLevel > 9;
+        
+        let startMsg = applyBuffs();
+        if(state.isHardMode) startMsg = "進階難度！小心干擾！";
+
         setupMonster(level - 1);
-        updateUI(); showScreen('gameplay-screen'); showSpeech(state.isHardMode ? "進階難度！" : "星光魔法，出擊！✨");
+        updateUI(); showScreen('gameplay-screen'); showSpeech(startMsg);
         generateQuestion();
     }
 
     function startEndlessMode() {
-        state.level = 'endless'; state.hp = 3; state.progress = 0; state.endlessScore = 0; state.isBoss = false; state.bossHp = 3;
-        state.isEndless = true; state.isHardMode = false;
+        state.level = 'endless'; state.progress = 0; state.endlessScore = 0; state.isBoss = false; state.isEndless = true; state.isHardMode = false;
+        
+        let startMsg = applyBuffs();
         setupMonster(Math.floor(Math.random() * 9));
-        updateUI(); showScreen('gameplay-screen'); showSpeech("無限挑戰開始！");
+        updateUI(); showScreen('gameplay-screen'); showSpeech(startMsg + "<br>無限挑戰開始！");
         generateQuestion();
     }
 
@@ -321,7 +370,10 @@
         state.timer = 100;
         const timerBar = document.getElementById('ui-timer');
         timerBar.style.width = '100%'; timerBar.style.background = '#00ffcc';
+        
         let speed = (state.isHardMode || state.isEndless) ? 60 : 100;
+        if(state.timeBuff) speed = Math.floor(speed * 1.25); // 時間魔法：變慢 25%
+
         state.timerInterval = setInterval(() => {
             state.timer -= 1;
             timerBar.style.width = state.timer + '%';
@@ -355,7 +407,7 @@
             if (state.isBoss) {
                 state.bossHp--;
                 if(state.bossHp <= 0) {
-                    if (state.hp < 3) state.hp++; 
+                    if (state.hp < state.maxHp) state.hp++; 
                     showSpeech("擊退Boss！愛心回復！");
                     state.isBoss = false; setupMonster(Math.floor(Math.random() * 9));
                 }
@@ -381,13 +433,13 @@
     function handleWrong(msg, mermaid) {
         if(!mermaid) mermaid = document.getElementById('char-mermaid');
         mermaid.classList.add('anim-hurt');
-        state.hp--; showSpeech(msg + " 加油！", false); updateUI();
+        state.hp--; showSpeech(msg + "<br>加油！", false); updateUI();
         if(state.hp <= 0) endGame(false);
         else setTimeout(generateQuestion, 1000);
     }
 
     function triggerBoss() {
-        state.isBoss = true; state.bossHp = 3;
+        state.isBoss = true; state.bossHp = state.baseBossHp; // 根據有無 Buff 決定血量
         if (state.isEndless) setupMonster(8); 
         let monster = document.getElementById('char-monster');
         if(monster.style.display === 'none') monster = document.getElementById('fallback-monster');
@@ -405,9 +457,14 @@
             desc.innerHTML = `你總共淨化了 <b style="color:#00ffcc; font-size:30px;">${state.endlessScore}</b> 隻海怪！`;
         } else if(isWin) {
             title.innerText = "⭐ 關卡完成！ ⭐"; title.style.color = "#ffeb3b";
-            desc.innerHTML = `星光魔法成功淨化了海怪！<br>獲得了新夥伴卡牌！`;
             
-            if (!saveFile.unlockedCards.includes(state.level - 1)) saveFile.unlockedCards.push(state.level - 1);
+            if (!saveFile.unlockedCards.includes(state.level - 1)) {
+                desc.innerHTML = `星光魔法成功淨化了海怪！<br><span style="color:#00ffcc;">獲得了新夥伴，可以到相簿裝備囉！</span>`;
+                saveFile.unlockedCards.push(state.level - 1);
+            } else {
+                desc.innerHTML = `星光魔法成功淨化了海怪！`;
+            }
+            
             if (state.level === saveFile.unlockedLevel) saveFile.unlockedLevel++;
             saveData();
         } else {
