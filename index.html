@@ -2,16 +2,24 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>重返亞特蘭提斯：人魚公主與數靈聖域</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&display=swap');
 
         * { box-sizing: border-box; user-select: none; font-family: 'Noto Sans TC', sans-serif; }
-        body { margin: 0; padding: 0; background-color: #050a1f; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; color: #fff; }
+        
+        body { 
+            margin: 0; padding: 0; background-color: #050a1f; 
+            display: flex; justify-content: center; align-items: center; 
+            height: 100vh; height: 100dvh; 
+            overflow: hidden; color: #fff; 
+        }
 
         #game-container {
-            position: relative; width: 100%; max-width: 900px; height: 100%; max-height: 800px; 
+            position: relative; width: 100%; max-width: 900px; 
+            height: 100%; height: 100dvh; 
+            max-height: 800px; 
             border-radius: 0; box-shadow: none; overflow: hidden; display: flex; flex-direction: column; background-color: #0d1b2a;
         }
 
@@ -34,8 +42,8 @@
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
             display: flex; flex-direction: column; justify-content: flex-start; align-items: center; 
             z-index: 10; background-size: cover; background-position: center; overflow-y: auto; 
-            padding-top: max(45px, env(safe-area-inset-top, 45px));
-            padding-bottom: max(20px, env(safe-area-inset-bottom, 20px));
+            padding-top: 45px; padding-top: env(safe-area-inset-top, 45px);
+            padding-bottom: 20px; padding-bottom: env(safe-area-inset-bottom, 20px);
             padding-left: 15px; padding-right: 15px;
             opacity: 0; visibility: hidden; transition: opacity 0.5s ease, visibility 0.5s; 
         }
@@ -45,7 +53,6 @@
         #intro-video { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
         #skip-intro-btn { position: absolute; top: 40px; right: 20px; background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(5px); border: 1px solid rgba(255, 255, 255, 0.5); color: #fff; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-size: 14px; font-weight: bold; z-index: 100000; transition: all 0.2s; }
         
-        #main-screen { background-image: url('images/bg-main.jpg'); background-color: #1a2a6c; justify-content: center; padding-top: 0; }
         #level-screen { background-image: url('images/bg-main.jpg'); background-color: #1a2a6c; justify-content: flex-start; }
         
         #result-screen { 
@@ -53,18 +60,31 @@
             background-image: url('images/bg-result.jpg'); background-color: rgba(0,8,81,0.9); 
             justify-content: center; backdrop-filter: blur(10px); padding: 30px 20px;
         }
-        #gallery-screen {
-            background: radial-gradient(circle at center, #112240 0%, #050a1f 100%);
-            background-image: url('images/bg-main.jpg'); background-color: #112240;
-            justify-content: center; padding: 20px 10px;
+
+        .currency-display {
+            position: absolute; top: 15px; top: env(safe-area-inset-top, 15px); right: 15px;
+            display: flex; align-items: center; justify-content: flex-end; 
+            background-image: url('images/ui-pearl-panel.png');
+            background-size: 100% 100%; background-position: center; background-repeat: no-repeat;
+            background-color: transparent; border: none; box-shadow: none;
+            padding: 8px 25px 8px 15px; min-width: 140px; height: 45px; z-index: 100; 
+            transition: transform 0.2s, filter 0.2s;
         }
+        .currency-amount { font-size: 18px; font-weight: 900; color: #fff; text-shadow: 1px 1px 3px #000; letter-spacing: 1px;}
+        .currency-display.pop { animation: currencyPop 0.4s ease-out; filter: brightness(1.2) drop-shadow(0 0 10px rgba(0,255,255,0.8)); }
+        @keyframes currencyPop { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+
+        .btn-tutorial-main {
+            position: absolute; top: 15px; top: env(safe-area-inset-top, 15px); left: 15px;
+            background: rgba(0, 0, 0, 0.6); border: 2px solid #00ffff; color: #00ffff;
+            width: 45px; height: 45px; border-radius: 50%; font-size: 24px; font-weight: bold;
+            display: flex; justify-content: center; align-items: center; cursor: pointer;
+            z-index: 100; box-shadow: 0 0 10px rgba(0,255,255,0.4); transition: all 0.2s;
+        }
+        .btn-tutorial-main:hover { transform: scale(1.1); box-shadow: 0 0 20px rgba(0,255,255,0.8); background: rgba(0,255,255,0.2); }
 
         h1 { font-size: 34px; color: #fff; text-shadow: 0 0 10px #ff69b4, 0 0 20px #ff1493, 0 5px 5px rgba(0,0,0,0.5); text-align: center; margin-bottom: 10px; line-height: 1.2; letter-spacing: 2px;}
-        .subtitle { font-size: 18px; color: #00ffff; text-shadow: 0 0 8px #00ffff, 1px 1px 2px #000; margin-bottom: 30px; font-weight: bold;}
         
-        #game-logo { width: 85%; max-width: 450px; margin-bottom: 15px; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5)) drop-shadow(0 0 15px rgba(0,255,255,0.4)); animation: floatLogo 3s ease-in-out infinite; }
-        @keyframes floatLogo { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
-
         .btn { background-image: url('images/btn-primary.png'); background-color: transparent; background-size: contain; background-position: center; background-repeat: no-repeat; border: none; border-radius: 30px; width: 240px; height: 80px; font-size: 20px; color: white; font-weight: bold; text-shadow: 1px 2px 3px rgba(0,0,0,0.8); cursor: pointer; transition: transform 0.1s, filter 0.3s; display: flex; justify-content: center; align-items: center; margin-bottom: 15px; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.5)); z-index: 3; flex-shrink: 0; }
         .btn:active { transform: scale(0.95) translateY(2px); filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5)); }
 
@@ -115,133 +135,192 @@
         @keyframes pulse-boss { 0% { box-shadow: 0 0 8px #ff4757; } 50% { box-shadow: 0 0 25px #ff0055, inset 0 0 10px #ff0055; transform: scale(1.02); } 100% { box-shadow: 0 0 8px #ff4757; } }
         .level-btn-wrapper.cleared .level-btn.boss-level-btn { border-color: #f1c40f; background: linear-gradient(135deg, #b33939, #660000); }
 
-
-        /* ====== 戰鬥排版：極致流暢分層 ====== */
-        #gameplay-screen { 
-            background-color: #000851; z-index: 5; 
-            padding: 0 !important; overflow: hidden; background: none;
-            display: flex; flex-direction: column; justify-content: flex-start; 
-            height: 100%; width: 100%;
+        #main-screen { 
+            background-image: url('images/bg-lobby.jpg'); background-color: #1a2a6c; 
+            display: flex; flex-direction: column; justify-content: space-between; 
+            padding-top: max(30px, env(safe-area-inset-top, 30px)); 
+            padding-left: 0; padding-right: 0; padding-bottom: 0; overflow: hidden; 
         }
         
-        /* 1. 頂部狀態列 */
-        .top-bar { 
-            display: flex; justify-content: space-between; align-items: center; 
-            padding: max(15px, env(safe-area-inset-top, 15px)) 15px 8px 15px; 
-            width: 100%; background: rgba(10, 20, 50, 0.85); border-bottom: 1px solid rgba(255,255,255,0.2); 
-            z-index: 10; flex-shrink: 0;
-        }
-        .hp-section { display: flex; align-items: center; gap: 8px; max-width: 50%; }
+        .lobby-header { text-align: center; width: 100%; z-index: 10; padding: 0 15px; flex-shrink: 0; margin-top: 15px; }
+        
+        #game-logo { width: 85%; max-width: 420px; margin-bottom: 5px; animation: magicalGlow 3s ease-in-out infinite alternate; }
+        @keyframes magicalGlow { 0% { filter: drop-shadow(0 5px 15px rgba(0,255,255,0.4)) hue-rotate(0deg) brightness(1); } 100% { filter: drop-shadow(0 5px 25px rgba(255,105,180,0.8)) hue-rotate(45deg) brightness(1.2); } }
+        
+        .lobby-center-stage { flex: 1; position: relative; width: 100%; min-height: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 5; }
+
+        .player-title-display { background: rgba(0, 0, 0, 0.6); border: 1px solid #00ffff; color: #00ffff; text-shadow: 0 0 5px #00ffff; font-size: 15px; font-weight: bold; padding: 4px 15px; border-radius: 20px; margin-bottom: 10px; z-index: 10; display: none; animation: floatTitle 3s infinite alternate; }
+        @keyframes floatTitle { 0% { transform: translateY(0); box-shadow: 0 0 5px rgba(0,255,255,0.5); } 100% { transform: translateY(-5px); box-shadow: 0 0 15px rgba(0,255,255,0.8); } }
+
+        .lobby-character { max-height: 90%; max-width: 90vw; object-fit: contain; filter: drop-shadow(0 15px 25px rgba(0,0,0,0.6)) drop-shadow(0 0 20px rgba(0,255,255,0.2)); }
+        
+        .lobby-partner-wrap { position: absolute; width: 80px; height: 80px; z-index: 6; display: none; transition: transform 3s ease-in-out; }
+        .lobby-partner-img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 5px 15px rgba(255,255,255,0.4)); transition: transform 0.5s ease; }
+        .partner-flip { transform: scaleX(-1); }
+
+        .float-anim { animation: smoothFloat 4s ease-in-out infinite; }
+        @keyframes smoothFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+        
+        .partner-hover-anim { animation: partnerHover 3s ease-in-out infinite alternate; }
+        @keyframes partnerHover { from { transform: translateY(-5px); } to { transform: translateY(5px); } }
+
+        .lobby-action-area { width: 100%; display: flex; justify-content: center; padding-bottom: 10px; z-index: 10; flex-shrink: 0; }
+        
+        .btn-start-adventure { width: 80%; max-width: 320px; height: 85px; font-size: 26px; background-image: url('images/ui-btn-start.png'); background-color: transparent; background-size: contain; background-repeat: no-repeat; background-position: center; border: none; box-shadow: none; border-radius: 0; animation: pulseBtn 2s infinite; margin-bottom: 0; color: #1b2856; text-shadow: 0 0 5px rgba(255,255,255,0.5); }
+        @keyframes pulseBtn { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(241, 196, 15, 0.4)); } 50% { transform: scale(1.05); filter: drop-shadow(0 0 20px rgba(241, 196, 15, 0.8)); } }
+
+        .lobby-bottom-nav { width: 100%; height: 105px; background-image: url('images/ui-nav-panel.png'); background-size: 100% 100%; background-position: center; background-repeat: no-repeat; background-color: transparent; border-top: none; backdrop-filter: none; display: flex; justify-content: space-around; align-items: center; padding-bottom: env(safe-area-inset-bottom, 10px); z-index: 20; flex-shrink: 0; }
+        .nav-item { background: transparent; border: none; outline: none; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fff; font-weight: bold; cursor: pointer; transition: all 0.2s; width: 25%; height: 100%; padding-top: 5px; }
+        .nav-icon-img { width: 60px; height: 60px; margin-bottom: 2px; object-fit: contain; transition: all 0.2s; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); }
+        .nav-icon { font-size: 26px; margin-bottom: 4px; filter: grayscale(50%); transition: all 0.2s; }
+        .nav-text { font-size: 12px; text-shadow: 1px 1px 2px #000; transition: color 0.2s; white-space: nowrap; }
+        .nav-item:hover, .nav-item:active { transform: translateY(-3px); }
+        .nav-item:hover .nav-icon-img, .nav-item:active .nav-icon-img { transform: scale(1.15); filter: drop-shadow(0 0 10px rgba(0,255,255,0.8)); }
+        .nav-item:hover .nav-text, .nav-item:active .nav-text { color: #00ffff; }
+
+        /* ====== 房間系統 UI ====== */
+        .room-display { position: relative; width: 100%; height: 60vh; margin-top: 5px; border-radius: 15px; overflow: hidden; border: 3px solid rgba(0, 255, 255, 0.5); box-shadow: 0 0 20px rgba(0, 255, 255, 0.3); background-color: #0d1b2a; }
+        .room-layer { position: absolute; bottom: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transition: all 0.3s ease;}
+        #room-outfit-layer { object-fit: contain; bottom: 5%; left: 50%; transform: translateX(-50%); height: 60%; max-width: 60%; z-index: 4; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5)); }
+        #room-habitat-layer { object-fit: contain; bottom: 10%; left: 5%; height: 30%; width: 35%; z-index: 3; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.6)); }
+        #room-bed-layer { object-fit: contain; bottom: 5%; right: 5%; left: auto; height: 40%; width: 45%; z-index: 2; filter: drop-shadow(0 8px 12px rgba(0,0,0,0.6)); }
+
+        .room-categories { display: flex; justify-content: space-around; align-items: center; width: 100%; padding: 10px 5px; margin-top: 10px; background: rgba(10, 20, 50, 0.6); border-radius: 20px; backdrop-filter: blur(5px); border: 1px solid rgba(0, 255, 255, 0.2); }
+        .room-cat-btn { background: transparent; border: none; outline: none; display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; transition: all 0.2s; padding: 5px; width: 18%; }
+        .room-cat-btn:active { transform: scale(0.9); }
+        .room-cat-btn:hover .room-cat-icon { transform: scale(1.1); filter: drop-shadow(0 0 10px rgba(0,255,255,0.8)); }
+        .room-cat-btn:hover .room-cat-text { color: #00ffff; }
+        .room-cat-icon { width: 45px; height: 45px; margin-bottom: 5px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); transition: all 0.2s; }
+        .room-cat-text { color: #fff; font-size: 11px; font-weight: bold; text-shadow: 1px 1px 2px #000; transition: color 0.2s; white-space: nowrap; }
+
+        .item-modal-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(5px); z-index: 200; display: flex; flex-direction: column; justify-content: flex-end; }
+        .item-modal-content { background: linear-gradient(to top, #1a2a6c, #112240); width: 100%; height: 60%; border-top-left-radius: 25px; border-top-right-radius: 25px; padding: 20px; box-shadow: 0 -5px 25px rgba(0, 255, 255, 0.3); display: flex; flex-direction: column; animation: slideUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        
+        .item-modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.2); }
+        .item-modal-close { font-size: 30px; color: #fff; cursor: pointer; font-weight: bold; line-height: 1; }
+        
+        .item-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; overflow-y: auto; flex: 1; padding-bottom: 20px; }
+        .room-item-card { background: rgba(0,0,0,0.5); border: 2px solid rgba(255,255,255,0.2); border-radius: 10px; aspect-ratio: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; position: relative; transition: all 0.2s; overflow: hidden; padding: 5px; }
+        .room-item-card img { width: 70%; height: 70%; object-fit: contain; }
+        .room-item-card.equipped { border-color: #00ffcc; box-shadow: inset 0 0 15px rgba(0,255,204,0.3); }
+        .room-item-card.locked { filter: grayscale(100%) brightness(0.4); cursor: not-allowed; }
+        .room-item-name { position: absolute; bottom: 5px; font-size: 10px; font-weight: bold; color: #fff; background: rgba(0,0,0,0.7); padding: 2px 5px; border-radius: 4px; text-align: center; width: 90%;}
+
+        /* ====== 魔法珍珠商店專屬樣式 ====== */
+        #shop-screen { background-image: url('images/bg-altar.jpg'); background-color: #050a1f; }
+        .shop-altar-container { flex: 1; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; width: 100%; position: relative; }
+        .altar-shell { width: 80%; max-width: 400px; object-fit: contain; filter: drop-shadow(0 20px 30px rgba(0,0,0,0.8)) drop-shadow(0 0 30px rgba(0,255,255,0.3)); transition: transform 0.3s ease; margin-top: 25vh;}
+        .altar-shell.shaking { animation: shake-shell 0.5s ease-in-out infinite alternate; filter: drop-shadow(0 0 50px rgba(255,255,255,0.8)) brightness(1.3); }
+        @keyframes shake-shell { 0% { transform: rotate(-5deg) scale(1); } 100% { transform: rotate(5deg) scale(1.05); } }
+        
+        .btn-gacha-small { width: 32%; height: 75px; font-size: 16px; line-height: 1.3; background-image: none; background: linear-gradient(135deg, #9b59b6, #8e44ad); border: 2px solid #e056fd; border-radius: 12px; box-shadow: 0 0 10px rgba(155, 89, 182, 0.6), inset 0 0 5px rgba(255,255,255,0.3); display: flex; flex-direction: column; justify-content: center; align-items: center; color: #fff; text-shadow: 1px 1px 2px #000; padding: 5px; transition: all 0.2s; cursor: pointer; }
+        .btn-gacha-small:hover { background: linear-gradient(135deg, #a25bc2, #944bbc); border-color: #fff; box-shadow: 0 0 20px rgba(224, 86, 253, 0.8); transform: translateY(-2px); }
+        .btn-gacha-small:active { transform: translateY(2px); }
+        .btn-gacha-small:disabled { filter: grayscale(100%) brightness(0.5); cursor: not-allowed; animation: none; box-shadow: none; border-color: #555; transform: none; }
+
+        .gacha-modal-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); backdrop-filter: blur(10px); z-index: 300; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .gacha-modal-content { display: flex; flex-direction: column; align-items: center; animation: zoomIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); width: 100%; text-align: center;}
+        @keyframes zoomIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        
+        .gacha-item-showcase { position: relative; width: 250px; height: 250px; display: flex; justify-content: center; align-items: center; }
+        .gacha-light-rays { position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(from 0deg at 50% 50%, rgba(255,255,255,0) 0%, rgba(255,255,255,0.6) 10%, rgba(255,255,255,0) 20%, rgba(255,255,255,0) 30%, rgba(255,255,255,0.6) 40%, rgba(255,255,255,0) 50%, rgba(255,255,255,0) 60%, rgba(255,255,255,0.6) 70%, rgba(255,255,255,0) 80%, rgba(255,255,255,0) 90%, rgba(255,255,255,0.6) 100%); animation: spinRays 10s linear infinite; z-index: 1; pointer-events: none; }
+        @keyframes spinRays { 100% { transform: rotate(360deg); } }
+        .gacha-result-img { width: 80%; height: 80%; object-fit: contain; z-index: 2; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.8)); animation: floatGacha 3s ease-in-out infinite; }
+        @keyframes floatGacha { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
+        /* ====== 卡牌收藏冊 (魔法書 UI) ====== */
+        #gallery-screen { background-image: url('images/bg-main.jpg'); background-color: #112240; justify-content: flex-start; padding-top: max(45px, env(safe-area-inset-top, 45px)); }
+        .book-container { width: 96%; max-width: 500px; display: flex; flex-direction: column; align-items: center; margin-top: 10px; flex: 1; margin-bottom: 15px;}
+        .book-tabs { display: flex; justify-content: flex-start; width: 92%; margin-bottom: -2px; z-index: 2; gap: 5px; }
+        .bookmark { background: #0b1a42; border: 2px solid #00ffff; border-bottom: none; color: #aaa; padding: 10px 15px; border-radius: 12px 12px 0 0; cursor: pointer; font-size: 15px; font-weight: bold; transition: all 0.2s; box-shadow: inset 0 -5px 10px rgba(0,0,0,0.5); }
+        .bookmark.active { background: linear-gradient(to bottom, #1a2a6c, #0d1b2a); color: #fff; text-shadow: 0 0 5px #00ffff; height: 105%; box-shadow: none; border-bottom: 2px solid #0d1b2a; }
+        
+        .book-page { background: linear-gradient(135deg, #0d1b2a, #050a1f); border: 2px solid #00ffff; border-radius: 15px; width: 100%; padding: 20px; box-shadow: 0 10px 30px rgba(0,255,255,0.2), inset 0 0 20px rgba(255,255,255,0.1); display: flex; flex-direction: column; align-items: center; z-index: 3; position: relative; flex: 1;}
+        .book-grid { display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, 1fr); gap: 15px; width: 100%; flex: 1;}
+        
+        .page-nav { display: flex; justify-content: space-between; align-items: center; width: 100%; margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.2); }
+        .btn-page { background: rgba(0,255,255,0.1); border: 1px solid #00ffff; color: #00ffff; padding: 8px 15px; border-radius: 15px; cursor: pointer; transition: all 0.2s; font-weight: bold; }
+        .btn-page:active { transform: scale(0.9); }
+        .btn-page:disabled { filter: grayscale(100%); opacity: 0.3; cursor: not-allowed; border-color: #555; color: #555;}
+        .page-indicator { color: #fff; font-weight: bold; text-shadow: 1px 1px 2px #000; font-size: 16px;}
+
+        .poker-card { position: relative; width: 100%; aspect-ratio: 2.2 / 3.3; background: rgba(0,0,0,0.5); border-radius: 8px; cursor: pointer; transition: all 0.25s; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.6)); overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 2px solid transparent; }
+        .poker-card:hover { transform: translateY(-3px) scale(1.02); filter: drop-shadow(0 6px 12px rgba(0,255,255,0.4)); }
+        .poker-card.locked { filter: grayscale(100%) brightness(0.35); cursor: not-allowed; }
+        .card-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1;}
+        .card-partner-img { position: absolute; top: 15%; width: 75%; height: 50%; object-fit: contain; z-index: 2; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.6)); }
+        .card-name-tag { position: absolute; bottom: 8%; width: 92%; text-align: center; color: #fff; font-size: 11px; font-weight: 900; z-index: 3; text-shadow: 0 1px 3px rgba(0,0,0,0.9); background: rgba(0,0,0,0.7); padding: 4px 2px; border-radius: 4px; border: 1px solid rgba(0,255,255,0.3); }
+        
+        .poker-card.equipped { border: 2px solid #00ffff; filter: drop-shadow(0 0 10px #00ffff) brightness(1.1); transform: translateY(-2px); }
+        .equip-tag { position: absolute; top: 4px; right: 4px; background: linear-gradient(135deg, #00ffcc, #00bfff); color: #000; font-size: 10px; font-weight: 900; padding: 3px 6px; border-radius: 6px; z-index: 4; box-shadow: 0 2px 4px rgba(0,0,0,0.6); letter-spacing: 0.5px; }
+
+        /* 卡牌詳細故事視窗 */
+        .card-detail-content { width: 85%; max-width: 340px; padding: 25px 20px; display: flex; flex-direction: column; align-items: center;}
+        .cd-img-box { width: 120px; height: 120px; border-radius: 50%; background: radial-gradient(circle, rgba(0,255,255,0.2) 0%, rgba(0,0,0,0) 70%); display: flex; justify-content: center; align-items: center; margin-bottom: 10px; filter: drop-shadow(0 0 15px rgba(0,255,255,0.3));}
+        .cd-img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.5));}
+        .cd-name { color: #00ffff; font-size: 24px; font-weight: 900; text-shadow: 0 0 10px rgba(0,255,255,0.5); margin: 5px 0;}
+        .cd-func-tag { background: rgba(0,255,255,0.2); border: 1px solid #00ffff; padding: 4px 12px; border-radius: 15px; font-size: 13px; color: #fff; font-weight: bold; margin-bottom: 15px;}
+        .cd-desc { background: rgba(0,0,0,0.5); padding: 15px; border-radius: 10px; border-left: 3px solid #00ffff; color: #ddd; font-size: 14px; line-height: 1.6; text-align: left; width: 100%; margin-bottom: 20px;}
+
+        /* ====== 戰鬥畫面排版 ====== */
+        #gameplay-screen { background-color: #000851; z-index: 5; padding: 0 !important; overflow: hidden; background: none; display: flex; flex-direction: column; height: 100%; width: 100%; }
+        .top-bar { display: flex; justify-content: space-between; align-items: center; padding: max(15px, env(safe-area-inset-top, 15px)) 15px 8px 15px; width: 100%; background: rgba(10, 20, 50, 0.85); border-bottom: 1px solid rgba(255,255,255,0.2); z-index: 10; flex-shrink: 0; }
+        .btn-exit { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255,255,255,0.5); border-radius: 12px; color: #fff; padding: 5px 12px; cursor: pointer; font-size: 14px; font-weight: bold; backdrop-filter: blur(5px); margin-right: 10px; transition: all 0.2s; flex-shrink: 0; }
+        .btn-exit:hover { background: rgba(255, 50, 50, 0.5); border-color: #ff4757; }
+        .hp-section { display: flex; align-items: center; gap: 8px; flex: 1; }
         #ui-hp { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
         .hp-icon { width: 22px; height: 22px; object-fit: contain; }
-        .progress-bar { font-size: 15px; color: #f1c40f; font-weight: 900; text-shadow: 0 2px 4px rgba(0,0,0,0.8); text-align: right; line-height: 1.2; }
-
-        /* 2. 問題區 */
-        .question-area { 
-            text-align: center; color: #fff; text-shadow: 0 0 20px #00ffff, 0 4px 8px rgba(0,0,0,0.8); 
-            margin-top: 15px; transition: all 0.2s; z-index: 10; flex-shrink: 0;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            width: 100%;
-        }
-        #ui-question { font-size: 45px; font-weight: 900; margin-bottom: 10px; }
+        .progress-bar { font-size: 15px; color: #f1c40f; font-weight: 900; text-shadow: 0 2px 4px rgba(0,0,0,0.8); text-align: right; line-height: 1.2; flex-shrink: 0;}
+        .middle-combat-area { flex: 1; display: flex; flex-direction: column; position: relative; width: 100%; background-color: #000851; background-image: url('images/bg-underwater.jpg'); background-size: auto 100%; background-position: 0vw top; background-repeat: repeat-x; transition: background-position 0.8s ease-in-out; overflow: hidden; }
+        .question-area { text-align: center; color: #fff; text-shadow: 0 0 20px #00ffff, 0 4px 8px rgba(0,0,0,0.8); margin-top: 15px; transition: all 0.2s; z-index: 10; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; }
+        #ui-question { font-size: 45px; font-weight: 900; margin-bottom: 10px; transition: color 0.3s, text-shadow 0.3s; }
         .timer-bar-container { width: 260px; height: 12px; background: rgba(0,0,0,0.6); border-radius: 6px; overflow: hidden; border: 1px solid rgba(255,255,255,0.5); margin-bottom: 10px; }
         .timer-bar { height: 100%; background: linear-gradient(90deg, #00ffcc, #00bfff); width: 100%; transition: width 0.1s linear;}
-        
-        /* 3+4. 戰鬥舞台 (背景圖從這裡開始往下填滿) */
-        .battle-stage { 
-            flex: 1; /* 自動填補剩下所有高度 */
-            display: flex; flex-direction: column; justify-content: flex-start;
-            background-color: #000851; /* 底部填塞色 (預防螢幕超長) */
-            background-image: url('images/bg-underwater.jpg'); 
-            background-size: auto 100%; /* 確保高度 100% 貼齊上下，寬度保持比例延伸 */
-            background-position: 0vw top; /* 背景對齊頂部 (題目區下緣) */
-            background-repeat: repeat-x; /* 水平無限卷軸 */
-            transition: background-position 0.8s ease-in-out; /* 平滑 15% 卷軸特效 */
-            width: 100%; z-index: 5;
-        }
-
-        /* 3. 答題按鈕區 (緊接在舞台最頂端，完全透明，沒有漸層色塊) */
-        .bottom-controls { 
-            display: flex; justify-content: space-evenly; align-items: center; 
-            padding: 5px 10px 15px 10px; width: 100%; z-index: 15; flex-shrink: 0; 
-            background: transparent; 
-        }
-        .answer-btn { background-image: url('images/btn-answer.png'); background-color: transparent; background-size: contain; background-position: center; background-repeat: no-repeat; border: none; width: 28vw; max-width: 90px; height: 28vw; max-height: 90px; font-size: 32px; font-weight: 900; color: #fff; text-shadow: 0 3px 6px rgba(0,0,0,0.8), 0 0 10px rgba(0,255,255,0.5); cursor: pointer; display: flex; justify-content: center; align-items: center; filter: drop-shadow(0 5px 8px rgba(0,0,0,0.5)); transition: all 0.1s; }
+        .stage-elements { flex: 1; position: relative; width: 100%; }
+        .bottom-controls { display: flex; justify-content: space-evenly; align-items: center; padding: 15px 10px; padding-bottom: max(15px, env(safe-area-inset-bottom, 15px)); width: 100%; z-index: 15; flex-shrink: 0; background: rgba(5, 10, 31, 0.95); border-top: 2px solid rgba(0, 255, 255, 0.3); }
+        .answer-btn { background-image: url('images/btn-answer.png'); background-color: transparent; background-size: contain; background-position: center; background-repeat: no-repeat; border: none; width: 28vw; max-width: 90px; height: 28vw; max-height: 90px; font-size: 32px; font-weight: 900; color: #fff; text-shadow: 0 3px 6px rgba(0,0,0,0.8), 0 0 10px rgba(0,255,255,0.5); cursor: pointer; display: flex; justify-content: center; align-items: center; filter: drop-shadow(0 5px 8px rgba(0,0,0,0.5)); transition: all 0.1s; outline: none; touch-action: manipulation; }
         .answer-btn:active { transform: scale(0.9) translateY(4px); filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5)); }
-        .answer-btn.flash { filter: brightness(1.5) drop-shadow(0 0 15px rgba(0,255,255,0.8)); transform: scale(1.05); }
-
-        /* 4. 戰鬥角色層 (位在答題區下方，佔滿剩下的舞台) */
-        .stage-elements {
-            flex: 1; position: relative; width: 100%;
-        }
-
-        .character { position: absolute; bottom: calc(10% + env(safe-area-inset-bottom, 5px)); transition: all 0.3s ease; height: auto; max-height: 70%; max-width: 42vw; object-fit: contain; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5));}
+        .answer-btn:focus { filter: brightness(1.2) drop-shadow(0 0 10px rgba(0,255,255,0.8)); }
+        .answer-btn:disabled { filter: grayscale(100%) brightness(0.5); cursor: not-allowed; }
+        .answer-btn.flash-correct { filter: brightness(1.5) drop-shadow(0 0 15px rgba(0,255,0,0.8)); transform: scale(1.05); }
+        .answer-btn.flash-wrong { filter: brightness(1.5) drop-shadow(0 0 15px rgba(255,0,0,0.8)); transform: scale(0.95); }
+        .character { position: absolute; bottom: 5%; transition: all 0.3s ease; height: auto; max-height: 70%; max-width: 42vw; object-fit: contain; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5));}
         .mermaid { left: 2%; transform-origin: bottom center;} 
         .monster { right: 2%; transform-origin: bottom center;}
-        
-        .partner-container { position: absolute; left: 32%; bottom: calc(25% + env(safe-area-inset-bottom, 5px)); width: 22vw; max-width: 85px; height: 22vw; max-height: 85px; z-index: 8; display: none; }
+        .partner-container { position: absolute; left: 32%; bottom: 20%; width: 22vw; max-width: 85px; height: 22vw; max-height: 85px; z-index: 8; display: none; }
         .partner-img { width: 100%; height: 100%; object-fit: contain; transform: scaleX(-1); filter: drop-shadow(0 5px 10px rgba(255,255,255,0.5)); }
-
-        /* 對話氣泡：定位在公主頭部斜上方，絕對跟隨 */
-        .speech-bubble { 
-            position: absolute; 
-            bottom: calc(55% + env(safe-area-inset-bottom, 5px)); 
-            left: 8%; 
-            background-image: url('images/ui-speech-bg.png'); background-size: 100% 100%; 
-            background-color: transparent; background-repeat: no-repeat; 
-            display: flex; justify-content: center; align-items: center; text-align: center; 
-            color: #1e3799; font-size: 13px; font-weight: 900; 
-            width: 120px; min-height: 40px; padding: 5px 10px 10px 10px;
-            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.5)); 
-            opacity: 0; transition: opacity 0.3s, transform 0.3s; 
-            transform: translateY(15px) scale(0.9); z-index: 20; pointer-events: none;
-        }
+        .speech-bubble { position: absolute; bottom: 65%; left: 8%; background-image: url('images/ui-speech-bg.png'); background-size: 100% 100%; background-color: transparent; background-repeat: no-repeat; display: flex; justify-content: center; align-items: center; text-align: center; color: #1e3799; font-size: 13px; font-weight: 900; width: 120px; min-height: 40px; padding: 5px 10px 10px 10px; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.5)); opacity: 0; transition: opacity 0.3s, transform 0.3s; transform: translateY(15px) scale(0.9); z-index: 20; pointer-events: none; }
         .speech-bubble.show { opacity: 1; transform: translateY(0) scale(1); }
         .speech-bubble.boss-skill { color: #ff0055; text-shadow: 0 0 5px rgba(255,0,0,0.5); font-size: 14px; }
-        
         .adv-monster { filter: hue-rotate(150deg) saturate(1.5) drop-shadow(0 10px 15px rgba(0,0,0,0.5)); }
         .elite-monster { transform: scale(1.15); filter: drop-shadow(0 0 15px #ff4757) contrast(1.2) saturate(1.5); }
         .adv-monster.elite-monster { filter: hue-rotate(150deg) drop-shadow(0 0 15px #ff4757) contrast(1.2) saturate(1.5); }
         .boss { max-height: 80%; max-width: 55vw; right: 0; filter: drop-shadow(0 0 25px rgba(255,0,0,0.8)); transform: scale(1.1); }
         .adv-monster.boss { filter: hue-rotate(150deg) drop-shadow(0 0 25px rgba(255,0,0,0.8)); }
-
         .monster-ui { position: absolute; right: 5%; bottom: 65%; width: 35vw; max-width: 150px; text-align: center; transition: all 0.3s; z-index: 15; display: none; }
-        .monster-ui.boss-ui { bottom: 75%; width: 45vw; max-width: 200px; right: 5%; } 
+        .monster-ui.boss-ui { bottom: 85%; width: 45vw; max-width: 200px; right: 5%; } 
         .monster-ui.elite-ui { bottom: 70%; } 
         .monster-hp-bar { width: 100%; height: 12px; border: 2px solid #fff; border-radius: 6px; background: rgba(0,0,0,0.8); overflow: hidden; }
         .monster-hp-fill { height: 100%; background: linear-gradient(90deg, #ff4757, #ff0000); width: 100%; transition: width 0.2s ease-out; }
         .monster-hp-text { color: #fff; font-size: 13px; font-weight: 900; text-shadow: 1px 1px 3px #000; margin-top: 4px;}
-
-        /* ====== 修復：移除了背景整塊推移的 CSS ====== */
-        
         .anim-mermaid-enter { animation: mermaidEnter 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
         @keyframes mermaidEnter { 0% { transform: translateX(-150vw); opacity: 0; } 100% { transform: translateX(0); opacity: 1; } }
-
         .anim-mermaid-run { animation: mermaidRun 0.8s ease-in-out forwards; }
         @keyframes mermaidRun { 0% { transform: translateX(0) rotate(0deg); } 20% { transform: translateX(20px) translateY(-15px) rotate(8deg); } 80% { transform: translateX(20px) translateY(-15px) rotate(8deg); } 100% { transform: translateX(0) rotate(0deg); } }
-
         .anim-monster-enter { animation: monsterEnter 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
         @keyframes monsterEnter { 0% { transform: translateX(150vw); opacity: 0; } 100% { transform: translateX(0); opacity: 1; } }
-        
         .anim-attack { animation: attack 0.4s ease; }
         @keyframes attack { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(20px) scale(1.05); filter: brightness(1.2); } }
-        
         .anim-partner-atk { animation: partnerAtk 0.4s ease; }
-        @keyframes partnerAtk { 
-            0%, 100% { transform: translate(0, 0) scale(1); } 
-            50% { transform: translate(40px, -20px) scale(1.2); filter: brightness(1.5) drop-shadow(0 0 15px #00ffff); } 
-        }
-
+        @keyframes partnerAtk { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(40px, -20px) scale(1.2); filter: brightness(1.5) drop-shadow(0 0 15px #00ffff); } }
         .anim-monster-hurt { animation: monster-hurt 0.4s cubic-bezier(.36,.07,.19,.97); }
         @keyframes monster-hurt { 0% { transform: translateX(0); filter: brightness(2) sepia(1) hue-rotate(-50deg) saturate(5) drop-shadow(0 0 20px red); } 20% { transform: translateX(15px) scale(0.95); filter: brightness(2) sepia(1) hue-rotate(-50deg) saturate(5) drop-shadow(0 0 20px red); } 50% { transform: translateX(-15px) scale(0.95); filter: brightness(1.5) drop-shadow(0 0 10px red); } 80% { transform: translateX(10px) scale(0.95); } 100% { transform: translateX(0); } }
-        
         .anim-monster-die { animation: monster-die 0.6s ease-in forwards; }
         @keyframes monster-die { 0% { transform: rotate(0deg) scale(1); filter: brightness(2); } 50% { transform: rotate(20deg) scale(0.8) translateY(20px); filter: brightness(1) opacity(0.8); } 100% { transform: rotate(45deg) scale(0.5) translateY(50px); filter: brightness(0) opacity(0); } }
-
         .boss-victory-flash { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #fff; z-index: 90; opacity: 0; pointer-events: none; }
         .boss-victory-flash.show { animation: victory-flash 1.5s ease-out forwards; }
         @keyframes victory-flash { 0% { opacity: 0; } 10% { opacity: 1; } 100% { opacity: 0; } }
-
         .warning-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 0, 0, 0.85); z-index: 50; display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: opacity 0.3s; overflow: hidden;}
         .warning-screen.show { opacity: 1; visibility: visible; }
         .warning-boss-silhouette { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; height: 90%; background-size: contain; background-repeat: no-repeat; background-position: center; filter: brightness(0.2) drop-shadow(0 0 25px rgba(255,0,50,0.8)); opacity: 0.6; z-index: -1; }
@@ -251,54 +330,14 @@
         .boss-name-display { color: #fff; font-size: 28px; font-weight: 900; text-shadow: 0 0 20px #ff0055, 2px 2px 4px #000; margin-top: 15px; letter-spacing: 2px; text-align: center; padding: 0 10px; line-height: 1.3;}
         @keyframes flash-warning { from { opacity: 1; transform: scale(1); } to { opacity: 0.7; transform: scale(1.05); } }
 
-        .gallery-grid { 
-            display: grid; grid-template-columns: repeat(3, 1fr); 
-            gap: 12px; width: 94%; max-width: 480px; max-height: 62%; overflow-y: auto; padding: 15px; 
-            background: rgba(5, 10, 31, 0.85); backdrop-filter: blur(8px); 
-            border: 2px solid rgba(0, 255, 255, 0.3); border-radius: 20px; 
-            box-shadow: inset 0 0 15px rgba(0,255,255,0.2); 
-        }
-        .poker-card { 
-            position: relative; width: 100%; aspect-ratio: 2.2 / 3.3; 
-            background: rgba(0,0,0,0.5); border-radius: 8px; cursor: pointer; transition: all 0.25s; 
-            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.6)); overflow: hidden;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            border: 2px solid transparent;
-        }
-        .poker-card:hover { transform: translateY(-3px) scale(1.02); filter: drop-shadow(0 6px 12px rgba(0,255,255,0.4)); }
-        .poker-card.locked { filter: grayscale(100%) brightness(0.35); cursor: not-allowed; }
-        
-        .card-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1;}
-        .card-partner-img { position: absolute; top: 15%; width: 75%; height: 50%; object-fit: contain; z-index: 2; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.6)); }
-        
-        .card-buff-desc { 
-            position: absolute; bottom: 6%; width: 92%; text-align: center; 
-            color: #fff; font-size: 9px; font-weight: 900; z-index: 3; 
-            text-shadow: 0 1px 3px rgba(0,0,0,0.9); line-height: 1.1;
-            background: rgba(0,0,0,0.65); padding: 3px 2px; border-radius: 4px;
-            border: 1px solid rgba(0,255,255,0.3);
-        }
-        
-        .poker-card.equipped { border: 2px solid #00ffff; filter: drop-shadow(0 0 10px #00ffff) brightness(1.1); transform: translateY(-2px); }
-        .equip-tag {
-            position: absolute; top: 4px; right: 4px; background: linear-gradient(135deg, #00ffcc, #00bfff); color: #000;
-            font-size: 8px; font-weight: 900; padding: 2px 5px; border-radius: 6px;
-            z-index: 4; box-shadow: 0 2px 4px rgba(0,0,0,0.6); letter-spacing: 0.5px;
-        }
+        .partner-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(5px); z-index: 250; display: flex; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.5s ease; pointer-events: none; }
+        .partner-overlay.show { opacity: 1; pointer-events: auto; }
+        .partner-overlay-content { text-align: center; animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes popIn { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        .partner-overlay-img { width: 50vw; max-width: 200px; height: 50vw; max-height: 200px; object-fit: contain; filter: drop-shadow(0 0 25px rgba(255,255,255,0.8)); margin-bottom: 15px; }
+        .partner-overlay-text { font-size: 26px; font-weight: 900; color: #fff; text-shadow: 0 0 15px #00ffff, 0 3px 6px #000; line-height: 1.4; }
 
-        .result-card-container {
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            margin: 10px auto; animation: cardEntrance 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-        }
-        @keyframes cardEntrance {
-            0% { transform: scale(0.3) rotate(-10deg); opacity: 0; }
-            100% { transform: scale(1) rotate(0deg); opacity: 1; }
-        }
-
-        .interference { animation: shake-blur 0.4s infinite alternate; }
-        @keyframes shake-blur { 0% { transform: translate(2px, 1px) rotate(0deg); filter: blur(0px); } 100% { transform: translate(-2px, -2px) rotate(-2deg); filter: blur(4px) hue-rotate(180deg); color: #ff00ff;} }
-
-        #settings-modal { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px); z-index: 9999; justify-content: center; align-items: center; }
+        .modal-overlay { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px); z-index: 9999; justify-content: center; align-items: center; }
         .settings-content { background: linear-gradient(135deg, #1a2a6c, #112240); border: 2px solid #00ffff; border-radius: 15px; padding: 25px; width: 85%; max-width: 350px; text-align: center; box-shadow: 0 0 20px rgba(0, 255, 255, 0.5); position: relative; }
         .settings-close { position: absolute; top: 10px; right: 15px; font-size: 24px; color: #fff; cursor: pointer; font-weight: bold; }
         .settings-close:hover { color: #ff4757; }
@@ -311,22 +350,56 @@
         .btn-danger:hover { background: rgba(231, 76, 60, 0.5); color: white; }
         .btn-test { background: rgba(0, 255, 204, 0.2); border: 1px solid #00ffcc; color: #00ffcc; padding: 10px; border-radius: 10px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 15px; transition: all 0.2s;}
         .btn-test:hover { background: rgba(0, 255, 204, 0.5); color: #fff; }
+
+        .tutorial-text-block { background: rgba(0,0,0,0.4); padding: 10px; border-radius: 8px; margin-bottom: 10px; border-left: 3px solid #00ffff; }
+        .tut-tab.active { background: linear-gradient(135deg, #9b59b6, #8e44ad); border-color: #e056fd; box-shadow: 0 0 10px rgba(155, 89, 182, 0.6); }
+
+        @media (max-height: 600px) {
+            .top-bar { padding: max(5px, env(safe-area-inset-top, 5px)) 15px 5px 15px; }
+            .hp-icon { width: 16px; height: 16px; }
+            #ui-question { font-size: 32px; margin-bottom: 5px; } 
+            .question-area { margin-top: 5px; }
+            .bottom-controls { padding: 5px; padding-bottom: max(5px, env(safe-area-inset-bottom, 5px)); }
+            .answer-btn { width: 22vw; max-width: 60px; height: 22vw; max-height: 60px; font-size: 24px; }
+            .character { max-height: 60%; bottom: 2%; }
+            .speech-bubble { bottom: 60%; transform: scale(0.85); transform-origin: bottom left; }
+            .monster-ui { bottom: 60%; transform: scale(0.85); transform-origin: bottom right; }
+            .partner-container { width: 18vw; max-width: 60px; height: 18vw; max-height: 60px; bottom: 15%; }
+            .partner-overlay-img { width: 120px; height: 120px; }
+            .partner-overlay-text { font-size: 20px; }
+            .book-grid { height: 45vh; }
+        }
+        @media (max-height: 450px) {
+            #ui-question { font-size: 24px; margin-bottom: 2px; }
+            .answer-btn { width: 50px; height: 50px; font-size: 20px; }
+            .character { max-height: 50%; bottom: 0%; }
+            .speech-bubble { bottom: 55%; transform: scale(0.7); }
+            .monster-ui { bottom: 55%; transform: scale(0.7); }
+            .lobby-character { max-height: 45vh; }
+            .shop-altar-container { margin-top: 15vh !important; }
+        }
     </style>
 </head>
 <body>
 
+<!-- 音效與資料載入置於頂部 -->
 <audio id="bgm-main" src="audio/bgm-main.mp3" loop></audio>
 <audio id="bgm-battle" src="audio/bgm-battle.mp3" loop></audio>
 
 <div id="game-container">
-    <div id="fade-overlay"></div>
     
-    <div id="intro-screen" class="screen active" onclick="finishIntro(event)">
-        <video id="intro-video" src="images/intro.mp4" autoplay muted playsinline></video>
-        <button id="skip-intro-btn" onclick="finishIntro(event)">跳過 (Skip)</button>
+    <div class="currency-display" id="global-pearl-ui" style="display: none;">
+        <img src="images/ui-pearl-icon.png" style="width: 20px; height: 20px; margin-right: 5px; object-fit: contain; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.5));" onerror="this.style.display='none';">
+        <span class="currency-amount" id="global-pearl-amount">0</span>
     </div>
 
-    <!-- Boss 警告畫面 -->
+    <div id="fade-overlay"></div>
+    
+    <div id="intro-screen" class="screen active">
+        <video id="intro-video" src="images/intro.mp4" autoplay muted playsinline></video>
+        <button id="skip-intro-btn">跳過 (Skip)</button>
+    </div>
+
     <div id="boss-warning" class="warning-screen">
         <div id="warning-boss-silhouette" class="warning-boss-silhouette"></div>
         <div class="warning-stripes"></div>
@@ -340,14 +413,101 @@
     <div id="victory-flash" class="boss-victory-flash"></div>
 
     <div id="main-screen" class="screen">
-        <img src="images/logo.png" id="game-logo" alt="重返亞特蘭提斯：人魚公主與數靈聖域" onerror="this.outerHTML='<h1 style=\'margin-top:20px;\'>重返亞特蘭提斯<br>人魚公主與數靈聖域</h1>'">
-        <div class="subtitle">✨ 魔法少女 x 九九乘法 ✨</div>
-        <button class="btn" onclick="firstStart()">開始冒險</button>
-        <button class="btn" onclick="showGallery()">夢幻相簿 & 夥伴</button>
-        <button class="btn" onclick="openSettings()">⚙️ 遊戲設定</button>
+        <button class="btn-tutorial-main" onclick="openTutorial('battle')">❓</button>
+
+        <div class="lobby-header">
+            <img src="images/logo.png" id="game-logo" alt="重返亞特蘭提斯：人魚公主與數靈聖域" onerror="this.outerHTML='<h1 style=\'margin-top:0px;\'>重返亞特蘭提斯<br>人魚公主與數靈聖域</h1>'">
+        </div>
+
+        <div class="lobby-center-stage">
+            <div id="lobby-player-title" class="player-title-display"></div>
+            <img src="images/char-mermaid-default.png" id="lobby-mermaid" class="lobby-character float-anim" onerror="this.src='images/char-mermaid.png'; this.onerror=function(){this.style.display='none'; this.nextElementSibling.style.display='block';};">
+            <div style="display:none; font-size: 120px;" class="lobby-character float-anim" id="lobby-fallback-mermaid">🧜‍♀️</div>
+            
+            <div id="lobby-partner-container" class="lobby-partner-wrap partner-hover-anim">
+                <img src="" id="lobby-partner" class="lobby-partner-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                <div style="display:none; font-size: 60px;" id="lobby-fallback-partner">✨</div>
+            </div>
+        </div>
+
+        <div class="lobby-action-area">
+            <button class="btn btn-start-adventure" onclick="firstStart()">開始冒險</button>
+        </div>
+
+        <div class="lobby-bottom-nav">
+            <button class="nav-item" onclick="showScreen('room-screen', 'ROOM')">
+                <img src="images/ui-nav-icon-room.png" class="nav-icon-img" onerror="this.src=''; this.style.display='none'; this.nextElementSibling.style.display='block';">
+                <div class="nav-icon" style="display:none;">🏠</div>
+                <span class="nav-text">人魚公主房間</span>
+            </button>
+            <button class="nav-item" onclick="checkAndOpenShop()">
+                <img src="images/ui-nav-icon-shop.png" class="nav-icon-img" onerror="this.src=''; this.style.display='none'; this.nextElementSibling.style.display='block';">
+                <div class="nav-icon" style="display:none;">🐚</div>
+                <span class="nav-text">魔法珍珠商店</span>
+            </button>
+            <button class="nav-item" onclick="showScreen('gallery-screen', 'GALLERY')">
+                <img src="images/ui-nav-icon-album.png" class="nav-icon-img" onerror="this.src=''; this.style.display='none'; this.nextElementSibling.style.display='block';">
+                <div class="nav-icon" style="display:none;">📖</div>
+                <span class="nav-text">魔法圖鑑書</span>
+            </button>
+            <button class="nav-item" onclick="openSettings()">
+                <img src="images/ui-nav-icon-settings.png" class="nav-icon-img" onerror="this.src=''; this.style.display='none'; this.nextElementSibling.style.display='block';">
+                <div class="nav-icon" style="display:none;">⚙️</div>
+                <span class="nav-text">功能選單</span>
+            </button>
+        </div>
     </div>
 
-    <!-- 關卡選單 -->
+    <!-- ====== 魔法珍珠商店 ====== -->
+    <div id="shop-screen" class="screen">
+        <div style="width: 100%; display: flex; justify-content: space-between; align-items: center; z-index: 10; padding: 0 15px;">
+            <button class="btn" style="width: 80px; height: 40px; font-size: 14px; margin-bottom: 0; min-height: 40px;" onclick="showScreen('main-screen', 'MENU')">返回</button>
+            <h2 style="color: #fff; text-shadow: 0 4px 6px rgba(0,0,0,0.8); margin: 0; letter-spacing: 2px;">魔法珍珠商店</h2>
+            <div style="width: 80px;"></div> 
+        </div>
+
+        <div class="shop-altar-container">
+            <img src="images/ui-altar-shell-closed.png" id="altar-shell" class="altar-shell float-anim" style="margin-top: 25vh;" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';">
+            
+            <div class="shop-action-area" style="position: absolute; bottom: 8%; width: 92%; max-width: 400px; display: flex; justify-content: space-between;">
+                <button class="btn-gacha-small" onclick="pullGacha('partner')">
+                    <span style="font-weight: bold;">神聖夥伴</span>
+                    <div style="display: flex; align-items: center; margin-top: 5px; color: #f1c40f; font-size: 14px;">
+                        <img src="images/ui-pearl-icon.png" style="width: 14px; height: 14px; margin-right: 3px;" onerror="this.style.display='none';">100
+                    </div>
+                </button>
+                <button class="btn-gacha-small" onclick="pullGacha('furniture')">
+                    <span style="font-weight: bold;">家具裝潢</span>
+                    <div style="display: flex; align-items: center; margin-top: 5px; color: #f1c40f; font-size: 14px;">
+                        <img src="images/ui-pearl-icon.png" style="width: 14px; height: 14px; margin-right: 3px;" onerror="this.style.display='none';">200
+                    </div>
+                </button>
+                <button class="btn-gacha-small" onclick="pullGacha('outfit')">
+                    <span style="font-weight: bold;">華麗套裝</span>
+                    <div style="display: flex; align-items: center; margin-top: 5px; color: #f1c40f; font-size: 14px;">
+                        <img src="images/ui-pearl-icon.png" style="width: 14px; height: 14px; margin-right: 3px;" onerror="this.style.display='none';">300
+                    </div>
+                </button>
+            </div>
+        </div>
+
+        <div id="gacha-result-modal" class="gacha-modal-overlay" style="display: none;">
+            <div class="gacha-modal-content">
+                <h1 style="color: #ffeb3b; text-shadow: 0 0 15px #ffeb3b; margin-top: 0; margin-bottom: 20px;">恭喜獲得！</h1>
+                
+                <div class="gacha-item-showcase" id="gacha-item-showcase">
+                    <div class="gacha-light-rays"></div>
+                    <img src="" id="gacha-result-img" class="gacha-result-img">
+                </div>
+                
+                <div id="gacha-result-name" style="font-size: 24px; font-weight: 900; color: #fff; margin-top: 20px; text-shadow: 1px 2px 4px #000, 0 0 10px #00ffff;">道具名稱</div>
+                <div id="gacha-result-type" style="font-size: 14px; color: #aaa; margin-bottom: 30px; text-align: center;">道具類型</div>
+                
+                <button class="btn" style="width: 200px; height: 60px;" onclick="closeGachaResult()">確認收下</button>
+            </div>
+        </div>
+    </div>
+
     <div id="level-screen" class="screen">
         <h2 style="color: #fff; text-shadow: 0 4px 6px rgba(0,0,0,0.8); margin-top: 5px; margin-bottom: 10px; letter-spacing: 2px;">選擇冒險章節</h2>
         
@@ -359,57 +519,144 @@
         <div class="level-container">
             <div class="level-grid" id="level-grid"></div>
             
-            <div class="special-modes" id="special-modes-ui" style="display:none; width: 100%;">
-                <button class="btn" onclick="startEndlessMode()" style="width: 100%; height: 50px; font-size: 16px; border-radius: 12px; background-image:none; background:linear-gradient(135deg, #00ffcc, #16a085);">♾️ 無限大挑戰 (解鎖)</button>
+            <div class="special-modes" id="special-modes-ui" style="display:none; width: 100%; gap: 10px; margin-top: 10px;">
+                <button class="btn" onclick="startEndlessMode()" style="flex:1; height: 50px; font-size: 14px; border-radius: 12px; background-image:none; background:linear-gradient(135deg, #00ffcc, #16a085);">♾️ 無限挑戰</button>
+                <button class="btn" onclick="openPracticeModal()" style="flex:1; height: 50px; font-size: 14px; border-radius: 12px; background-image:none; background:linear-gradient(135deg, #3498db, #2980b9);">🎓 練習模式</button>
             </div>
         </div>
 
-        <button class="btn" style="width: 140px; height: 42px; font-size: 15px; margin-top: 10px;" onclick="showScreen('main-screen', 'MENU')">返回主選單</button>
+        <button class="btn" style="width: 140px; height: 42px; font-size: 15px; margin-top: 10px;" onclick="showScreen('main-screen', 'MENU')">返回大廳</button>
     </div>
 
+    <!-- ====== 魔法圖鑑書 ====== -->
     <div id="gallery-screen" class="screen">
-        <h2 style="color: #fff; text-shadow: 0 4px 6px rgba(0,0,0,0.8); margin-top:0; margin-bottom: 5px; letter-spacing: 2px;">星光好朋友相簿</h2>
-        <div style="font-size: 13px; margin-bottom: 10px; color: #00ffff; font-weight: bold; text-shadow: 1px 1px 2px #000;">點擊已解鎖的卡牌來裝備守護夥伴</div>
-        <div class="gallery-grid" id="gallery-grid"></div>
-        <button class="btn" style="margin-top: 15px; width: 150px; height: 50px; font-size: 16px;" onclick="showScreen('main-screen', 'MENU')">返回</button>
+        <div style="width: 100%; display: flex; justify-content: space-between; align-items: center; z-index: 10; padding: 0 15px;">
+            <button class="btn" style="width: 80px; height: 40px; font-size: 14px; margin-bottom: 0; min-height: 40px;" onclick="showScreen('main-screen', 'MENU')">返回</button>
+            <h2 style="color: #fff; text-shadow: 0 4px 6px rgba(0,0,0,0.8); margin: 0; letter-spacing: 2px;">魔法圖鑑書</h2>
+            <div style="width: 80px;"></div> 
+        </div>
+
+        <div class="book-container">
+            <div class="book-tabs">
+                <div class="bookmark active" id="bm-partner" onclick="switchGalleryTab('partner')">✨ 神聖夥伴</div>
+                <div class="bookmark" id="bm-mob" onclick="switchGalleryTab('mob')">👾 淵海魔物</div>
+                <div class="bookmark" id="bm-boss" onclick="switchGalleryTab('boss')">👑 深淵霸主</div>
+            </div>
+            
+            <div class="book-page">
+                <div id="book-grid" class="book-grid">
+                    <!-- 圖鑑內容由 JS 動態生成 -->
+                </div>
+                
+                <div class="page-nav">
+                    <button class="btn-page" id="btn-prev-page" onclick="changePage(-1)">◀ 上一頁</button>
+                    <span class="page-indicator" id="page-indicator">1 / 1</span>
+                    <button class="btn-page" id="btn-next-page" onclick="changePage(1)">下一頁 ▶</button>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- ====== 全新順序戰鬥畫面 ====== -->
+    <!-- 卡牌故事彈窗 -->
+    <div id="card-detail-modal" class="modal-overlay">
+        <div class="settings-content card-detail-content">
+            <div class="settings-close" onclick="closeCardDetail()">×</div>
+            <div class="cd-img-box">
+                <img id="cd-img" class="cd-img" src="">
+            </div>
+            <h2 id="cd-name" class="cd-name">名稱</h2>
+            <div id="cd-func" class="cd-func-tag">功能</div>
+            <div id="cd-desc" class="cd-desc">故事介紹</div>
+            <button id="cd-action-btn" class="btn" style="width: 100%; height: 50px; font-size: 16px; margin-bottom:0;" onclick="toggleEquipFromDetail()">出戰 / 卸下</button>
+        </div>
+    </div>
+
+    <div id="room-screen" class="screen">
+        <div style="width: 100%; display: flex; justify-content: space-between; align-items: center; z-index: 10;">
+            <button class="btn" style="width: 80px; height: 40px; font-size: 14px; margin-bottom: 0;" onclick="showScreen('main-screen', 'MENU')">返回</button>
+            <h2 style="color: #fff; text-shadow: 0 4px 6px rgba(0,0,0,0.8); margin: 0; letter-spacing: 2px;">公主的小天地</h2>
+            <div style="width: 80px;"></div> 
+        </div>
+
+        <div class="room-display">
+            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" id="room-bg-layer" class="room-layer" style="background-color: #1a2a6c;">
+            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" id="room-bed-layer" class="room-layer" style="display: none;">
+            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" id="room-habitat-layer" class="room-layer" style="display: none;">
+            <img src="images/char-mermaid-default.png" id="room-outfit-layer" class="room-layer" onerror="this.src='images/char-mermaid.png'; this.onerror=function(){this.style.display='none';};">
+        </div>
+
+        <div class="room-categories">
+            <button class="room-cat-btn" onclick="openRoomModal('bg')">
+                <img src="images/ui-icon-bg.png" class="room-cat-icon" onerror="this.src=''; this.style.display='none'; this.nextElementSibling.style.display='block';">
+                <div style="display:none; font-size:30px; margin-bottom:5px;">🖼️</div>
+                <span class="room-cat-text">房間背景</span>
+            </button>
+            <button class="room-cat-btn" onclick="openRoomModal('outfit')">
+                <img src="images/ui-icon-outfit.png" class="room-cat-icon" onerror="this.src=''; this.style.display='none'; this.nextElementSibling.style.display='block';">
+                <div style="display:none; font-size:30px; margin-bottom:5px;">👗</div>
+                <span class="room-cat-text">華麗套裝</span>
+            </button>
+            <button class="room-cat-btn" onclick="openRoomModal('habitat')">
+                <img src="images/ui-icon-habitat.png" class="room-cat-icon" onerror="this.src=''; this.style.display='none'; this.nextElementSibling.style.display='block';">
+                <div style="display:none; font-size:30px; margin-bottom:5px;">🪸</div>
+                <span class="room-cat-text">夥伴的窩</span>
+            </button>
+            <button class="room-cat-btn" onclick="openRoomModal('bed')">
+                <img src="images/ui-icon-bed.png" class="room-cat-icon" onerror="this.src=''; this.style.display='none'; this.nextElementSibling.style.display='block';">
+                <div style="display:none; font-size:30px; margin-bottom:5px;">🛏️</div>
+                <span class="room-cat-text">公主床舖</span>
+            </button>
+            <button class="room-cat-btn" onclick="openRoomModal('title')">
+                <img src="images/ui-icon-title.png" class="room-cat-icon" onerror="this.src=''; this.style.display='none'; this.nextElementSibling.style.display='block';">
+                <div style="display:none; font-size:30px; margin-bottom:5px;">🏷️</div>
+                <span class="room-cat-text">星語稱號</span>
+            </button>
+        </div>
+
+        <div id="room-item-modal" class="item-modal-overlay" style="display: none;">
+            <div class="item-modal-content">
+                <div class="item-modal-header">
+                    <h3 id="room-modal-title" style="margin: 0; color: #00ffff; text-shadow: 1px 1px 2px #000;">選擇道具</h3>
+                    <div class="item-modal-close" onclick="closeRoomModal()">×</div>
+                </div>
+                <div class="item-grid" id="room-item-grid"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 夥伴進場特效 -->
+    <div id="partner-overlay" class="partner-overlay" style="display: none;">
+        <div class="partner-overlay-content">
+            <img id="partner-overlay-img" src="" class="partner-overlay-img" onerror="this.style.display='none';">
+            <div id="partner-overlay-text" class="partner-overlay-text"></div>
+        </div>
+    </div>
+
     <div id="gameplay-screen" class="screen">
-        
         <div class="top-bar">
+            <button class="btn-exit" onclick="confirmExitBattle()">⬅️ 退出</button>
             <div class="hp-section"><div id="ui-hp"></div></div>
             <div class="progress-bar" id="ui-progress">🚩 進度: 0/3</div>
         </div>
         
-        <div class="question-area">
-            <div id="ui-question">2 x 3 = ?</div>
-            <div class="timer-bar-container"><div class="timer-bar" id="ui-timer"></div></div>
-        </div>
-        
-        <!-- 背景圖與戰鬥舞台從這區開始填滿往下 -->
-        <div class="battle-stage" id="battle-stage-bg">
-            
-            <!-- 答題區：放入戰鬥舞台的最頂層，透明懸浮，且沒有色塊 -->
-            <div class="bottom-controls">
-                <button class="answer-btn" onclick="checkAnswer(0)" id="btn-ans-0">1</button>
-                <button class="answer-btn" onclick="checkAnswer(1)" id="btn-ans-1">2</button>
-                <button class="answer-btn" onclick="checkAnswer(2)" id="btn-ans-2">3</button>
+        <div class="middle-combat-area" id="battle-stage-bg">
+            <div class="question-area">
+                <div id="ui-question">2 x 3 = ?</div>
+                <div class="timer-bar-container"><div class="timer-bar" id="ui-timer"></div></div>
             </div>
             
-            <!-- 角色與氣泡舞台 -->
             <div class="stage-elements">
-                <img src="images/char-mermaid.png" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" class="character mermaid" id="char-mermaid">
+                <img src="images/char-mermaid-default.png" onerror="this.src='images/char-mermaid.png'; this.onerror=function(){this.style.display='none'; this.nextElementSibling.style.display='block';};" class="character mermaid" id="char-mermaid">
                 <div style="display:none; font-size: 70px;" class="character mermaid" id="fallback-mermaid">🧜‍♀️</div>
                 
                 <div id="char-partner-container" class="partner-container">
-                    <img src="" id="char-partner" class="partner-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" id="char-partner" class="partner-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
                     <div style="display:none; font-size: 40px; transform: scaleX(-1);" id="fallback-partner">✨</div>
                 </div>
 
                 <div class="speech-bubble" id="ui-speech">準備好了嗎？</div>
                 
-                <img src="" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" class="character monster" id="char-monster">
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" class="character monster" id="char-monster">
                 <div style="display:none; font-size: 70px;" class="character monster" id="fallback-monster">👾</div>
 
                 <div id="monster-ui" class="monster-ui">
@@ -419,6 +666,11 @@
             </div>
         </div>
         
+        <div class="bottom-controls">
+            <button class="answer-btn" id="btn-ans-0">1</button>
+            <button class="answer-btn" id="btn-ans-1">2</button>
+            <button class="answer-btn" id="btn-ans-2">3</button>
+        </div>
     </div>
 
     <div id="result-screen" class="screen">
@@ -427,7 +679,17 @@
         <button class="btn" onclick="showScreen('level-screen', 'LEVEL_SELECT')" style="margin-top: 15px; width: 200px; height: 60px; font-size: 18px;">確認</button>
     </div>
 
-    <div id="settings-modal">
+    <div id="practice-modal" class="modal-overlay">
+        <div class="settings-content">
+            <div class="settings-close" onclick="closePracticeModal()">×</div>
+            <h2 style="color: #fff; margin-top: 0; margin-bottom: 20px;">選擇練習範圍</h2>
+            <button class="btn" style="width: 100%; height: 60px; font-size: 18px;" onclick="confirmPracticeMode(3)">1 ~ 3 乘法 (簡單)</button>
+            <button class="btn" style="width: 100%; height: 60px; font-size: 18px; filter: hue-rotate(90deg);" onclick="confirmPracticeMode(6)">1 ~ 6 乘法 (中等)</button>
+            <button class="btn" style="width: 100%; height: 60px; font-size: 18px; filter: hue-rotate(270deg);" onclick="confirmPracticeMode(9)">1 ~ 9 乘法 (綜合)</button>
+        </div>
+    </div>
+
+    <div id="settings-modal" class="modal-overlay">
         <div class="settings-content">
             <div class="settings-close" onclick="closeSettings()">×</div>
             <h2 style="color: #fff; margin-top: 0;">設定</h2>
@@ -443,33 +705,239 @@
             <button class="btn-danger" onclick="resetSaveData()">⚠️ 重置遊戲進度</button>
         </div>
     </div>
+
+    <div id="tutorial-modal" class="modal-overlay">
+        <div class="settings-content" style="width: 90%; height: 75vh; max-width: 400px; display: flex; flex-direction: column; padding: 15px; box-sizing: border-box;">
+            <div class="settings-close" onclick="closeTutorial()">×</div>
+            <h2 style="margin-top: 0; color: #00ffff; margin-bottom: 10px;">冒險指南</h2>
+            
+            <div class="chapter-tabs" style="width: 100%; flex-wrap: wrap; margin-bottom: 15px; gap: 5px;">
+                <button class="tab-btn tut-tab active" onclick="switchTutTab('battle')" id="tut-tab-battle" style="padding: 5px 0;">⚔️ 戰鬥</button>
+                <button class="tab-btn tut-tab" onclick="switchTutTab('shop')" id="tut-tab-shop" style="padding: 5px 0;">🐚 商店</button>
+                <button class="tab-btn tut-tab" onclick="switchTutTab('room')" id="tut-tab-room" style="padding: 5px 0;">🏠 房間</button>
+                <button class="tab-btn tut-tab" onclick="switchTutTab('partner')" id="tut-tab-partner" style="padding: 5px 0;">📖 夥伴</button>
+            </div>
+            
+            <div style="flex: 1; overflow-y: auto; text-align: left; font-size: 14px; line-height: 1.6; padding: 0 5px;" id="tut-content">
+            </div>
+            
+            <button class="btn" style="width: 100%; height: 50px; font-size: 16px; margin-top: 15px; margin-bottom: 0;" onclick="closeTutorial()">我了解了</button>
+        </div>
+    </div>
+
 </div>
 
+<!-- 所有的腳本統一置於檔案底端 -->
 <script>
-    let gameState = 'INTRO'; 
-    let currentViewingAdvanced = false; 
-    let isAnimating = false; 
-    let bubbleInterval = null; 
-    
-    // 背景卷軸變數
-    let currentBgPosX = 0;
-
-    window.onload = function() {
-        const overlay = document.getElementById('fade-overlay');
-        setTimeout(() => { overlay.style.opacity = '0'; }, 100);
-        setTimeout(() => { overlay.style.display = 'none'; }, 1600);
+    const ITEM_DB = {
+        outfit: [
+            { id: 'outfit_default', name: '粉紅套裝', img: 'char-mermaid-default.png', type: 'outfit' },
+            { id: 'outfit_snow', name: '冰雪套裝', img: 'char-mermaid-snow.png', type: 'outfit' },
+            { id: 'outfit_star', name: '星光套裝', img: 'char-mermaid-star.png', type: 'outfit' }
+        ],
+        bg: [
+            { id: 'bg_default', name: '溫馨珊瑚', img: 'bg-room-default.jpg', type: 'bg' },
+            { id: 'bg_crystal', name: '水晶深淵', img: 'bg-room-crystal.jpg', type: 'bg' },
+            { id: 'bg_starry', name: '星空遺跡', img: 'bg-room-starry.jpg', type: 'bg' }
+        ],
+        bed: [
+            { id: 'bed_default', name: '大蚌殼床', img: 'room-bed-default.png', type: 'bed' },
+            { id: 'bed_crystal', name: '水晶床舖', img: 'room-bed-crystal.png', type: 'bed' },
+            { id: 'bed_star', name: '星光搖籃', img: 'room-bed-star.png', type: 'bed' }
+        ],
+        habitat: [
+            { id: 'habitat_default', name: '小海草叢', img: 'room-habitat-default.png', type: 'habitat' },
+            { id: 'habitat_coral', name: '七彩珊瑚窩', img: 'room-habitat-coral.png', type: 'habitat' },
+            { id: 'habitat_crystal', name: '聚能水晶座', img: 'room-habitat-crystal.png', type: 'habitat' }
+        ]
     };
 
-    const introVideo = document.getElementById('intro-video');
-    let introFinished = false;
+    const TITLES = [
+        "星光見習生", "初階魔法少女", "深海探險家", "浪花小精靈", "珊瑚守護者",
+        "珍珠收集者", "潮汐使者", "海神眷屬", "蔚藍之光", "星海漫步者",
+        "水之舞者", "深淵挑戰者", "魔法小神童", "海洋之心", "泡沫幻影",
+        "星辰碎片", "月光祈願者", "海妖剋星", "乘風破浪", "海王星祝福",
+        "亞特蘭提斯之影", "洋流引導者", "水靈低語", "星屑紡織者", "海淵行者",
+        "閃耀之鱗", "魔力泉源", "數靈契約者", "深海尋寶家", "星空導航員",
+        "海之頌歌", "破浪先鋒", "潮汐守望者", "水色奇蹟", "星河追尋者",
+        "海潮之音", "深淵微光", "魔法使者", "水晶共鳴者", "海洋學者",
+        "星光守護神", "水下精靈王", "幻海旅人", "波濤領主", "星雲織夢者",
+        "深海之瞳", "魔法先驅", "海王星的微笑", "星際漫遊者", "亞特蘭提斯傳奇"
+    ];
+
+    // ====== 修正：統一鍵值對應 (partner, mob, boss) ======
+    const LORE_DB = {
+        partner: [
+            { name: "聖光小海馬", img: "partner-1.png", func: "💖 愛心上限+1", desc: "帶來治癒能量的可愛海馬，能在危急時保護公主的生命。" },
+            { name: "雙子水靈蛇", img: "partner-2.png", func: "⏳ 倒數變慢 25%", desc: "掌握時間洪流的靈蛇，讓敵人的動作變得遲緩。" },
+            { name: "晨曦引路魚", img: "partner-3.png", func: "⚔️ 魔王血量-1", desc: "化身銳利的光箭，對巨大的魔王造成強力的致命打擊。" },
+            { name: "天使四翼魚", img: "partner-4.png", func: "💖 愛心上限+1", desc: "擁有四片羽翼的夢幻魚類，能張開神聖護盾抵擋傷害。" },
+            { name: "星晶守護者", img: "partner-5.png", func: "⏳ 倒數變慢 25%", desc: "堅硬的星晶能干擾時空，為公主爭取更多答題時間。" },
+            { name: "柔波小海鯊", img: "partner-6.png", func: "⚔️ 魔王血量-1", desc: "雖然體型小巧，但咬合力驚人，專剋厚血的深淵魔王。" },
+            { name: "幻彩治癒傘", img: "partner-7.png", func: "💖 愛心上限+1", desc: "散發出柔和的七彩光芒，能撫平戰鬥的疲憊並恢復愛心。" },
+            { name: "智慧八爪仙", img: "partner-8.png", func: "⏳ 倒數變慢 25%", desc: "深通魔法陣的八爪大師，用智謀操控整個戰局的節奏。" },
+            { name: "九星祈願鯤", img: "partner-9.png", func: "⚔️ 魔王血量-1", desc: "傳說中背負著星辰的古老巨獸，撞擊的威力毀天滅地。" }
+        ],
+        mob: [
+            { name: "迷糊小烏賊", img: "mob-1.png", func: "純收藏卡牌", desc: "常常噴錯墨汁的笨拙烏賊，總是不小心在海草叢裡迷路。" },
+            { name: "暴躁寄居蟹", img: "mob-2.png", func: "純收藏卡牌", desc: "總是在尋找更大殼的寄居蟹，對算數學感到非常頭痛。" },
+            { name: "貪吃小鯊魚", img: "mob-3.png", func: "純收藏卡牌", desc: "肚子永遠填不飽，看到什麼發光的東西都想咬一口的調皮鬼。" }
+        ],
+        boss: [
+            { name: "獨角海馬", img: "monster-1.png", func: "純收藏卡牌", desc: "受到深淵污染而變異的海馬，頭上堅硬的角是牠最強的武器。" },
+            { name: "雙頭海蛇", img: "monster-2.png", func: "純收藏卡牌", desc: "擁有兩個頭的狡猾海蛇，噴吐出的毒液會干擾答題者的視線。" },
+            { name: "三尾燈籠魚", img: "monster-3.png", func: "純收藏卡牌", desc: "深海的潛伏者，頭頂閃爍的燈籠會讓人產生時間錯亂的幻覺。" },
+            { name: "四翼魔化飛魚", img: "monster-4.png", func: "純收藏卡牌", desc: "速度極快的魔化生物，能在水面上高速滑行，讓人難以捕捉。" },
+            { name: "巨型裝甲海星", img: "monster-5.png", func: "純收藏卡牌", desc: "全身覆蓋著堅不可摧的厚重裝甲，沒有極高的魔力難以被擊敗。" },
+            { name: "六鰓異化鯊魚", img: "monster-6.png", func: "純收藏卡牌", desc: "為了適應深海污染而長出六個鰓的兇猛鯊魚，極具攻擊性。" },
+            { name: "七彩毒素水母", img: "monster-7.png", func: "純收藏卡牌", desc: "外表美麗但致命，觸手上的毒素會瞬間癱瘓海底的魔法神經網路。" },
+            { name: "八爪深海大章魚", img: "monster-8.png", func: "純收藏卡牌", desc: "擁有極高智商的巨型章魚，會使用策略與墨汁隱藏正確答案。" },
+            { name: "九眼深海魔魚", img: "monster-9.png", func: "純收藏卡牌", desc: "古老的深海魔物，身上的九隻眼睛能看穿挑戰者內心的恐懼。" },
+            { name: "深淵大魔王", img: "monster-10.png", func: "純收藏卡牌", desc: "來自深海淵谷的終極噩夢，企圖用混沌完全吞噬數靈聖域的光芒。" }
+        ]
+    };
+
+    const bossData = [
+        { name: "獨角海馬", quote: "別小看我的衝刺！" },
+        { name: "雙頭海蛇", quote: "妳逃不出我的視線..." },
+        { name: "三尾燈籠魚", quote: "在深海裡迷失吧！" },
+        { name: "四翼魔化飛魚", quote: "我的速度可是最快的！" },
+        { name: "巨型裝甲海星", quote: "我的防禦無堅不摧！" },
+        { name: "六鰓異化鯊魚", quote: "我要把分數都咬碎！" },
+        { name: "七彩毒素水母", quote: "小心我的麻痺毒素～" },
+        { name: "八爪深海大章魚", quote: "觸手會把答案藏起來喔！" },
+        { name: "九眼深海魔魚", quote: "所有的數字都在我眼中！" },
+        { name: "深淵大魔王", quote: "見識真正的絕望吧！" }
+    ];
+
+    function loadAndVerifySaveData() {
+        let parsedData = null;
+        try { 
+            let rawData = localStorage.getItem('mermaidSave');
+            if(rawData) parsedData = JSON.parse(rawData); 
+        } catch(e) { 
+            console.warn("存檔讀取失敗，使用預設進度");
+        }
+
+        let defaultSave = {
+            unlockedLevel: 1, 
+            unlockedCards: [], 
+            equippedPartner: null, 
+            pearls: 0,
+            inventory: ['outfit_default', 'bg_default', 'bed_default', 'habitat_default'], 
+            unlockedTitles: [], 
+            equippedTitle: null,
+            tutorialSeen: { battle: false, shop: false, room: false, partner: false },
+            equipped: {
+                outfit: 'outfit_default',
+                bg: 'bg_default',
+                bed: 'bed_default',
+                habitat: 'habitat_default'
+            }
+        };
+
+        if (!parsedData || typeof parsedData !== 'object') { return defaultSave; }
+
+        parsedData.unlockedLevel = parseInt(parsedData.unlockedLevel) || 1;
+        parsedData.unlockedLevel = Math.max(1, Math.min(25, parsedData.unlockedLevel));
+        parsedData.pearls = parseInt(parsedData.pearls) || 0;
+        parsedData.pearls = Math.max(0, parsedData.pearls);
+
+        if (!Array.isArray(parsedData.unlockedCards)) parsedData.unlockedCards = [];
+        if (!Array.isArray(parsedData.inventory)) parsedData.inventory = defaultSave.inventory;
+        if (!Array.isArray(parsedData.unlockedTitles)) parsedData.unlockedTitles = [];
+        if (parsedData.equippedTitle === undefined) parsedData.equippedTitle = null;
+        if (typeof parsedData.tutorialSeen !== 'object' || parsedData.tutorialSeen === null) {
+            parsedData.tutorialSeen = { battle: false, shop: false, room: false, partner: false };
+        }
+        if (typeof parsedData.equipped !== 'object' || parsedData.equipped === null) parsedData.equipped = defaultSave.equipped;
+        if (parsedData.equippedPartner === undefined) parsedData.equippedPartner = null;
+
+        return parsedData;
+    }
+
+    // ====== 修正：將所有全域變數集中宣告 ======
+    let saveFile = loadAndVerifySaveData();
+    let state = { 
+        level: 1, hp: 3, maxHp: 3, 
+        monstersDefeated: 0, maxMonsters: 3, 
+        monsterHp: 2, monsterMaxHp: 2,       
+        isBoss: false, bossHp: 3, baseBossHp: 3, 
+        correctAnswer: 0, timer: 100, timerInterval: null, 
+        isEndless: false, isPractice: false, isHardMode: false, endlessScore: 0, timeBuff: false,
+        sessionPearls: 0, isFirstClear: false, practiceRange: 9 
+    };
+
+    let volBGM = 0.5;
+    let volSFX = 0.5;
+    let gameState = 'INTRO'; 
+    let currentViewingAdvanced = false; 
+    let bubbleInterval = null; 
+    let partnerSwimInterval = null; 
+    let currentBgPosX = 0;
     
-    introVideo.addEventListener('ended', finishIntro);
+    let curGalleryTab = 'partner';
+    let curGalleryPage = 0;
+    let selectedDetailItem = null;
+
+    let activeTimeouts = [];
+    let introFinished = false;
+    let hasStartedAudio = false; // 修復「開始冒險」按鈕失效的關鍵
+
+    function safeSetTimeout(fn, delay) {
+        let id = setTimeout(() => {
+            activeTimeouts = activeTimeouts.filter(t => t !== id);
+            fn();
+        }, delay);
+        activeTimeouts.push(id);
+        return id;
+    }
+    function clearAllTimers() {
+        clearInterval(state.timerInterval);
+        activeTimeouts.forEach(clearTimeout);
+        activeTimeouts = [];
+    }
+
+    // 系統初始化
+    document.addEventListener("DOMContentLoaded", function() {
+        const overlay = document.getElementById('fade-overlay');
+        if(overlay) {
+            safeSetTimeout(() => { overlay.style.opacity = '0'; }, 100);
+            safeSetTimeout(() => { overlay.style.display = 'none'; }, 1600);
+        }
+        
+        try {
+            volBGM = localStorage.getItem('mermaidVolBGM') !== null ? parseFloat(localStorage.getItem('mermaidVolBGM')) : 0.5;
+            volSFX = localStorage.getItem('mermaidVolSFX') !== null ? parseFloat(localStorage.getItem('mermaidVolSFX')) : 0.5;
+        } catch (e) {
+            console.warn("無法讀取存檔音量設定，使用預設值。");
+        }
+        
+        initVolumeUI();
+        updatePearlUI();
+        updateLevelUI(); 
+        bindAnswerButtons();
+
+        const introVideo = document.getElementById('intro-video');
+        const skipBtn = document.getElementById('skip-intro-btn');
+        
+        if (introVideo) {
+            introVideo.addEventListener('ended', finishIntro);
+            introVideo.addEventListener('error', finishIntro); 
+        }
+        if (skipBtn) {
+            skipBtn.addEventListener('click', finishIntro);
+        }
+        
+        setTimeout(() => { if (!introFinished) finishIntro(); }, 10000);
+    });
 
     function finishIntro(e) {
-        if (e) e.stopPropagation(); 
+        if (e && e.stopPropagation) e.stopPropagation(); 
         if (introFinished) return;
         introFinished = true; 
-        try { introVideo.pause(); } catch(err) {}
+        const introVideo = document.getElementById('intro-video');
+        try { if (introVideo) introVideo.pause(); } catch(err) {}
         showScreen('main-screen', 'MENU');
     }
 
@@ -509,75 +977,29 @@
             osc.type = 'square'; osc.frequency.setValueAtTime(400, now); osc.frequency.setValueAtTime(600, now + 0.3); osc.frequency.setValueAtTime(400, now + 0.6); osc.frequency.setValueAtTime(600, now + 0.9);
             gainNode.gain.setValueAtTime(baseGain * 0.5, now); gainNode.gain.linearRampToValueAtTime(0, now + 1.2);
             osc.start(now); osc.stop(now + 1.2);
+        } else if (type === 'pearl') {
+            osc.type = 'sine'; osc.frequency.setValueAtTime(1200, now); osc.frequency.setValueAtTime(1600, now + 0.1); 
+            gainNode.gain.setValueAtTime(baseGain * 0.5, now); gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+            osc.start(now); osc.stop(now + 0.2);
         }
     }
-
-    function startBubbles() {
-        if (bubbleInterval) return;
-        const container = document.getElementById('game-container');
-        bubbleInterval = setInterval(() => {
-            if (document.hidden) return; 
-            const bubble = document.createElement('div');
-            bubble.style.position = 'absolute';
-            bubble.style.bottom = '-30px';
-            bubble.style.background = 'radial-gradient(circle at 30% 30%, rgba(255,255,255,0.9), rgba(0,255,255,0.3))';
-            bubble.style.borderRadius = '50%';
-            bubble.style.border = '1px solid rgba(255,255,255,0.5)';
-            bubble.style.pointerEvents = 'none';
-            bubble.style.zIndex = '4'; 
-            
-            const size = Math.random() * 25 + 8; 
-            bubble.style.width = `${size}px`; 
-            bubble.style.height = `${size}px`;
-            bubble.style.left = `${Math.random() * 100}%`;
-            
-            const duration = Math.random() * 3 + 3;
-            bubble.style.transition = `transform ${duration}s linear, opacity ${duration}s linear`;
-            
-            container.appendChild(bubble);
-            
-            setTimeout(() => {
-                bubble.style.transform = `translateY(-${container.clientHeight + 50}px) scale(1.3)`;
-                bubble.style.opacity = '0';
-            }, 50);
-
-            setTimeout(() => { bubble.remove(); }, (duration + 0.1) * 1000);
-        }, 300);
-    }
-
-    function stopBubbles() {
-        clearInterval(bubbleInterval);
-        bubbleInterval = null;
-    }
-
-    document.addEventListener("visibilitychange", () => {
-        if (document.hidden) {
-            stopBubbles();
-            bgmMain.pause();
-            bgmBattle.pause();
-        } else {
-            startBubbles();
-            updateBGM();
-        }
-    });
-    
-    startBubbles(); 
-
-    const bgmMain = document.getElementById('bgm-main');
-    const bgmBattle = document.getElementById('bgm-battle');
-    let hasStartedAudio = false;
-
-    let volBGM = localStorage.getItem('mermaidVolBGM') !== null ? parseFloat(localStorage.getItem('mermaidVolBGM')) : 0.5;
-    let volSFX = localStorage.getItem('mermaidVolSFX') !== null ? parseFloat(localStorage.getItem('mermaidVolSFX')) : 0.5;
 
     function initVolumeUI() {
-        document.getElementById('bgm-slider').value = volBGM * 100;
-        document.getElementById('bgm-value').innerText = Math.round(volBGM * 100) + '%';
-        bgmMain.volume = volBGM; bgmBattle.volume = volBGM;
-        document.getElementById('sfx-slider').value = volSFX * 100;
-        document.getElementById('sfx-value').innerText = Math.round(volSFX * 100) + '%';
+        const bgmSlider = document.getElementById('bgm-slider');
+        const sfxSlider = document.getElementById('sfx-slider');
+        if(bgmSlider) bgmSlider.value = volBGM * 100;
+        if(sfxSlider) sfxSlider.value = volSFX * 100;
+        
+        const bgmVal = document.getElementById('bgm-value');
+        const sfxVal = document.getElementById('sfx-value');
+        if(bgmVal) bgmVal.innerText = Math.round(volBGM * 100) + '%';
+        if(sfxVal) sfxVal.innerText = Math.round(volSFX * 100) + '%';
+        
+        const bgmMain = document.getElementById('bgm-main');
+        const bgmBattle = document.getElementById('bgm-battle');
+        if(bgmMain) bgmMain.volume = volBGM; 
+        if(bgmBattle) bgmBattle.volume = volBGM;
     }
-    initVolumeUI();
 
     function openSettings() { 
         if (gameState === 'PLAYING') gameState = 'PAUSED'; 
@@ -586,40 +1008,52 @@
     
     function closeSettings() { 
         document.getElementById('settings-modal').style.display = 'none';
-        const activeScreen = document.querySelector('.screen.active').id;
+        const activeScreenObj = document.querySelector('.screen.active');
+        const activeScreen = activeScreenObj ? activeScreenObj.id : 'main-screen';
         
         if (gameState === 'PAUSED' && activeScreen === 'gameplay-screen') gameState = 'PLAYING';
         else if (activeScreen === 'level-screen') gameState = 'LEVEL_SELECT';
         else if (activeScreen === 'result-screen') gameState = 'RESULT';
-        else if (activeScreen === 'main-screen') gameState = 'MENU';
+        else if (activeScreen === 'room-screen') gameState = 'ROOM';
+        else if (activeScreen === 'shop-screen') gameState = 'SHOP';
+        else if (activeScreen === 'gallery-screen') gameState = 'GALLERY';
+        else gameState = 'MENU';
 
         if(!hasStartedAudio) { initAudio(); hasStartedAudio = true; updateBGM(); }
     }
 
     function updateVolume(type) {
+        const bgmMain = document.getElementById('bgm-main');
+        const bgmBattle = document.getElementById('bgm-battle');
+        
         if(type === 'bgm') {
             let val = document.getElementById('bgm-slider').value;
             volBGM = val / 100; document.getElementById('bgm-value').innerText = val + '%';
-            bgmMain.volume = volBGM; bgmBattle.volume = volBGM;
-            localStorage.setItem('mermaidVolBGM', volBGM);
+            if(bgmMain) bgmMain.volume = volBGM; 
+            if(bgmBattle) bgmBattle.volume = volBGM;
+            try { localStorage.setItem('mermaidVolBGM', volBGM); } catch(e){}
             if(volBGM > 0 && hasStartedAudio) updateBGM(); 
         } else if(type === 'sfx') {
             let val = document.getElementById('sfx-slider').value;
             volSFX = val / 100; document.getElementById('sfx-value').innerText = val + '%';
-            localStorage.setItem('mermaidVolSFX', volSFX);
+            try { localStorage.setItem('mermaidVolSFX', volSFX); } catch(e){}
             initAudio(); playSFX('correct');
         }
     }
 
     function updateBGM() {
+        const bgmMain = document.getElementById('bgm-main');
+        const bgmBattle = document.getElementById('bgm-battle');
+        if(!bgmMain || !bgmBattle) return;
+
         if (volBGM === 0 || gameState === 'PAUSED' || document.hidden) { 
             bgmMain.pause(); bgmBattle.pause(); return; 
         }
         
-        if (gameState === 'PLAYING' || gameState === 'WARNING') {
+        if (gameState === 'PLAYING' || gameState === 'WARNING' || gameState === 'RESOLVING') {
             bgmMain.pause();
             if (bgmBattle.paused) { bgmBattle.currentTime = 0; bgmBattle.play().catch(e => {}); }
-        } else if (gameState === 'MENU' || gameState === 'LEVEL_SELECT') {
+        } else {
             bgmBattle.pause();
             if (bgmMain.paused) { bgmMain.play().catch(e => {}); }
         }
@@ -630,99 +1064,355 @@
         showScreen('level-screen', 'LEVEL_SELECT');
     }
 
-    function showScreen(id, stateTag) {
-        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-        document.getElementById(id).scrollTop = 0; 
-        gameState = stateTag;
-        if(hasStartedAudio) updateBGM();
-    }
-
-    function loadAndVerifySaveData() {
-        let rawData = localStorage.getItem('mermaidSave');
-        let parsedData;
-        try { parsedData = JSON.parse(rawData); } catch(e) { parsedData = null; }
-
-        if (!parsedData || typeof parsedData.unlockedLevel !== 'number' || isNaN(parsedData.unlockedLevel) || parsedData.unlockedLevel < 1 || parsedData.unlockedLevel > 25) {
-            return { unlockedLevel: 1, unlockedCards: [], equippedPartner: null };
+    function confirmExitBattle() {
+        if(confirm("確定要退出戰鬥嗎？目前進度將會遺失喔！")) {
+            clearAllTimers();
+            showScreen('level-screen', 'LEVEL_SELECT');
         }
-        if(parsedData.equippedPartner === undefined) parsedData.equippedPartner = null;
-        if(!Array.isArray(parsedData.unlockedCards)) parsedData.unlockedCards = [];
-        return parsedData;
     }
 
-    let saveFile = loadAndVerifySaveData();
-    function saveData() { localStorage.setItem('mermaidSave', JSON.stringify(saveFile)); updateLevelUI(); }
+    function checkAndOpenShop() {
+        if (saveFile.unlockedLevel <= 3) {
+            alert("【魔法珍珠商店】將在通關第 3 關後解鎖喔！");
+            return;
+        }
+        showScreen('shop-screen', 'SHOP');
+    }
+
+    function startPartnerSwim() {
+        if (partnerSwimInterval) return;
+        const wrap = document.getElementById('lobby-partner-container');
+        const img = document.getElementById('lobby-partner');
+        if (!wrap || wrap.style.display === 'none') return;
+
+        let currentX = 15; let currentY = 25; 
+
+        partnerSwimInterval = setInterval(() => {
+            if (gameState !== 'MENU' || document.hidden) return;
+            let targetX = Math.floor(Math.random() * 70) + 5; 
+            let targetY = Math.floor(Math.random() * 40) + 10; 
+            if (targetX < currentX) img.classList.add('partner-flip');
+            else img.classList.remove('partner-flip');
+            wrap.style.right = `${targetX}%`; wrap.style.top = `${targetY}%`;
+            currentX = targetX; currentY = targetY;
+        }, 4000); 
+    }
+
+    function stopPartnerSwim() {
+        clearInterval(partnerSwimInterval);
+        partnerSwimInterval = null;
+        const wrap = document.getElementById('lobby-partner-container');
+        if(wrap) { wrap.style.right = '15%'; wrap.style.top = '25%'; }
+    }
+
+    function startBubbles() {
+        if (bubbleInterval) return;
+        const container = document.getElementById('game-container');
+        bubbleInterval = setInterval(() => {
+            if (document.hidden || gameState !== 'MENU') return; 
+            const bubble = document.createElement('div');
+            bubble.style.position = 'absolute';
+            bubble.style.bottom = '-30px';
+            bubble.style.background = 'radial-gradient(circle at 30% 30%, rgba(255,255,255,0.9), rgba(0,255,255,0.3))';
+            bubble.style.borderRadius = '50%';
+            bubble.style.border = '1px solid rgba(255,255,255,0.5)';
+            bubble.style.pointerEvents = 'none';
+            bubble.style.zIndex = '4'; 
+            
+            const size = Math.random() * 25 + 8; 
+            bubble.style.width = `${size}px`; bubble.style.height = `${size}px`;
+            bubble.style.left = `${Math.random() * 100}%`;
+            
+            const duration = Math.random() * 3 + 3;
+            bubble.style.transition = `transform ${duration}s linear, opacity ${duration}s linear`;
+            container.appendChild(bubble);
+            
+            safeSetTimeout(() => {
+                bubble.style.transform = `translateY(-${container.clientHeight + 50}px) scale(1.3)`;
+                bubble.style.opacity = '0';
+            }, 50);
+
+            safeSetTimeout(() => { bubble.remove(); }, (duration + 0.1) * 1000);
+        }, 300);
+    }
+
+    function stopBubbles() {
+        clearInterval(bubbleInterval); bubbleInterval = null;
+    }
+
+    document.addEventListener("visibilitychange", () => {
+        if (document.hidden) { stopBubbles(); const b1=document.getElementById('bgm-main'), b2=document.getElementById('bgm-battle'); if(b1) b1.pause(); if(b2) b2.pause(); } 
+        else { startBubbles(); updateBGM(); }
+    });
+
+    function showScreen(id, stateTag) {
+        clearAllTimers();
+        stopPartnerSwim(); 
+        
+        for(let i=0; i<3; i++) {
+            let btn = document.getElementById(`btn-ans-${i}`);
+            if(btn) btn.disabled = false;
+        }
+        
+        const questionUI = document.getElementById('ui-question');
+        if(questionUI) {
+            questionUI.style.color = "#fff";
+            questionUI.style.textShadow = "0 0 20px #00ffff, 0 4px 8px rgba(0,0,0,0.8)";
+            questionUI.classList.remove('interference');
+        }
+
+        const targetScreen = document.getElementById(id);
+        if (!targetScreen) return;
+
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        targetScreen.classList.add('active');
+        targetScreen.scrollTop = 0; 
+        gameState = stateTag;
+        
+        const pearlUI = document.getElementById('global-pearl-ui');
+        if (stateTag === 'SHOP') { 
+            if(pearlUI) pearlUI.style.display = 'flex';
+        } else {
+            if(pearlUI) pearlUI.style.display = 'none';
+        }
+
+        if (stateTag === 'MENU') { updateLobbyAvatar(); startPartnerSwim(); }
+        if (stateTag === 'ROOM') updateRoomDisplay(); 
+        if (stateTag === 'GALLERY') {
+            curGalleryTab = 'partner';
+            curGalleryPage = 0;
+            renderGallery();
+        }
+
+        if(hasStartedAudio) updateBGM();
+
+        if (stateTag === 'LEVEL_SELECT' && !saveFile.tutorialSeen.battle) {
+            saveFile.tutorialSeen.battle = true; saveData(); openTutorial('battle');
+        } else if (stateTag === 'SHOP' && !saveFile.tutorialSeen.shop) {
+            saveFile.tutorialSeen.shop = true; saveData(); openTutorial('shop');
+        } else if (stateTag === 'ROOM' && !saveFile.tutorialSeen.room) {
+            saveFile.tutorialSeen.room = true; saveData(); openTutorial('room');
+        } else if (stateTag === 'GALLERY' && !saveFile.tutorialSeen.partner) {
+            saveFile.tutorialSeen.partner = true; saveData(); openTutorial('partner');
+        }
+    }
+
+    function saveData() { 
+        try { localStorage.setItem('mermaidSave', JSON.stringify(saveFile)); } 
+        catch(e) {}
+        if(gameState === 'LEVEL_SELECT') updateLevelUI(); 
+        updatePearlUI();
+    }
+
+    function updatePearlUI() {
+        const pearlDisplay = document.getElementById('global-pearl-amount');
+        if (pearlDisplay) pearlDisplay.innerText = saveFile.pearls;
+    }
+
+    function addPearls(amount) {
+        saveFile.pearls += amount; saveData();
+    }
 
     function resetSaveData() {
         if(confirm("確定要清除所有遊戲進度嗎？")) {
-            localStorage.removeItem('mermaidSave');
-            saveFile = { unlockedLevel: 1, unlockedCards: [], equippedPartner: null };
-            updateLevelUI(); alert("進度已重置！"); closeSettings();
+            try { localStorage.removeItem('mermaidSave'); } catch(e){}
+            saveFile = { 
+                unlockedLevel: 1, unlockedCards: [], equippedPartner: null, pearls: 0,
+                inventory: ['outfit_default', 'bg_default', 'bed_default', 'habitat_default'],
+                unlockedTitles: [], equippedTitle: null,
+                tutorialSeen: { battle: false, shop: false, room: false, partner: false },
+                equipped: { outfit: 'outfit_default', bg: 'bg_default', bed: 'bed_default', habitat: 'habitat_default' }
+            };
+            saveData(); alert("進度已重置！"); closeSettings(); showScreen('main-screen', 'MENU');
         }
     }
 
     function testUnlockAll() {
-        if(confirm("確定要解鎖所有關卡與圖鑑嗎？")) {
+        if(confirm("確定要解鎖所有關卡與圖鑑，獲得珍珠，並解鎖所有套裝與稱號嗎？")) {
             saveFile.unlockedLevel = 25; 
             saveFile.unlockedCards = [0, 1, 2, 3, 4, 5, 6, 7, 8]; 
+            saveFile.pearls += 10000;
+            saveFile.inventory = [
+                'outfit_default', 'outfit_snow', 'outfit_star', 
+                'bg_default', 'bg_crystal', 'bg_starry',
+                'bed_default', 'bed_crystal', 'bed_star',
+                'habitat_default', 'habitat_coral', 'habitat_crystal'
+            ];
+            saveFile.unlockedTitles = TITLES.slice(0, 5);
             saveData(); alert("測試模式啟動！全解鎖！"); closeSettings();
+            if(gameState === 'MENU') updateLobbyAvatar(); 
         }
     }
 
-    let state = { 
-        level: 1, hp: 3, maxHp: 3, 
-        monstersDefeated: 0, maxMonsters: 3, 
-        monsterHp: 2, monsterMaxHp: 2,       
-        isBoss: false, bossHp: 3, baseBossHp: 3, 
-        correctAnswer: 0, timer: 100, timerInterval: null, 
-        isEndless: false, isHardMode: false, endlessScore: 0, timeBuff: false
-    };
+    function updateLobbyAvatar() {
+        const lobbyMermaid = document.getElementById('lobby-mermaid');
+        const lobbyPartnerWrap = document.getElementById('lobby-partner-container');
+        const lobbyPartnerImg = document.getElementById('lobby-partner');
+        const fallbackPartner = document.getElementById('lobby-fallback-partner');
+        const titleDisplay = document.getElementById('lobby-player-title');
 
-    const mobImg = ["mob-1.png", "mob-2.png", "mob-3.png"];
-    const mobEmojis = ["🦑", "🦀", "🦈"]; 
-    const monsters = ["🐟","🐍","🦀","🐡","🌟","🦑","🦈","🐙","👿", "☠️"]; 
-    const monsterImg = ["monster-1.png", "monster-2.png", "monster-3.png", "monster-4.png", "monster-5.png", "monster-6.png", "monster-7.png", "monster-8.png", "monster-9.png", "monster-10.png"];
-    const partnerImg = ["partner-1.png", "partner-2.png", "partner-3.png", "partner-4.png", "partner-5.png", "partner-6.png", "partner-7.png", "partner-8.png", "partner-9.png"];
-    const partnerNames = ["聖光小海馬", "雙子水靈蛇", "晨曦引路魚", "天使四翼魚", "星晶守護者", "柔波小海鯊", "幻彩治癒傘", "智慧八爪仙", "九星祈願鯤"];
-    const buffNames = ["生命守護<br>(愛心+1)", "時間魔法<br>(變慢25%)", "強力打擊<br>(Boss血-1)"];
-    
-    const baseBossNames = [
-        "獨角海馬", "雙頭海蛇", "三尾燈籠魚", "四翼魔化飛魚", "巨型裝甲海星",
-        "六鰓異化鯊魚", "七彩毒素水母", "八爪深海大章魚", "九眼深海魔魚"
-    ];
+        if (saveFile.equippedTitle) {
+            titleDisplay.innerText = `✧ ${saveFile.equippedTitle} ✧`; titleDisplay.style.display = 'block';
+        } else { titleDisplay.style.display = 'none'; }
+
+        if (lobbyMermaid && saveFile.equipped && saveFile.equipped.outfit) {
+            const currentOutfitData = ITEM_DB.outfit.find(item => item.id === saveFile.equipped.outfit);
+            if (currentOutfitData) lobbyMermaid.src = `images/${currentOutfitData.img}`;
+            else lobbyMermaid.src = 'images/char-mermaid-default.png'; 
+        }
+
+        if (saveFile.equippedPartner !== null) {
+            lobbyPartnerWrap.style.display = "block"; lobbyPartnerImg.style.display = "block";
+            const partnerIndex = saveFile.equippedPartner;
+            if(LORE_DB.partner[partnerIndex]) {
+                lobbyPartnerImg.src = `images/${LORE_DB.partner[partnerIndex].img}`;
+                lobbyPartnerImg.onerror = function() { 
+                    this.src = `images/monster-${partnerIndex+1}.png`; 
+                    this.style.filter = "hue-rotate(90deg) drop-shadow(0 5px 10px rgba(255,255,255,0.4))";
+                };
+            }
+            if(fallbackPartner) fallbackPartner.style.display = "none";
+        } else {
+            lobbyPartnerWrap.style.display = "none";
+        }
+    }
+
+    function updateBattleAvatar() {
+        const battleMermaid = document.getElementById('char-mermaid');
+        if (battleMermaid && saveFile.equipped && saveFile.equipped.outfit) {
+            const currentOutfitData = ITEM_DB.outfit.find(item => item.id === saveFile.equipped.outfit);
+            if (currentOutfitData) battleMermaid.src = `images/${currentOutfitData.img}`;
+            else battleMermaid.src = 'images/char-mermaid-default.png'; 
+        }
+    }
+
+    // ====== 圖鑑與彈窗 UI 邏輯 ======
+    function switchGalleryTab(tabName) {
+        curGalleryTab = tabName;
+        curGalleryPage = 0;
+        document.querySelectorAll('.book-tabs .bookmark').forEach(bm => bm.classList.remove('active'));
+        document.getElementById(`bm-${tabName}`).classList.add('active');
+        renderGallery();
+    }
+
+    function changePage(delta) {
+        const list = LORE_DB[curGalleryTab];
+        const maxPage = Math.ceil(list.length / 6) - 1;
+        curGalleryPage += delta;
+        if(curGalleryPage < 0) curGalleryPage = 0;
+        if(curGalleryPage > maxPage) curGalleryPage = maxPage;
+        renderGallery();
+    }
+
+    function renderGallery() {
+        const grid = document.getElementById('book-grid');
+        const btnPrev = document.getElementById('btn-prev-page');
+        const btnNext = document.getElementById('btn-next-page');
+        const pageInd = document.getElementById('page-indicator');
+        if(!grid) return;
+
+        grid.innerHTML = '';
+        const list = LORE_DB[curGalleryTab];
+        const totalItems = list.length;
+        const totalPages = Math.ceil(totalItems / 6) || 1;
+        
+        pageInd.innerText = `${curGalleryPage + 1} / ${totalPages}`;
+        btnPrev.disabled = (curGalleryPage === 0);
+        btnNext.disabled = (curGalleryPage >= totalPages - 1);
+
+        const startIndex = curGalleryPage * 6;
+        const endIndex = Math.min(startIndex + 6, totalItems);
+
+        for(let i = startIndex; i < endIndex; i++) {
+            let card = document.createElement('div');
+            let item = list[i];
+            
+            let isUnlocked = false;
+            if (curGalleryTab === 'partner') {
+                isUnlocked = saveFile.unlockedCards.includes(i);
+            } else if (curGalleryTab === 'mob') {
+                if (i === 0 && saveFile.unlockedLevel > 1) isUnlocked = true;
+                if (i === 1 && saveFile.unlockedLevel > 4) isUnlocked = true;
+                if (i === 2 && saveFile.unlockedLevel > 7) isUnlocked = true;
+            } else if (curGalleryTab === 'boss') {
+                if (saveFile.unlockedLevel > i + 1) isUnlocked = true;
+                if (i === 9 && saveFile.unlockedLevel > 10) isUnlocked = true; 
+            }
+
+            if (isUnlocked) {
+                card.className = 'poker-card';
+                if (curGalleryTab === 'partner' && saveFile.equippedPartner === i) card.classList.add('equipped');
+                
+                card.innerHTML = `
+                    <div style="position:absolute; width:100%; height:100%; background:linear-gradient(135deg, #1a2a6c, #0d1b2a); border-radius:8px;"></div>
+                    <img src="images/ui-card-front.png" class="card-bg" onerror="this.style.display='none';">
+                    <img src="images/${item.img}" class="card-partner-img" onerror="this.style.display='none';">
+                    <div class="card-name-tag">${item.name}</div>
+                    ${(curGalleryTab === 'partner' && saveFile.equippedPartner === i) ? '<div class="equip-tag">出戰中</div>' : ''}
+                `;
+                card.onclick = () => openCardDetail(curGalleryTab, i);
+            } else {
+                card.className = 'poker-card locked'; 
+                card.innerHTML = `
+                    <div style="position:absolute; width:100%; height:100%; background:linear-gradient(135deg, #050a1f, #111); border-radius:8px; border:1px solid #333;"></div>
+                    <img src="images/ui-card-back.png" class="card-bg" onerror="this.style.display='none';">
+                    <span style="position:absolute; color:#555; font-size:30px;">🔒</span>
+                `;
+                card.onclick = () => alert("這張卡牌尚未解鎖喔！\n請繼續推進關卡來遇見牠吧！");
+            }
+            grid.appendChild(card);
+        }
+    }
+
+    function openCardDetail(tab, index) {
+        selectedDetailItem = { tab: tab, index: index };
+        const item = LORE_DB[tab][index];
+        const modal = document.getElementById('card-detail-modal');
+        
+        document.getElementById('cd-img').src = `images/${item.img}`;
+        document.getElementById('cd-name').innerText = item.name;
+        document.getElementById('cd-func').innerText = item.func;
+        document.getElementById('cd-desc').innerHTML = item.desc;
+        
+        const actionBtn = document.getElementById('cd-action-btn');
+        if (tab === 'partner') {
+            actionBtn.style.display = 'block';
+            actionBtn.innerText = (saveFile.equippedPartner === index) ? "卸下夥伴" : "裝備出戰";
+            actionBtn.style.background = (saveFile.equippedPartner === index) ? "rgba(255,0,0,0.5)" : "";
+        } else {
+            actionBtn.style.display = 'none';
+        }
+        modal.style.display = 'flex';
+    }
+
+    function closeCardDetail() { document.getElementById('card-detail-modal').style.display = 'none'; }
+
+    function toggleEquipFromDetail() {
+        if (!selectedDetailItem || selectedDetailItem.tab !== 'partner') return;
+        const index = selectedDetailItem.index;
+        saveFile.equippedPartner = (saveFile.equippedPartner === index) ? null : index;
+        saveData(); renderGallery(); openCardDetail(selectedDetailItem.tab, selectedDetailItem.index); 
+    }
 
     function getBossName(levelIndex, isEndless = false) {
         if (isEndless) {
             let prefix = Math.random() > 0.5 ? "深淵" : "";
             if (levelIndex === 9) return prefix ? "十面埋伏-深淵海神克蘇魯" : "十面埋伏-海神克蘇魯的虛影";
-            return prefix + baseBossNames[levelIndex];
+            return prefix + bossData[levelIndex].name;
         }
         if (state.level === 10) return "十面埋伏-海神克蘇魯的虛影";
         if (state.level === 20) return "十面埋伏-深淵海神克蘇魯";
-        if (state.level > 10) return "深淵" + baseBossNames[levelIndex];
-        return baseBossNames[levelIndex];
+        if (state.level > 10) return "深淵" + bossData[levelIndex].name;
+        return bossData[levelIndex].name;
     }
 
     function switchChapter(isAdvanced) {
         const isUnlockedAdv = saveFile.unlockedLevel >= 11;
-
-        if (isAdvanced && !isUnlockedAdv) {
-            alert("請先通關「普通海域」的最終大魔王，才能解鎖進階海域！");
-            return;
-        }
-        
+        if (isAdvanced && !isUnlockedAdv) { alert("請先通關「普通海域」的最終大魔王，才能解鎖進階海域！"); return; }
         currentViewingAdvanced = isAdvanced;
-        const tabNormal = document.getElementById('tab-normal');
-        const tabAdvanced = document.getElementById('tab-advanced');
-
-        if (isAdvanced) {
-            tabAdvanced.classList.add('active');
-            tabNormal.classList.remove('active');
-        } else {
-            tabNormal.classList.add('active');
-            tabAdvanced.classList.remove('active');
-        }
+        const tabNormal = document.getElementById('tab-normal'); const tabAdvanced = document.getElementById('tab-advanced');
+        if (isAdvanced) { tabAdvanced.classList.add('active'); tabNormal.classList.remove('active'); } 
+        else { tabNormal.classList.add('active'); tabAdvanced.classList.remove('active'); }
         updateLevelUI();
     }
 
@@ -730,33 +1420,23 @@
         const grid = document.getElementById('level-grid');
         const tabAdvanced = document.getElementById('tab-advanced');
         const specialUI = document.getElementById('special-modes-ui');
-        
+        if(!grid) return;
+
         grid.innerHTML = '';
-        
         const isUnlockedAdv = saveFile.unlockedLevel >= 11;
-        if (!isUnlockedAdv) tabAdvanced.classList.add('locked-tab');
-        else tabAdvanced.classList.remove('locked-tab');
+        if (!isUnlockedAdv) tabAdvanced.classList.add('locked-tab'); else tabAdvanced.classList.remove('locked-tab');
 
         for(let i = 1; i <= 10; i++) {
             let actualLevel = currentViewingAdvanced ? (i === 10 ? 20 : i + 10) : i;
-            let wrapper = document.createElement('div');
-            let btn = document.createElement('button');
-            let bgPanel = document.createElement('div');
-            
-            bgPanel.className = 'level-bg-panel';
-            wrapper.className = 'level-btn-wrapper';
+            let wrapper = document.createElement('div'); let btn = document.createElement('button'); let bgPanel = document.createElement('div');
+            bgPanel.className = 'level-bg-panel'; wrapper.className = 'level-btn-wrapper';
 
             if (saveFile.unlockedLevel > actualLevel) {
                 wrapper.classList.add('cleared');
-                let tick = document.createElement('div');
-                tick.className = 'cleared-tick';
-                tick.innerText = '✓';
+                let tick = document.createElement('div'); tick.className = 'cleared-tick'; tick.innerText = '✓';
                 wrapper.appendChild(tick);
-            } else if (saveFile.unlockedLevel === actualLevel) {
-                wrapper.classList.add('current');
-            } else {
-                wrapper.classList.add('locked');
-            }
+            } else if (saveFile.unlockedLevel === actualLevel) { wrapper.classList.add('current'); } 
+            else { wrapper.classList.add('locked'); }
 
             if (saveFile.unlockedLevel >= actualLevel) {
                 if (i === 10) {
@@ -768,77 +1448,317 @@
                 }
                 btn.onclick = () => startGame(actualLevel);
             } else {
-                btn.className = 'level-btn'; 
-                if (i === 10) {
-                    btn.className += ' boss-level-btn locked';
-                    btn.innerHTML = `👑<br>🔒`;
-                } else {
-                    btn.className += ' locked';
-                    btn.innerHTML = `🔒<br>未解鎖`;
-                }
+                btn.className = 'level-btn locked'; 
+                if (i === 10) { btn.className += ' boss-level-btn'; btn.innerHTML = `👑<br>🔒`; } 
+                else { btn.innerHTML = `🔒<br>未解鎖`; }
                 btn.onclick = () => alert("這片海域還被濃霧籠罩著...請先通關前面的關卡！");
             }
+            wrapper.appendChild(bgPanel); wrapper.appendChild(btn); grid.appendChild(wrapper);
+        }
+        if (saveFile.unlockedLevel >= 21) specialUI.style.display = 'flex'; else specialUI.style.display = 'none';
+    }
 
-            wrapper.appendChild(bgPanel);
-            wrapper.appendChild(btn);
-            grid.appendChild(wrapper);
+    function openPracticeModal() { document.getElementById('practice-modal').style.display = 'flex'; }
+    function closePracticeModal() { document.getElementById('practice-modal').style.display = 'none'; }
+    function confirmPracticeMode(range) { closePracticeModal(); startPracticeGame(range); }
+
+    const TUTORIAL_TEXTS = {
+        battle: `<div class="tutorial-text-block"><div style="font-size: 16px; font-weight: bold; color: #00ffff; margin-bottom: 5px;">🎯 核心目標</div>選擇正確的九九乘法答案，使用星光魔法擊退海怪！</div><div class="tutorial-text-block"><div style="font-size: 16px; font-weight: bold; color: #ffeb3b; margin-bottom: 5px;">❤️ 戰鬥規則</div>答錯或倒數結束會扣除愛心。愛心歸零則挑戰失敗。<br>只有<b>首次通關</b>關卡才能獲得珍珠懸賞金喔！</div><div class="tutorial-text-block"><div style="font-size: 16px; font-weight: bold; color: #ff4757; margin-bottom: 5px;">👑 進階與大魔王</div>通關第 10 關可解鎖更難的<b>進階海域</b>。<br>在特定的 Boss 關卡中，海怪會施放干擾視線的特殊魔法，請特別小心！</div>`,
+        shop: `<div class="tutorial-text-block"><div style="font-size: 16px; font-weight: bold; color: #00ffff; margin-bottom: 5px;">🐚 喚醒寶物</div>商店分為三個蛋池，花費珍珠即可隨機獲得大獎：<br>• <b>神聖夥伴</b> (100 珍珠)<br>• <b>家具裝潢</b> (200 珍珠)<br>• <b>華麗套裝</b> (300 珍珠)</div><div class="tutorial-text-block"><div style="font-size: 16px; font-weight: bold; color: #ffeb3b; margin-bottom: 5px;">♻️ 重複防護</div>如果抽到了已經擁有的卡牌或道具，祭壇會自動將其轉化為稀有的<b>【星語祝福稱號】</b>送給妳喔！</div>`,
+        room: `<div class="tutorial-text-block"><div style="font-size: 16px; font-weight: bold; color: #00ffff; margin-bottom: 5px;">👗 自由裝扮</div>點擊下方分類，可以為人魚公主換上在商店抽到的美麗套裝，或是佈置獨一無二的房間。</div><div class="tutorial-text-block"><div style="font-size: 16px; font-weight: bold; color: #ffeb3b; margin-bottom: 5px;">🏷️ 裝備稱號</div>在商店抽到的【星語祝福稱號】可以在這裡選擇裝備。<br>裝備後，稱號會華麗地展示在遊戲大廳中喔！</div>`,
+        partner: `<div class="tutorial-text-block"><div style="font-size: 16px; font-weight: bold; color: #00ffff; margin-bottom: 5px;">📖 魔法圖鑑書</div>這裡記錄了所有妳遇過的海怪、擊敗的魔王，以及淨化後的星光夥伴！</div><div class="tutorial-text-block"><div style="font-size: 16px; font-weight: bold; color: #ffeb3b; margin-bottom: 5px;">✨ 夥伴獲得</div>通關第 1 關後會自動獲得第一隻夥伴。<br>之後的其他夥伴，都需要去<b>【魔法珍珠商店】</b>進行喚醒喔！</div><div class="tutorial-text-block"><div style="font-size: 16px; font-weight: bold; color: #ffeb3b; margin-bottom: 5px;">🛡️ 夥伴出戰</div>點擊【✨神聖夥伴】書籤內的卡牌即可裝備出戰！夥伴會在戰鬥中提供強大的魔法增益。</div>`
+    };
+
+    function openTutorial(defaultTab = 'battle') { document.getElementById('tutorial-modal').style.display = 'flex'; switchTutTab(defaultTab); }
+    function closeTutorial() { document.getElementById('tutorial-modal').style.display = 'none'; }
+    function switchTutTab(tabName) {
+        document.querySelectorAll('.tut-tab').forEach(btn => btn.classList.remove('active'));
+        document.getElementById(`tut-tab-${tabName}`).classList.add('active');
+        document.getElementById('tut-content').innerHTML = TUTORIAL_TEXTS[tabName];
+    }
+
+    function pullGacha(poolType) {
+        let cost = 0; let pool = []; let typeName = "";
+        
+        if (poolType === 'partner') {
+            cost = 100; typeName = "神聖夥伴";
+            pool = LORE_DB.partner.map((p, index) => ({...p, id: index, gachaType: 'partner'}));
+        } else if (poolType === 'outfit') {
+            cost = 300; typeName = "華麗套裝";
+            pool = ITEM_DB.outfit.map(item => ({...item, gachaType: 'item'}));
+        } else if (poolType === 'furniture') {
+            cost = 200; typeName = "家具裝潢";
+            ['bg', 'bed', 'habitat'].forEach(cat => {
+                if (ITEM_DB[cat]) ITEM_DB[cat].forEach(item => pool.push({...item, gachaType: 'item'}));
+            });
         }
 
-        if (saveFile.unlockedLevel >= 21) specialUI.style.display = 'flex';
-        else specialUI.style.display = 'none';
-    }
-    updateLevelUI();
+        if (saveFile.pearls < cost) { alert(`哎呀！珍珠不夠囉！喚醒${typeName}需要 ${cost} 珍珠。`); return; }
 
-    function showGallery() {
-        const grid = document.getElementById('gallery-grid');
-        grid.innerHTML = '';
-        for(let i = 0; i < 9; i++) {
-            let card = document.createElement('div');
-            let buffType = i % 3; 
+        document.querySelectorAll('.btn-gacha-small').forEach(b => b.disabled = true);
+        saveFile.pearls -= cost; updatePearlUI(); saveData();
 
-            if (saveFile.unlockedCards.includes(i)) {
-                card.className = 'poker-card';
-                if (saveFile.equippedPartner === i) card.classList.add('equipped');
-                
-                card.innerHTML = `
-                    <div style="position:absolute; width:100%; height:100%; background:linear-gradient(135deg, #1a2a6c, #0d1b2a); border-radius:8px;"></div>
-                    <img src="images/ui-card-front.png" class="card-bg" onerror="this.style.display='none';">
-                    <img src="images/${partnerImg[i]}" class="card-partner-img" onerror="this.src='images/${monsterImg[i]}'; this.style.filter='hue-rotate(90deg) drop-shadow(0 2px 5px rgba(0,0,0,0.5))';">
-                    <div class="card-buff-desc">${partnerNames[i]}<br><span style="font-size:8px; color:#00ffcc;">${buffNames[buffType].replace('<br>',' ')}</span></div>
-                    ${saveFile.equippedPartner === i ? '<div class="equip-tag">裝備中</div>' : ''}
-                `;
-                card.onclick = () => equipPartner(i);
+        const wonItem = pool[Math.floor(Math.random() * pool.length)];
+        let result = null; let isDuplicate = false;
+
+        if (wonItem.gachaType === 'partner') {
+            if (saveFile.unlockedCards.includes(wonItem.id)) isDuplicate = true;
+            else saveFile.unlockedCards.push(wonItem.id);
+        } else {
+            if (saveFile.inventory.includes(wonItem.id)) isDuplicate = true;
+            else saveFile.inventory.push(wonItem.id);
+        }
+
+        if (isDuplicate) {
+            let unownedTitles = TITLES.filter(t => !saveFile.unlockedTitles.includes(t));
+            if (unownedTitles.length > 0) {
+                let wonTitle = unownedTitles[Math.floor(Math.random() * unownedTitles.length)];
+                saveFile.unlockedTitles.push(wonTitle);
+                result = { type: 'title', title: wonTitle, fallbackFrom: wonItem.name };
             } else {
-                card.className = 'poker-card locked'; 
-                card.innerHTML = `
-                    <div style="position:absolute; width:100%; height:100%; background:linear-gradient(135deg, #050a1f, #111); border-radius:8px; border:1px solid #333;"></div>
-                    <img src="images/ui-card-back.png" class="card-bg" onerror="this.style.display='none';">
-                    <span style="position:absolute; color:#555; font-size:30px;">🔒</span>
-                `;
+                saveFile.pearls += cost; 
+                result = { type: 'duplicate_refund', item: wonItem, refund: cost };
             }
-            grid.appendChild(card);
+        } else {
+            result = { type: wonItem.gachaType, item: wonItem };
         }
-        showScreen('gallery-screen', 'MENU');
+        saveData();
+
+        const shellImg = document.getElementById('altar-shell');
+        playSFX('pearl'); shellImg.classList.remove('float-anim'); shellImg.classList.add('shaking');
+        
+        safeSetTimeout(() => {
+            shellImg.classList.remove('shaking'); shellImg.src = 'images/ui-altar-shell-open.png'; 
+            playSFX('win'); showGachaResult(result);
+        }, 1500);
     }
 
-    function equipPartner(index) {
-        saveFile.equippedPartner = (saveFile.equippedPartner === index) ? null : index;
-        saveData(); showGallery();
+    function showGachaResult(result) {
+        const modal = document.getElementById('gacha-result-modal');
+        const showcase = document.getElementById('gacha-item-showcase');
+        const img = document.getElementById('gacha-result-img');
+        const name = document.getElementById('gacha-result-name');
+        const typeDisplay = document.getElementById('gacha-result-type');
+
+        if (result.type === 'item' || result.type === 'partner' || result.type === 'duplicate_refund') {
+            img.src = `images/${result.item.img}`;
+            img.style.display = 'block'; showcase.style.display = 'flex';
+            name.innerText = result.item.name;
+
+            let tName = "寶物";
+            if(result.type === 'partner') tName = "神聖夥伴";
+            else if(result.item.type === 'outfit') tName = "華麗套裝";
+            else if(result.item.type === 'bg') tName = "房間背景";
+            else if(result.item.type === 'bed') tName = "公主床舖";
+            else if(result.item.type === 'habitat') tName = "夥伴的窩";
+
+            if (result.type === 'duplicate_refund') {
+                typeDisplay.innerHTML = `【 ${tName} 】<br><br><span style="color:#ff4757; font-size:16px; font-weight:bold; background:rgba(0,0,0,0.8); padding:5px 10px; border-radius:8px;">已擁有此道具且稱號全滿！返還 ${result.refund} 珍珠</span>`;
+            } else { typeDisplay.innerText = `【 ${tName} 】`; }
+        } else if (result.type === 'title') {
+            img.style.display = 'none'; showcase.style.display = 'none';
+            name.innerHTML = `<div style="font-size:14px; color:#aaa; margin-bottom:10px;">(獲得重複的 ${result.fallbackFrom})</div>
+                              <div style="font-size:26px; margin: 10px 0; padding: 15px; border:3px dashed #00ffff; color:#00ffff; border-radius:15px; background:rgba(0,0,0,0.6); box-shadow: 0 0 20px rgba(0,255,255,0.5);">✧ ${result.title} ✧</div>`;
+            typeDisplay.innerText = `【 星語祝福稱號 】`;
+        }
+        modal.style.display = 'flex';
+    }
+
+    function closeGachaResult() {
+        document.getElementById('gacha-result-modal').style.display = 'none';
+        const shellImg = document.getElementById('altar-shell');
+        shellImg.src = 'images/ui-altar-shell-closed.png'; shellImg.classList.add('float-anim');
+        document.querySelectorAll('.btn-gacha-small').forEach(b => b.disabled = false);
+    }
+
+    function triggerPartnerEntry(buffMsg, callback) {
+        if (saveFile.equippedPartner === null) { if (callback) callback(); return; }
+        const overlay = document.getElementById('partner-overlay');
+        const img = document.getElementById('partner-overlay-img');
+        const text = document.getElementById('partner-overlay-text');
+        
+        img.src = `images/${LORE_DB.partner[saveFile.equippedPartner].img}`;
+        text.innerHTML = buffMsg; overlay.style.display = 'flex';
+        
+        safeSetTimeout(() => {
+            overlay.classList.add('show'); playSFX('win'); 
+            safeSetTimeout(() => {
+                overlay.classList.remove('show');
+                safeSetTimeout(() => { overlay.style.display = 'none'; if (callback) callback(); }, 500); 
+            }, 1500);
+        }, 50);
+    }
+
+    function applyBuffs() {
+        state.maxHp = 3; state.baseBossHp = 3; state.timeBuff = false;
+        const pContainer = document.getElementById('char-partner-container');
+        const pImg = document.getElementById('char-partner');
+        const pFallback = document.getElementById('fallback-partner');
+        let buffMsg = "星光魔法，出擊！✨";
+
+        if(saveFile.equippedPartner !== null) {
+            let pType = saveFile.equippedPartner % 3;
+            if(pType === 0) { state.maxHp = 4; buffMsg = "別怕！我來保護妳！<br>💖(愛心上限+1)"; }
+            if(pType === 1) { state.timeBuff = true; buffMsg = "時間停止吧！<br>⏳(倒數變慢)"; }
+            if(pType === 2) { state.baseBossHp = 2; buffMsg = "一起把魔王打飛吧！<br>⚔️(Boss血量-1)"; }
+            
+            pContainer.style.display = "block"; pImg.style.display = "block";
+            pImg.src = `images/${LORE_DB.partner[saveFile.equippedPartner].img}`;
+            pImg.onerror = function() { 
+                this.src = `images/monster-${saveFile.equippedPartner+1}.png`; 
+                this.style.filter = "hue-rotate(90deg) drop-shadow(0 5px 10px rgba(255,255,255,0.4))";
+            };
+            pFallback.style.display = "none";
+        } else {
+            pContainer.style.display = "none";
+        }
+        state.hp = state.maxHp; return buffMsg; 
+    }
+
+    function startGame(level) {
+        if ((level === 10 && saveFile.unlockedLevel < 10) || (level === 20 && saveFile.unlockedLevel < 20)) {
+            alert("此大魔王關卡尚未解鎖！"); return;
+        }
+
+        clearAllTimers(); updateBattleAvatar(); 
+        state.level = level; state.monstersDefeated = 0; state.isBoss = false; 
+        state.isEndless = false; state.isPractice = false;
+        state.sessionPearls = 0; state.isFirstClear = (level === saveFile.unlockedLevel); 
+        currentBgPosX = 0; document.getElementById('battle-stage-bg').style.backgroundPosition = '0vw top';
+
+        let startMsg = applyBuffs(); state.monsterMaxHp = 2; 
+        
+        if (level === 10) { state.isHardMode = true; state.baseBossHp += 7; state.maxMonsters = 8; }
+        else if (level === 20) { state.isHardMode = true; state.baseBossHp += 12; state.maxMonsters = 5; }
+        else if (level > 10) { state.isHardMode = true; state.baseBossHp += 2; state.maxMonsters = 5; }
+        else { state.isHardMode = false; state.maxMonsters = 3; }
+
+        document.getElementById('monster-ui').style.display = 'none'; state.monsterHp = state.monsterMaxHp;
+        const pearlUI = document.getElementById('global-pearl-ui'); if (pearlUI) pearlUI.style.display = 'none'; 
+        showScreen('gameplay-screen', 'RESOLVING'); 
+        
+        triggerPartnerEntry(startMsg, () => {
+            if(saveFile.equippedPartner === null) {
+                showSpeech(level >= 10 ? "最終決戰！<br>打倒大魔王！" : "星光魔法，出擊！✨");
+            }
+            document.getElementById('char-monster').style.display = 'block';
+            spawnNextMonster(true, () => { gameState = 'PLAYING'; generateQuestion(); }); 
+            updateUI(); 
+        });
+    }
+
+    function startEndlessMode() {
+        clearAllTimers(); updateBattleAvatar(); 
+        state.level = 'endless'; state.monstersDefeated = 0; state.endlessScore = 0; state.isBoss = false; 
+        state.isEndless = true; state.isPractice = false; state.isHardMode = true; state.sessionPearls = 0;
+        currentBgPosX = 0; document.getElementById('battle-stage-bg').style.backgroundPosition = '0vw top';
+
+        let startMsg = applyBuffs(); state.monsterMaxHp = 2; state.monsterHp = state.monsterMaxHp;
+        document.getElementById('monster-ui').style.display = 'none';
+        const pearlUI = document.getElementById('global-pearl-ui'); if (pearlUI) pearlUI.style.display = 'none';
+        
+        showScreen('gameplay-screen', 'RESOLVING'); 
+        triggerPartnerEntry(startMsg, () => {
+            if(saveFile.equippedPartner === null) showSpeech("無限挑戰開始！");
+            document.getElementById('char-monster').style.display = 'block';
+            spawnNextMonster(true, () => { gameState = 'PLAYING'; generateQuestion(); });
+            updateUI(); 
+        });
+    }
+
+    function startPracticeGame(practiceMaxNum) {
+        clearAllTimers(); updateBattleAvatar();
+        state.level = 'practice'; state.monstersDefeated = 0; state.endlessScore = 0; state.isBoss = false; 
+        state.isEndless = false; state.isPractice = true; state.isHardMode = false;
+        state.sessionPearls = 0; state.practiceRange = practiceMaxNum; 
+        currentBgPosX = 0; document.getElementById('battle-stage-bg').style.backgroundPosition = '0vw top';
+
+        let startMsg = applyBuffs(); state.monsterMaxHp = 1; state.monsterHp = 1;
+        document.getElementById('monster-ui').style.display = 'none';
+        showScreen('gameplay-screen', 'RESOLVING'); 
+        
+        triggerPartnerEntry(startMsg, () => {
+            showSpeech(`專注練習 1~${practiceMaxNum} 乘法！`);
+            document.getElementById('char-monster').style.display = 'block';
+            spawnNextMonster(true, () => { gameState = 'PLAYING'; generateQuestion(); });
+            updateUI(); 
+        });
+    }
+
+    function spawnNextMonster(isFirstSpawn = false, callback = null) {
+        const gameplayBg = document.getElementById('battle-stage-bg');
+        const mermaid = document.getElementById('char-mermaid');
+        const partnerContainer = document.getElementById('char-partner-container');
+        
+        mermaid.classList.remove('anim-mermaid-enter', 'anim-mermaid-run', 'anim-attack', 'anim-hurt');
+        partnerContainer.classList.remove('anim-mermaid-enter', 'anim-mermaid-run', 'anim-partner-atk');
+        void mermaid.offsetWidth; void partnerContainer.offsetWidth;
+
+        if (isFirstSpawn) {
+            mermaid.classList.add('anim-mermaid-enter');
+            if(saveFile.equippedPartner !== null) partnerContainer.classList.add('anim-mermaid-enter');
+        } else {
+            currentBgPosX -= 15; gameplayBg.style.backgroundPosition = `${currentBgPosX}vw top`;
+            mermaid.classList.add('anim-mermaid-run');
+            if(saveFile.equippedPartner !== null) partnerContainer.classList.add('anim-mermaid-run');
+        }
+
+        let mobIndex = 0; let actualLevel = state.level; let isBossAsMob = false;
+        if (actualLevel === 'endless') mobIndex = Math.floor(Math.random() * 3); 
+        else if (actualLevel === 20) { mobIndex = Math.floor(Math.random() * 9); isBossAsMob = true; }
+        else if (actualLevel === 10) mobIndex = Math.floor(Math.random() * 3);
+        else if (actualLevel === 'practice') {  } 
+        else {
+            if (actualLevel > 10) actualLevel -= 10; 
+            if (actualLevel <= 3) mobIndex = 0; else if (actualLevel <= 6) mobIndex = 1; else mobIndex = 2;                       
+        }
+
+        let isElite = state.isEndless ? (state.endlessScore % 5 === 4) : (!state.isPractice && state.monstersDefeated === state.maxMonsters - 1);
+        
+        safeSetTimeout(() => {
+            if (state.level === 'practice') setupSprite('practice', 0, false, isFirstSpawn);
+            else if (isBossAsMob) setupSprite('boss-as-mob', mobIndex, isElite, isFirstSpawn);
+            else setupSprite('mob', mobIndex, isElite, isFirstSpawn);
+
+            document.getElementById('monster-hp-fill').style.width = '100%';
+            if(!state.isPractice) document.getElementById('monster-ui').style.display = 'block';
+            if (callback) callback();
+        }, isFirstSpawn ? 0 : 400); 
+    }
+
+    function setupSprite(type, index, isElite = false, isFirstSpawn = false) {
+        const pic = document.getElementById('char-monster');
+        const fallback = document.getElementById('fallback-monster');
+        pic.classList.remove('anim-monster-hurt', 'anim-monster-die', 'anim-monster-enter');
+        fallback.classList.remove('anim-monster-hurt', 'anim-monster-die', 'anim-monster-enter');
+        pic.style.display = 'block'; fallback.style.display = 'none';
+
+        let classBase = 'character monster ';
+        if (!isFirstSpawn) classBase += 'anim-monster-enter ';
+        if (state.level > 10 || state.level === 'endless') classBase += 'adv-monster ';
+        
+        if (type === 'boss') {
+            pic.src = `images/${LORE_DB.boss[index].img}`; fallback.innerText = "☠️";
+            pic.className = classBase + 'boss'; fallback.className = classBase + 'boss';
+        } else if (type === 'boss-as-mob') {
+            pic.src = `images/${LORE_DB.boss[index].img}`; fallback.innerText = "👾";
+            pic.className = classBase + (isElite ? 'elite-monster' : ''); fallback.className = classBase + (isElite ? 'elite-monster' : '');
+        } else if (type === 'practice') {
+            pic.src = `images/mob-practice.png`; fallback.innerText = "🧸";
+            pic.className = classBase; fallback.className = classBase;
+        } else {
+            pic.src = `images/${LORE_DB.mob[index].img}`; fallback.innerText = "👾";
+            pic.className = classBase + (isElite ? 'elite-monster' : ''); fallback.className = classBase + (isElite ? 'elite-monster' : '');
+        }
     }
 
     function showSpeech(text, isGood = true, isBossSkill = false) {
         const bubble = document.getElementById('ui-speech');
         bubble.innerHTML = text; 
-        
-        if (isBossSkill) {
-            bubble.classList.add('boss-skill');
-        } else {
-            bubble.classList.remove('boss-skill');
-            bubble.style.color = isGood ? '#1e3799' : '#e84118'; 
-        }
-        
+        if (isBossSkill) { bubble.classList.add('boss-skill'); } 
+        else { bubble.classList.remove('boss-skill'); bubble.style.color = isGood ? '#1e3799' : '#e84118'; }
         bubble.classList.add('show');
-        setTimeout(() => { bubble.classList.remove('show'); }, 2000);
+        safeSetTimeout(() => { bubble.classList.remove('show'); }, 2000);
     }
 
     function updateUI() {
@@ -851,6 +1771,7 @@
         
         const progressUI = document.getElementById('ui-progress');
         if (state.isEndless) progressUI.innerHTML = `🏆 總擊退: <span style="color:#fff;">${state.endlessScore}</span>`;
+        else if (state.isPractice) progressUI.innerHTML = `🎓 練習中: <span style="color:#fff;">${state.endlessScore}/50</span>`;
         else progressUI.innerHTML = `🚩 進度: <span style="color:#fff;">${state.monstersDefeated}/${state.maxMonsters}</span>`;
 
         const monsterUi = document.getElementById('monster-ui');
@@ -864,7 +1785,7 @@
                 hpFill.style.width = Math.max(pct, 0) + '%';
                 hpText.innerText = `Boss HP: ${Math.max(state.bossHp, 0)} / ${state.baseBossHp}`;
             } else {
-                let isElite = state.isEndless ? (state.endlessScore % 5 === 4) : (state.monstersDefeated === state.maxMonsters - 1);
+                let isElite = state.isEndless ? (state.endlessScore % 5 === 4) : (!state.isPractice && state.monstersDefeated === state.maxMonsters - 1);
                 monsterUi.className = isElite ? 'monster-ui elite-ui' : 'monster-ui';
                 let pct = (state.monsterHp / state.monsterMaxHp) * 100;
                 hpFill.style.width = Math.max(pct, 0) + '%';
@@ -873,166 +1794,18 @@
         }
     }
 
-    function applyBuffs() {
-        state.maxHp = 3; state.baseBossHp = 3; state.timeBuff = false;
-        
-        const pContainer = document.getElementById('char-partner-container');
-        const pImg = document.getElementById('char-partner');
-        const pFallback = document.getElementById('fallback-partner');
-        let buffMsg = "星光魔法，出擊！✨";
-
-        if(saveFile.equippedPartner !== null) {
-            let pType = saveFile.equippedPartner % 3;
-            if(pType === 0) { state.maxHp = 4; buffMsg = "發動技能：<br>💖 生命守護！"; }
-            if(pType === 1) { state.timeBuff = true; buffMsg = "發動技能：<br>⏳ 時間變慢！"; }
-            if(pType === 2) { state.baseBossHp = 2; buffMsg = "發動技能：<br>⚔️ Boss血量-1！"; }
-            
-            pContainer.style.display = "block";
-            pImg.style.display = "block";
-            pImg.src = `images/${partnerImg[saveFile.equippedPartner]}`;
-            pImg.onerror = function() { 
-                this.src = `images/${monsterImg[saveFile.equippedPartner]}`; 
-                this.style.filter = "hue-rotate(90deg) drop-shadow(0 5px 10px rgba(255,255,255,0.4))";
-            };
-            pFallback.style.display = "none";
-        } else {
-            pContainer.style.display = "none";
-        }
-        state.hp = state.maxHp;
-        return buffMsg;
-    }
-
-    function startGame(level) {
-        if ((level === 10 && saveFile.unlockedLevel < 10) || (level === 20 && saveFile.unlockedLevel < 20)) {
-            alert("此大魔王關卡尚未解鎖！");
-            return;
-        }
-
-        state.level = level; state.monstersDefeated = 0; state.isBoss = false; state.isEndless = false;
-        isAnimating = false; 
-        
-        // 進入關卡時重置背景卷軸位置
-        currentBgPosX = 0;
-        document.getElementById('battle-stage-bg').style.backgroundPosition = '0vw top';
-
-        let startMsg = applyBuffs();
-        state.monsterMaxHp = 2; 
-        
-        if (level === 10) { state.isHardMode = true; state.baseBossHp += 7; state.maxMonsters = 8; startMsg = "最終決戰！<br>打倒大魔王！"; }
-        else if (level === 20) { state.isHardMode = true; state.baseBossHp += 12; state.maxMonsters = 5; startMsg = "進階最終戰！<br>歷代魔王降臨！"; }
-        else if (level > 10) { state.isHardMode = true; state.baseBossHp += 2; state.maxMonsters = 5; startMsg = "進階挑戰！<br>Boss技能解放！"; }
-        else { state.isHardMode = false; state.maxMonsters = 3; }
-
-        document.getElementById('monster-ui').style.display = 'none'; 
-        state.monsterHp = state.monsterMaxHp;
-        
-        spawnNextMonster(true); 
-        
-        updateUI(); 
-        showScreen('gameplay-screen', 'PLAYING'); 
-        showSpeech(startMsg);
-        generateQuestion();
-    }
-
-    function startEndlessMode() {
-        state.level = 'endless'; state.monstersDefeated = 0; state.endlessScore = 0; state.isBoss = false; state.isEndless = true; state.isHardMode = true;
-        isAnimating = false; 
-
-        // 進入關卡時重置背景卷軸位置
-        currentBgPosX = 0;
-        document.getElementById('battle-stage-bg').style.backgroundPosition = '0vw top';
-
-        let startMsg = applyBuffs();
-        state.monsterMaxHp = 2; state.monsterHp = state.monsterMaxHp;
-        
-        document.getElementById('monster-ui').style.display = 'none';
-        
-        spawnNextMonster(true);
-        updateUI(); showScreen('gameplay-screen', 'PLAYING'); showSpeech(startMsg + "<br>無限挑戰開始！");
-        generateQuestion();
-    }
-
-    function spawnNextMonster(isFirstSpawn = false) {
-        const gameplayBg = document.getElementById('battle-stage-bg');
-        const mermaid = document.getElementById('char-mermaid');
-        const partnerContainer = document.getElementById('char-partner-container');
-        
-        mermaid.classList.remove('anim-mermaid-enter', 'anim-mermaid-run', 'anim-attack', 'anim-hurt');
-        partnerContainer.classList.remove('anim-mermaid-enter', 'anim-mermaid-run', 'anim-partner-atk');
-        void mermaid.offsetWidth; 
-        void partnerContainer.offsetWidth;
-
-        if (isFirstSpawn) {
-            mermaid.classList.add('anim-mermaid-enter');
-            if(saveFile.equippedPartner !== null) partnerContainer.classList.add('anim-mermaid-enter');
-        } else {
-            // 平滑卷軸推進 15vw，而不使用會移動整個 DIV 的 transform
-            currentBgPosX -= 15;
-            gameplayBg.style.backgroundPosition = `${currentBgPosX}vw top`;
-            
-            mermaid.classList.add('anim-mermaid-run');
-            if(saveFile.equippedPartner !== null) partnerContainer.classList.add('anim-mermaid-run');
-        }
-
-        let mobIndex = 0; let actualLevel = state.level; let isBossAsMob = false;
-        
-        if (actualLevel === 'endless') mobIndex = Math.floor(Math.random() * 3); 
-        else if (actualLevel === 20) { mobIndex = Math.floor(Math.random() * 9); isBossAsMob = true; }
-        else if (actualLevel === 10) mobIndex = Math.floor(Math.random() * 3);
-        else {
-            if (actualLevel > 10) actualLevel -= 10; 
-            if (actualLevel <= 3) mobIndex = 0; else if (actualLevel <= 6) mobIndex = 1; else mobIndex = 2;                       
-        }
-
-        let isElite = state.isEndless ? (state.endlessScore % 5 === 4) : (state.monstersDefeated === state.maxMonsters - 1);
-        
-        setTimeout(() => {
-            if (isBossAsMob) setupSprite('boss-as-mob', mobIndex, isElite, isFirstSpawn);
-            else setupSprite('mob', mobIndex, isElite, isFirstSpawn);
-
-            document.getElementById('monster-hp-fill').style.width = '100%';
-            document.getElementById('monster-ui').style.display = 'block';
-            isAnimating = false; 
-        }, isFirstSpawn ? 0 : 400);
-    }
-
-    function setupSprite(type, index, isElite = false, isFirstSpawn = false) {
-        const pic = document.getElementById('char-monster');
-        const fallback = document.getElementById('fallback-monster');
-        
-        pic.classList.remove('anim-monster-hurt', 'anim-monster-die', 'anim-monster-enter');
-        fallback.classList.remove('anim-monster-hurt', 'anim-monster-die', 'anim-monster-enter');
-        
-        pic.style.display = 'block'; fallback.style.display = 'none';
-
-        let classBase = 'character monster ';
-        if (!isFirstSpawn) classBase += 'anim-monster-enter ';
-        
-        if (state.level > 10 || state.level === 'endless') classBase += 'adv-monster ';
-        
-        if (type === 'boss') {
-            pic.src = `images/${monsterImg[index]}`; fallback.innerText = monsters[index] || "☠️";
-            pic.className = classBase + 'boss'; fallback.className = classBase + 'boss';
-        } else if (type === 'boss-as-mob') {
-            pic.src = `images/${monsterImg[index]}`; fallback.innerText = monsters[index] || "👾";
-            pic.className = classBase + (isElite ? 'elite-monster' : ''); fallback.className = classBase + (isElite ? 'elite-monster' : '');
-        } else {
-            pic.src = `images/${mobImg[index]}`; fallback.innerText = mobEmojis[index] || "👾";
-            pic.className = classBase + (isElite ? 'elite-monster' : ''); fallback.className = classBase + (isElite ? 'elite-monster' : '');
-        }
-    }
-
     function generateQuestion() {
+        if (gameState !== 'PLAYING') return;
         resetTimer();
         for(let i=0; i<3; i++) {
             let btn = document.getElementById(`btn-ans-${i}`);
-            btn.style.color = "#fff";
-            btn.classList.remove('flash'); 
+            btn.style.color = "#fff"; btn.classList.remove('flash-correct', 'flash-wrong'); btn.disabled = false;
         }
         document.getElementById('ui-question').classList.remove('interference');
 
         let num1;
-        if (state.level === 'endless' || state.level === 10 || state.level === 20) num1 = Math.floor(Math.random() * 9) + 1; 
+        if (state.isPractice) num1 = Math.floor(Math.random() * state.practiceRange) + 1;
+        else if (state.level === 'endless' || state.level === 10 || state.level === 20) num1 = Math.floor(Math.random() * 9) + 1; 
         else if (state.level > 10) num1 = state.level - 10; 
         else num1 = state.level; 
         
@@ -1048,14 +1821,14 @@
         for(let i=0; i<3; i++) document.getElementById(`btn-ans-${i}`).innerText = options[i];
 
         if (state.isBoss && state.isHardMode) {
-            if (Math.random() > 0.4) { 
+            if (Math.random() > 0.75) { 
                 let skillType = Math.floor(Math.random() * 3);
                 if (skillType === 0) { document.getElementById('ui-question').classList.add('interference'); showSpeech("深海迷霧！", false, true); }
-                else if (skillType === 1) { state.timer -= 30; showSpeech("時間吞噬！", false, true); }
+                else if (skillType === 1) { state.timer -= 25; showSpeech("時間吞噬！", false, true); }
                 else if (skillType === 2) {
                     for(let i=0; i<3; i++) {
                         document.getElementById(`btn-ans-${i}`).style.color = "transparent";
-                        setTimeout(() => { const btn = document.getElementById(`btn-ans-${i}`); if(btn) btn.style.color = "#fff"; }, 1500);
+                        safeSetTimeout(() => { const btn = document.getElementById(`btn-ans-${i}`); if(btn) btn.style.color = "#fff"; }, 800);
                     }
                     showSpeech("暗影遮蔽！", false, true);
                 }
@@ -1065,6 +1838,10 @@
 
     function resetTimer() {
         clearInterval(state.timerInterval);
+        if (state.isPractice) {
+            document.getElementById('ui-timer').style.width = '100%';
+            document.getElementById('ui-timer').style.background = '#3498db'; return; 
+        }
         state.timer = 100;
         const timerBar = document.getElementById('ui-timer');
         timerBar.style.width = '100%'; timerBar.style.background = 'linear-gradient(90deg, #00ffcc, #00bfff)';
@@ -1073,26 +1850,39 @@
         if(state.timeBuff) speed = Math.floor(speed * 1.25); 
 
         state.timerInterval = setInterval(() => {
-            if (gameState !== 'PLAYING' || isAnimating || document.hidden) return; 
-            state.timer -= 1;
-            timerBar.style.width = state.timer + '%';
+            if (gameState !== 'PLAYING' || document.hidden) return; 
+            state.timer -= 1; timerBar.style.width = state.timer + '%';
             if(state.timer < 30) timerBar.style.background = 'linear-gradient(90deg, #ff4757, #ff6b81)';
-            if(state.timer <= 0) { clearInterval(state.timerInterval); handleWrong("時間到！"); }
+            if(state.timer <= 0) { clearInterval(state.timerInterval); handleTimeout(); }
         }, speed);
+    }
+    
+    function handleTimeout() {
+        if (gameState !== 'PLAYING') return;
+        gameState = 'RESOLVING'; handleWrong("時間到！");
+    }
+
+    function bindAnswerButtons() {
+        document.getElementById('btn-ans-0').addEventListener('click', () => checkAnswer(0));
+        document.getElementById('btn-ans-1').addEventListener('click', () => checkAnswer(1));
+        document.getElementById('btn-ans-2').addEventListener('click', () => checkAnswer(2));
+        window.addEventListener('keydown', (e) => {
+            if (gameState === 'PLAYING') {
+                if (e.key === '1' || e.key === 'NumPad1') document.getElementById('btn-ans-0').click();
+                if (e.key === '2' || e.key === 'NumPad2') document.getElementById('btn-ans-1').click();
+                if (e.key === '3' || e.key === 'NumPad3') document.getElementById('btn-ans-2').click();
+            }
+        });
     }
 
     function checkAnswer(btnIndex) {
-        if (gameState !== 'PLAYING' || isAnimating) return; 
-        isAnimating = true; 
-
-        clearInterval(state.timerInterval);
-        document.getElementById('ui-question').classList.remove('interference'); 
+        if (gameState !== 'PLAYING') return; 
+        gameState = 'RESOLVING'; 
+        clearInterval(state.timerInterval); document.getElementById('ui-question').classList.remove('interference'); 
+        for(let i=0; i<3; i++) document.getElementById(`btn-ans-${i}`).disabled = true; 
         
         const btn = document.getElementById(`btn-ans-${btnIndex}`);
         const selected = parseInt(btn.innerText);
-        
-        btn.classList.add('flash');
-
         let mermaid = document.getElementById('char-mermaid');
         let partnerContainer = document.getElementById('char-partner-container');
         if(mermaid.style.display === 'none') mermaid = document.getElementById('fallback-mermaid');
@@ -1101,27 +1891,50 @@
         partnerContainer.classList.remove('anim-partner-atk', 'anim-mermaid-enter', 'anim-mermaid-run');
         void mermaid.offsetWidth; void partnerContainer.offsetWidth;
 
-        if(selected === state.correctAnswer) handleCorrect(mermaid, partnerContainer);
-        else handleWrong("哎呀，答錯了！", mermaid);
+        if(selected === state.correctAnswer) {
+            btn.classList.add('flash-correct'); handleCorrect(mermaid, partnerContainer);
+        } else {
+            btn.classList.add('flash-wrong'); handleWrong("哎呀，答錯了！", mermaid);
+        }
     }
 
     function handleCorrect(mermaid, partnerContainer) {
         playSFX('correct'); 
+        let currentOutfitImg = 'char-mermaid-default-atk.png'; 
+        if (saveFile.equipped && saveFile.equipped.outfit) {
+            const outfitData = ITEM_DB.outfit.find(i => i.id === saveFile.equipped.outfit);
+            if(outfitData) currentOutfitImg = outfitData.img.replace('.png', '-atk.png');
+        }
 
         if (mermaid.id === 'char-mermaid') { 
-            mermaid.src = 'images/char-mermaid-atk.png';
-            mermaid.onerror = function() { this.src = 'images/char-mermaid.png'; };
-            setTimeout(() => { mermaid.src = 'images/char-mermaid.png'; }, 400); 
+            mermaid.src = `images/${currentOutfitImg}`;
+            mermaid.onerror = function() { 
+                const normalData = ITEM_DB.outfit.find(i => i.id === saveFile.equipped.outfit);
+                this.src = normalData ? `images/${normalData.img}` : 'images/char-mermaid-default.png'; 
+            };
+            safeSetTimeout(() => { 
+                const normalData = ITEM_DB.outfit.find(i => i.id === saveFile.equipped.outfit);
+                mermaid.src = normalData ? `images/${normalData.img}` : 'images/char-mermaid-default.png'; 
+            }, 400); 
         }
+        
         mermaid.classList.add('anim-attack');
         if(saveFile.equippedPartner !== null) partnerContainer.classList.add('anim-partner-atk');
 
         let monster = document.getElementById('char-monster');
         if(monster.style.display === 'none') monster = document.getElementById('fallback-monster');
-        
         monster.classList.remove('anim-monster-hurt', 'anim-monster-enter');
-        void monster.offsetWidth; 
-        monster.classList.add('anim-monster-hurt');
+        void monster.offsetWidth; monster.classList.add('anim-monster-hurt');
+
+        if (state.isPractice) {
+            state.endlessScore++; updateUI();
+            if (state.endlessScore >= 50) {
+                showSpeech("練習達成！", true); handleMonsterDeath(monster, () => { endGame(true); }, false);
+            } else {
+                showSpeech("答對了！", true); handleMonsterDeath(monster, () => { spawnNextMonster(false, () => { gameState = 'PLAYING'; generateQuestion(); }); });
+            }
+            return;
+        }
 
         if (state.isEndless) {
             if (state.isBoss) {
@@ -1129,9 +1942,8 @@
                 if(state.bossHp <= 0) {
                     handleMonsterDeath(monster, () => {
                         if (state.hp < state.maxHp) state.hp++; 
-                        showSpeech("擊退Boss！<br>愛心回復！");
-                        state.isBoss = false; state.monsterHp = state.monsterMaxHp;
-                        spawnNextMonster(false); setTimeout(generateQuestion, 800);
+                        showSpeech("擊退Boss！<br>愛心回復！"); state.isBoss = false; state.monsterHp = state.monsterMaxHp;
+                        spawnNextMonster(false, () => { gameState = 'PLAYING'; generateQuestion(); }); 
                     }); return;
                 }
             } else {
@@ -1141,21 +1953,19 @@
                     handleMonsterDeath(monster, () => {
                         if (state.endlessScore > 0 && state.endlessScore % 5 === 0) triggerBoss();
                         else {
-                            showSpeech(["小怪消滅！", "下一隻！"][Math.floor(Math.random()*2)], true);
-                            state.monsterHp = state.monsterMaxHp; spawnNextMonster(false); setTimeout(generateQuestion, 800);
+                            showSpeech(["小怪消滅！", "下一隻！"][Math.floor(Math.random()*2)], true); state.monsterHp = state.monsterMaxHp; 
+                            spawnNextMonster(false, () => { gameState = 'PLAYING'; generateQuestion(); }); 
                         }
                     }); return;
                 } else showSpeech("造成傷害！", true);
             }
-            setTimeout(() => { isAnimating = false; generateQuestion(); }, 600); return;
+            safeSetTimeout(() => { gameState = 'PLAYING'; generateQuestion(); }, 600); return;
         }
 
         if(state.isBoss) {
             state.bossHp--; updateUI();
             if(state.bossHp <= 0) {
-                showSpeech("擊敗Boss！", true);
-                handleMonsterDeath(monster, () => { endGame(true); }, true); 
-                return;
+                showSpeech("擊敗Boss！", true); handleMonsterDeath(monster, () => { endGame(true); }, true); return;
             }
             showSpeech("造成傷害！", true);
         } else {
@@ -1165,52 +1975,59 @@
                 handleMonsterDeath(monster, () => {
                     if (state.monstersDefeated >= state.maxMonsters) triggerBoss();
                     else {
-                        showSpeech(["小怪消滅！", "下一隻！"][Math.floor(Math.random()*2)], true);
-                        state.monsterHp = state.monsterMaxHp; spawnNextMonster(false); setTimeout(generateQuestion, 800);
+                        showSpeech(["小怪消滅！", "下一隻！"][Math.floor(Math.random()*2)], true); state.monsterHp = state.monsterMaxHp; 
+                        spawnNextMonster(false, () => { gameState = 'PLAYING'; generateQuestion(); }); 
                     }
                 }); return;
             } else showSpeech("造成傷害！", true);
         }
-        setTimeout(() => { isAnimating = false; generateQuestion(); }, 600);
+        safeSetTimeout(() => { gameState = 'PLAYING'; generateQuestion(); }, 600);
     }
 
     function handleMonsterDeath(monsterElement, callback, isBossKill = false) {
         document.getElementById('monster-ui').style.display = 'none'; 
         monsterElement.classList.add('anim-monster-die');
-        
         if (isBossKill) {
-            const flash = document.getElementById('victory-flash');
-            flash.classList.add('show');
-            setTimeout(() => {
-                flash.classList.remove('show');
-                callback();
-            }, 1500); 
-        } else {
-            setTimeout(callback, 600); 
-        }
+            const flash = document.getElementById('victory-flash'); flash.classList.add('show');
+            safeSetTimeout(() => { flash.classList.remove('show'); callback(); }, 1500); 
+        } else { safeSetTimeout(callback, 600); }
     }
 
     function handleWrong(msg, mermaid) {
         playSFX('wrong'); 
         const gameContainer = document.getElementById('game-container');
         gameContainer.classList.add('shake-screen');
-        setTimeout(() => gameContainer.classList.remove('shake-screen'), 400);
+        safeSetTimeout(() => gameContainer.classList.remove('shake-screen'), 400);
 
         if(!mermaid) mermaid = document.getElementById('char-mermaid');
         mermaid.classList.add('anim-hurt');
-        state.hp--; showSpeech(msg + "<br>加油！", false); updateUI();
         
-        if(state.hp <= 0) endGame(false);
-        else setTimeout(() => { isAnimating = false; generateQuestion(); }, 1000);
+        if (!state.isPractice) state.hp--; 
+        
+        const questionUI = document.getElementById('ui-question');
+        const originalQuestion = questionUI.innerText; 
+        const expression = originalQuestion.split('=')[0].trim(); 
+        questionUI.innerText = `${expression} = ${state.correctAnswer}`;
+        questionUI.style.color = "#ff4757"; questionUI.style.textShadow = "0 0 15px #ff0000";
+
+        showSpeech(msg + (state.isPractice ? "<br>再看清楚一點！" : "<br>記住答案喔！"), false); 
+        updateUI();
+        
+        if(state.hp <= 0 && !state.isPractice) {
+            safeSetTimeout(() => endGame(false), 2000); 
+        } else {
+            safeSetTimeout(() => { 
+                questionUI.style.color = "#fff"; questionUI.style.textShadow = "0 0 20px #00ffff, 0 4px 8px rgba(0,0,0,0.8)";
+                gameState = 'PLAYING'; generateQuestion(); 
+            }, 2500); 
+        }
     }
 
     function triggerBoss() {
         state.isBoss = true; state.bossHp = state.baseBossHp; 
         clearInterval(state.timerInterval); gameState = 'WARNING'; 
-        isAnimating = true; 
         
-        document.getElementById('monster-ui').style.display = 'none'; 
-        document.getElementById('char-monster').style.display = 'none';
+        document.getElementById('monster-ui').style.display = 'none'; document.getElementById('char-monster').style.display = 'none';
         
         let bossIndex = 0; 
         if (state.level === 10 || state.level === 20) bossIndex = 9; 
@@ -1220,80 +2037,166 @@
 
         const warningScreen = document.getElementById('boss-warning');
         const bossSilhouette = document.getElementById('warning-boss-silhouette');
-        
-        const bossImageUrl = `images/${monsterImg[bossIndex]}`;
+        const bossImageUrl = `images/${LORE_DB.boss[bossIndex].img}`;
         bossSilhouette.style.backgroundImage = `url('${bossImageUrl}')`;
-        
         document.getElementById('boss-name-display').innerText = getBossName(bossIndex, state.level === 'endless');
         
-        warningScreen.classList.add('show');
-        playSFX('warning');
+        warningScreen.classList.add('show'); playSFX('warning');
 
-        setTimeout(() => {
-            warningScreen.classList.remove('show');
-            setupSprite('boss', bossIndex, false, false); 
-            
-            document.getElementById('monster-hp-fill').style.width = '100%';
-            document.getElementById('monster-ui').style.display = 'block';
-            showSpeech("海怪Boss來襲！", false); 
-            updateUI(); gameState = 'PLAYING'; 
-            isAnimating = false; 
-            generateQuestion(); 
+        safeSetTimeout(() => {
+            warningScreen.classList.remove('show'); setupSprite('boss', bossIndex, false, false); 
+            document.getElementById('monster-hp-fill').style.width = '100%'; document.getElementById('monster-ui').style.display = 'block';
+            let bossQuote = bossData[bossIndex] ? bossData[bossIndex].quote : "見識真正的力量吧！";
+            showSpeech(bossQuote, false, true); 
+            updateUI(); gameState = 'PLAYING'; generateQuestion(); 
         }, 2500);
     }
 
     function endGame(isWin) {
-        clearInterval(state.timerInterval);
-        document.getElementById('monster-ui').style.display = 'none';
-        
+        if(gameState === 'RESULT') return; 
+        gameState = 'RESULT'; clearAllTimers(); document.getElementById('monster-ui').style.display = 'none';
         if(isWin) playSFX('win'); else playSFX('lose');
 
-        gameState = 'RESULT';
         document.getElementById('fade-overlay').style.display = 'none';
+        const pearlUI = document.getElementById('global-pearl-ui'); if (pearlUI) pearlUI.style.display = 'none'; 
 
         const title = document.getElementById('result-title');
         const desc = document.getElementById('result-desc');
         
-        if (state.isEndless) {
-            title.innerText = "⭐ 挑戰結束 ⭐"; title.style.color = "#ffeb3b"; title.style.textShadow = "0 0 15px #ffeb3b";
-            desc.innerHTML = `你總共淨化了 <b style="color:#00ffcc; font-size:32px; text-shadow: 0 0 10px #00ffcc;">${state.endlessScore}</b> 隻海怪！`;
-        } else if(isWin) {
-            title.innerText = "⭐ 關卡完成！ ⭐"; title.style.color = "#ffeb3b"; title.style.textShadow = "0 0 15px #ffeb3b";
-            
-            if (state.level <= 9 && !saveFile.unlockedCards.includes(state.level - 1)) {
-                let unlockedIndex = state.level - 1;
-                let buffType = unlockedIndex % 3;
-                
-                desc.innerHTML = `星光魔法成功淨化了海怪！<br>
-                <span style="color:#00ffcc; font-weight:bold; font-size: 14px;">海怪化為星光，成為了妳的專屬夥伴！</span>
-                <div class="result-card-container">
-                    <div class="poker-card equipped" style="width: 100px; height: 140px; cursor: default;">
-                        <div style="position:absolute; width:100%; height:100%; background:linear-gradient(135deg, #1a2a6c, #0d1b2a); border-radius:8px;"></div>
-                        <img src="images/ui-card-front.png" class="card-bg" onerror="this.style.display='none';">
-                        <img src="images/${partnerImg[unlockedIndex]}" class="card-partner-img" onerror="this.src='images/${monsterImg[unlockedIndex]}'; this.style.filter='hue-rotate(90deg) drop-shadow(0 2px 5px rgba(0,0,0,0.5))';">
-                        <div class="card-buff-desc" style="font-size:8px;">${partnerNames[unlockedIndex]}<br><span style="color:#00ffcc;">${buffNames[buffType].replace('<br>',' ')}</span></div>
-                        <div class="equip-tag" style="font-size:8px;">NEW!</div>
-                    </div>
-                </div>`;
-                saveFile.unlockedCards.push(unlockedIndex);
-            } else if (state.level === 10) {
-                desc.innerHTML = `太強了！你擊敗了最終大魔王！<br><span style="color:#ff4757; font-weight:bold; font-size:15px;">🔥 已為您解鎖【進階模式】 🔥</span>`;
-            } else if (state.level === 19) {
-                desc.innerHTML = `進階考驗通過！<br><span style="color:#ff4757; font-weight:bold; font-size:15px;">👑 已解鎖【進階第10關】真・大魔王 🔥</span>`;
-            } else if (state.level === 20) {
-                desc.innerHTML = `不可思議！你擊敗了真・大魔王！<br><span style="color:#00ffcc; font-weight:bold; font-size:15px;">✨ 已為您解鎖【無限挑戰模式】 ✨</span>`;
+        if (state.isPractice) {
+            if (isWin) {
+                state.sessionPearls = 10; addPearls(state.sessionPearls);
+                title.innerText = "🎓 練習達成 🎓"; title.style.color = "#3498db"; title.style.textShadow = "0 0 15px #3498db";
+                desc.innerHTML = `完成了 50 題數學練習！非常棒！<br><div style="margin: 15px 0; font-size: 18px; color: #f1c40f; text-shadow: 0 2px 4px #000; font-weight: bold;">懸賞金：🐚 +10</div>`;
             } else {
-                desc.innerHTML = `星光魔法成功淨化了海怪！`;
+                title.innerText = "🎓 練習結束 🎓"; title.style.color = "#3498db"; title.style.textShadow = "0 0 15px #3498db";
+                desc.innerHTML = `你完成了 ${state.endlessScore} 題練習。<br>繼續加油喔！`;
             }
-            
-            if (state.level === saveFile.unlockedLevel) saveFile.unlockedLevel++;
-            saveData();
         } else {
-            title.innerText = "💧 挑戰失敗 💧"; title.style.color = "#ff4757"; title.style.textShadow = "0 0 15px #ff4757";
-            desc.innerText = "魔法愛心消耗殆盡，稍微休息一下再出發吧！";
+            if (isWin && !state.isEndless) {
+                if (state.isFirstClear) {
+                    if (state.level === 10 || state.level === 20) state.sessionPearls = 100; 
+                    else state.sessionPearls = 30;  
+                    addPearls(state.sessionPearls);
+                } else { state.sessionPearls = 0; }
+            } else if (isWin && state.isEndless) {
+                state.sessionPearls = state.endlessScore * 5; addPearls(state.sessionPearls);
+            }
+
+            let pearlRewardHTML = "";
+            if (isWin) {
+                if (state.sessionPearls > 0) pearlRewardHTML = `<div style="margin: 15px 0; font-size: 18px; color: #f1c40f; text-shadow: 0 2px 4px #000; font-weight: bold;">過關懸賞金：🐚 +${state.sessionPearls}</div>`;
+                else pearlRewardHTML = `<div style="margin: 15px 0; font-size: 14px; color: #aaa; font-weight: bold;">已通關過此海域，無額外珍珠獎勵</div>`;
+            }
+
+            if (state.isEndless) {
+                title.innerText = "⭐ 挑戰結束 ⭐"; title.style.color = "#ffeb3b"; title.style.textShadow = "0 0 15px #ffeb3b";
+                desc.innerHTML = `你總共淨化了 <b style="color:#00ffcc; font-size:32px; text-shadow: 0 0 10px #00ffcc;">${state.endlessScore}</b> 隻海怪！<br>${pearlRewardHTML}`;
+            } else if(isWin) {
+                title.innerText = "⭐ 關卡完成！ ⭐"; title.style.color = "#ffeb3b"; title.style.textShadow = "0 0 15px #ffeb3b";
+                
+                let extraMsg = "";
+                if (state.level === 1 && state.isFirstClear && !saveFile.unlockedCards.includes(0)) {
+                    let partner = LORE_DB.partner[0];
+                    extraMsg = `
+                    星光魔法成功淨化了海怪！<br>
+                    <span style="color:#00ffcc; font-weight:bold; font-size: 14px;">獲得了第一位專屬神聖夥伴！</span>
+                    <div class="result-card-container">
+                        <div class="poker-card equipped" style="width: 100px; height: 140px; cursor: default;">
+                            <div style="position:absolute; width:100%; height:100%; background:linear-gradient(135deg, #1a2a6c, #0d1b2a); border-radius:8px;"></div>
+                            <img src="images/ui-card-front.png" class="card-bg" onerror="this.style.display='none';">
+                            <img src="images/${partner.img}" class="card-partner-img" onerror="this.style.display='none';">
+                            <div class="card-name-tag" style="font-size:8px;">${partner.name}</div>
+                            <div class="equip-tag" style="font-size:8px;">NEW!</div>
+                        </div>
+                    </div>`;
+                    saveFile.unlockedCards.push(0);
+                } 
+                else if (state.level === 10 && state.isFirstClear) extraMsg = `太強了！你擊敗了最終大魔王！<br><span style="color:#ff4757; font-weight:bold; font-size:15px;">🔥 已為您解鎖【進階模式】 🔥</span>`;
+                else if (state.level === 19 && state.isFirstClear) extraMsg = `進階考驗通過！<br><span style="color:#ff4757; font-weight:bold; font-size:15px;">👑 已解鎖【進階第10關】真・大魔王 🔥</span>`;
+                else if (state.level === 20 && state.isFirstClear) extraMsg = `不可思議！你擊敗了真・大魔王！<br><span style="color:#00ffcc; font-weight:bold; font-size:15px;">✨ 已為您解鎖【無限挑戰模式】 ✨</span>`;
+                else extraMsg = `星光魔法成功淨化了海怪！`;
+                
+                desc.innerHTML = pearlRewardHTML + extraMsg;
+                if (state.level === saveFile.unlockedLevel) saveFile.unlockedLevel++;
+                saveData();
+            } else {
+                title.innerText = "💧 挑戰失敗 💧"; title.style.color = "#ff4757"; title.style.textShadow = "0 0 15px #ff4757";
+                desc.innerHTML = `魔法愛心消耗殆盡，稍微休息一下再出發吧！`;
+            }
         }
-        setTimeout(() => showScreen('result-screen', 'RESULT'), 800); 
+        safeSetTimeout(() => showScreen('result-screen', 'RESULT'), 800); 
     }
+
+    function updateRoomDisplay() {
+        const bgLayer = document.getElementById('room-bg-layer');
+        const bedLayer = document.getElementById('room-bed-layer');
+        const habitatLayer = document.getElementById('room-habitat-layer');
+        const outfitLayer = document.getElementById('room-outfit-layer');
+        const emptySrc = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
+
+        let bgData = ITEM_DB.bg.find(i => i.id === saveFile.equipped.bg);
+        if(bgData) { bgLayer.src = `images/${bgData.img}`; bgLayer.style.display = 'block'; } else { bgLayer.src = emptySrc; }
+
+        let bedData = ITEM_DB.bed.find(i => i.id === saveFile.equipped.bed);
+        if(bedData) { bedLayer.src = `images/${bedData.img}`; bedLayer.style.display = 'block'; } else { bedLayer.src = emptySrc; bedLayer.style.display = 'none'; }
+
+        let habitatData = ITEM_DB.habitat.find(i => i.id === saveFile.equipped.habitat);
+        if(habitatData) { habitatLayer.src = `images/${habitatData.img}`; habitatLayer.style.display = 'block'; } else { habitatLayer.src = emptySrc; habitatLayer.style.display = 'none'; }
+
+        let outfitData = ITEM_DB.outfit.find(i => i.id === saveFile.equipped.outfit);
+        if(outfitData) { outfitLayer.src = `images/${outfitData.img}`; outfitLayer.style.display = 'block'; } else { outfitLayer.src = 'images/char-mermaid-default.png'; }
+    }
+
+    function openRoomModal(category) {
+        let title = "";
+        if(category === 'bg') title = "選擇房間背景";
+        else if(category === 'outfit') title = "選擇華麗套裝";
+        else if(category === 'habitat') title = "選擇夥伴的窩";
+        else if(category === 'bed') title = "選擇公主床舖";
+        else if(category === 'title') title = "選擇星語稱號";
+        
+        document.getElementById('room-modal-title').innerText = title;
+        document.getElementById('room-item-modal').style.display = 'flex';
+        const grid = document.getElementById('room-item-grid');
+        grid.innerHTML = '';
+
+        if (category === 'title') {
+            if (saveFile.unlockedTitles.length === 0) {
+                grid.innerHTML = '<div style="color:#aaa; text-align:center; grid-column: 1 / -1; margin-top:20px;">尚未獲得任何稱號，快去魔法珍珠商店喚醒吧！</div>'; return;
+            }
+            saveFile.unlockedTitles.forEach(tName => {
+                const isEquipped = (saveFile.equippedTitle === tName);
+                let card = document.createElement('div');
+                card.className = `room-item-card ${isEquipped ? 'equipped' : ''}`; card.style.background = 'rgba(0,0,0,0.7)';
+                card.onclick = () => { saveFile.equippedTitle = tName; saveData(); openRoomModal('title'); };
+                card.innerHTML = `<div style="font-size:16px; font-weight:bold; text-align:center; color:#00ffff; width:100%; padding:10px;">${tName}</div>${isEquipped ? '<div class="equip-tag" style="position:absolute; top:4px; right:4px; font-size:8px; background:#00ffcc; color:#000; padding:2px 5px; border-radius:6px; font-weight:bold;">裝備中</div>' : ''}`;
+                grid.appendChild(card);
+            });
+            return;
+        }
+
+        const items = ITEM_DB[category];
+        if(!items || items.length === 0) { grid.innerHTML = '<div style="color:#aaa; text-align:center; grid-column: 1 / -1; margin-top:20px;">尚無道具資料</div>'; return; }
+
+        items.forEach(item => {
+            const isOwned = saveFile.inventory.includes(item.id);
+            const isEquipped = saveFile.equipped[category] === item.id;
+            let card = document.createElement('div');
+            card.className = `room-item-card ${isEquipped ? 'equipped' : ''} ${!isOwned ? 'locked' : ''}`;
+            if (isOwned) card.onclick = () => equipRoomItem(category, item.id);
+            else card.onclick = () => alert("尚未擁有此道具！\n\n請透過主選單的【🐚 魔法珍珠商店】喚醒獲得喔！");
+
+            card.innerHTML = `<img src="images/${item.img}" onerror="this.style.display='none';"><div class="room-item-name">${item.name}</div>${isEquipped ? '<div class="equip-tag" style="position:absolute; top:4px; right:4px; font-size:8px; background:#00ffcc; color:#000; padding:2px 5px; border-radius:6px; font-weight:bold;">裝備中</div>' : ''}${!isOwned ? '<div style="position:absolute; font-size:24px; text-shadow: 0 2px 4px #000;">🔒</div>' : ''}`;
+            grid.appendChild(card);
+        });
+    }
+
+    function equipRoomItem(category, itemId) {
+        saveFile.equipped[category] = itemId; saveData(); updateRoomDisplay(); openRoomModal(category); 
+    }
+    function closeRoomModal() { document.getElementById('room-item-modal').style.display = 'none'; }
 </script>
 </body>
 </html>
+    
