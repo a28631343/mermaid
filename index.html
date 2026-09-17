@@ -189,6 +189,7 @@
         .nav-item:hover .nav-icon-img, .nav-item:active .nav-icon-img { transform: scale(1.15); filter: drop-shadow(0 0 10px rgba(0,255,255,0.8)); }
         .nav-item:hover .nav-text, .nav-item:active .nav-text { color: #00ffff; }
 
+        /* ====== 房間系統 UI ====== */
         .room-display { position: relative; width: 100%; height: 60vh; margin-top: 5px; border-radius: 15px; overflow: hidden; border: 3px solid rgba(0, 255, 255, 0.5); box-shadow: 0 0 20px rgba(0, 255, 255, 0.3); background-color: #0d1b2a; }
         .room-layer { position: absolute; bottom: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transition: all 0.3s ease;}
         #room-outfit-layer { object-fit: contain; bottom: 5%; left: 50%; transform: translateX(-50%); height: 60%; max-width: 60%; z-index: 4; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5)); }
@@ -217,6 +218,7 @@
         .room-item-card.locked { filter: grayscale(100%) brightness(0.4); cursor: not-allowed; }
         .room-item-name { position: absolute; bottom: 5px; font-size: 10px; font-weight: bold; color: #fff; background: rgba(0,0,0,0.7); padding: 2px 5px; border-radius: 4px; text-align: center; width: 90%;}
 
+        /* ====== 魔法珍珠商店專屬樣式 ====== */
         #shop-screen { background-image: url('images/bg-altar.jpg'); background-color: #050a1f; }
         .shop-altar-container { flex: 1; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; width: 100%; position: relative; }
         .altar-shell { width: 80%; max-width: 400px; object-fit: contain; margin-bottom: 20px; filter: drop-shadow(0 20px 30px rgba(0,0,0,0.8)) drop-shadow(0 0 30px rgba(0,255,255,0.3)); transition: transform 0.3s ease; margin-top: 25vh;}
@@ -238,6 +240,7 @@
         .gacha-result-img { width: 80%; height: 80%; object-fit: contain; z-index: 2; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.8)); animation: floatGacha 3s ease-in-out infinite; }
         @keyframes floatGacha { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
+        /* ====== 卡牌收藏冊 (魔法書 UI) ====== */
         #gallery-screen { background-image: url('images/bg-main.jpg'); background-color: #112240; justify-content: flex-start; padding-top: max(45px, env(safe-area-inset-top, 45px)); }
         .book-container { width: 96%; max-width: 500px; display: flex; flex-direction: column; align-items: center; margin-top: 10px; flex: 1; margin-bottom: 15px;}
         .book-tabs { display: flex; justify-content: flex-start; width: 92%; margin-bottom: -2px; z-index: 2; gap: 5px; }
@@ -270,6 +273,7 @@
         .cd-func-tag { background: rgba(0,255,255,0.2); border: 1px solid #00ffff; padding: 4px 12px; border-radius: 15px; font-size: 13px; color: #fff; font-weight: bold; margin-bottom: 15px;}
         .cd-desc { background: rgba(0,0,0,0.5); padding: 15px; border-radius: 10px; border-left: 3px solid #00ffff; color: #ddd; font-size: 14px; line-height: 1.6; text-align: left; width: 100%; margin-bottom: 20px;}
 
+        /* ====== 戰鬥畫面排版 ====== */
         #gameplay-screen { background-color: #000851; z-index: 5; padding: 0 !important; overflow: hidden; background: none; display: flex; flex-direction: column; height: 100%; width: 100%; }
         .top-bar { display: flex; justify-content: space-between; align-items: center; padding: max(15px, env(safe-area-inset-top, 15px)) 15px 8px 15px; width: 100%; background: rgba(10, 20, 50, 0.85); border-bottom: 1px solid rgba(255,255,255,0.2); z-index: 10; flex-shrink: 0; }
         .btn-exit { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255,255,255,0.5); border-radius: 12px; color: #fff; padding: 5px 12px; cursor: pointer; font-size: 14px; font-weight: bold; backdrop-filter: blur(5px); margin-right: 10px; transition: all 0.2s; flex-shrink: 0; }
@@ -402,14 +406,16 @@
     <span class="currency-amount" id="global-pearl-amount">0</span>
 </div>
 
-<audio id="bgm-main" src="audio/bgm-main.mp3" loop></audio>
-<audio id="bgm-battle" src="audio/bgm-battle.mp3" loop></audio>
+<!-- 修正：加上 preload="none" 防止網頁一開就下載幾十 MB 的音樂卡死網路 -->
+<audio id="bgm-main" preload="none"><source src="audio/bgm-main.mp3" type="audio/mpeg"></audio>
+<audio id="bgm-battle" preload="none"><source src="audio/bgm-battle.mp3" type="audio/mpeg"></audio>
 
 <div id="game-container">
     <div id="fade-overlay"></div>
     
     <div id="intro-screen" class="screen active">
-        <video id="intro-video" src="images/intro.mp4" autoplay muted playsinline></video>
+        <!-- 修正：拿掉 src，改由 JS 控制載入，並取消 preload -->
+        <video id="intro-video" muted playsinline preload="none"></video>
         <button id="skip-intro-btn">跳過 (Skip)</button>
     </div>
 
@@ -558,6 +564,7 @@
             
             <div class="book-page">
                 <div id="book-grid" class="book-grid">
+                    <!-- 圖鑑內容由 JS 動態生成 -->
                 </div>
                 
                 <div class="page-nav">
@@ -569,6 +576,7 @@
         </div>
     </div>
 
+    <!-- 卡牌故事彈窗 -->
     <div id="card-detail-modal" class="modal-overlay">
         <div class="settings-content card-detail-content">
             <div class="settings-close" onclick="closeCardDetail()">×</div>
@@ -635,6 +643,7 @@
         </div>
     </div>
 
+    <!-- 夥伴進場特效 -->
     <div id="partner-overlay" class="partner-overlay" style="display: none;">
         <div class="partner-overlay-content">
             <img id="partner-overlay-img" src="" class="partner-overlay-img" onerror="this.style.display='none';">
@@ -794,7 +803,7 @@
             { name: "貪吃小鯊魚", img: "mob-3.png", func: "純收藏卡牌", desc: "肚子永遠填不飽，看到什麼發光的東西都想咬一口的調皮鬼。" }
         ],
         boss: [
-            { name: "獨角海馬", img: "monster-1.png", func: "純收藏卡牌", desc: "受到深淵污染而變異海馬，頭上堅硬的角是牠最強的武器。" },
+            { name: "獨角海馬", img: "monster-1.png", func: "純收藏卡牌", desc: "受到深淵污染而變異的海馬，頭上堅硬的角是牠最強的武器。" },
             { name: "雙頭海蛇", img: "monster-2.png", func: "純收藏卡牌", desc: "擁有兩個頭的狡猾海蛇，噴吐出的毒液會干擾答題者的視線。" },
             { name: "三尾燈籠魚", img: "monster-3.png", func: "純收藏卡牌", desc: "深海的潛伏者，頭頂閃爍的燈籠會讓人產生時間錯亂的幻覺。" },
             { name: "四翼魔化飛魚", img: "monster-4.png", func: "純收藏卡牌", desc: "速度極快的魔化生物，能在水面上高速滑行，讓人難以捕捉。" },
@@ -892,6 +901,7 @@
     let activeTimeouts = [];
     let introFinished = false;
     let hasStartedAudio = false; 
+    let isGameInitialized = false; 
 
     function safeSetTimeout(fn, delay) {
         let id = setTimeout(() => {
@@ -907,55 +917,48 @@
         activeTimeouts = [];
     }
 
-    // ====== 新增：圖片預載入系統 ======
+    // ====== 取消龐大的圖片下載，只保留基本外框，且加上強制防呆機制 ======
     document.addEventListener("DOMContentLoaded", function() {
         const essentialImages = [
-            'images/bg-main.jpg', 'images/bg-lobby.jpg', 'images/bg-underwater.jpg', 'images/bg-result.jpg', 'images/bg-altar.jpg',
-            'images/btn-primary.png', 'images/btn-answer.png', 'images/btn-level.png', 
-            'images/ui-pearl-panel.png', 'images/ui-pearl-icon.png', 'images/ui-nav-panel.png',
-            'images/ui-nav-icon-room.png', 'images/ui-nav-icon-shop.png', 'images/ui-nav-icon-album.png', 'images/ui-nav-icon-settings.png',
-            'images/ui-card-front.png', 'images/ui-card-back.png', 'images/ui-speech-bg.png',
-            'images/ui-altar-shell-closed.png', 'images/ui-altar-shell-open.png',
-            'images/icon-heart-full.png', 'images/icon-heart-empty.png', 'images/logo.png',
-            'images/char-mermaid-default.png', 'images/char-mermaid-snow.png', 'images/char-mermaid-star.png',
-            'images/char-mermaid-default-atk.png', 'images/char-mermaid-snow-atk.png', 'images/char-mermaid-star-atk.png',
-            'images/mob-practice.png'
+            'images/bg-main.jpg', 'images/bg-lobby.jpg', 'images/btn-primary.png', 'images/logo.png'
         ];
         
-        let allImagesToLoad = [...essentialImages];
-        ['partner', 'mob', 'boss'].forEach(cat => {
-            LORE_DB[cat].forEach(item => allImagesToLoad.push(`images/${item.img}`));
-        });
-        ['outfit', 'bg', 'bed', 'habitat'].forEach(cat => {
-            ITEM_DB[cat].forEach(item => allImagesToLoad.push(`images/${item.img}`));
-        });
-
-        allImagesToLoad = [...new Set(allImagesToLoad)];
-
         let loadedCount = 0;
         const loadingBar = document.getElementById('loading-bar');
         const loadingText = document.getElementById('loading-text');
 
-        if (allImagesToLoad.length === 0) {
-            finishLoading();
-        } else {
-            allImagesToLoad.forEach(src => {
-                const img = new Image();
-                img.onload = img.onerror = () => {
-                    loadedCount++;
-                    let pct = Math.floor((loadedCount / allImagesToLoad.length) * 100);
-                    if(loadingBar) loadingBar.style.width = pct + '%';
-                    if(loadingText) loadingText.innerText = pct + '%';
-                    if (loadedCount >= allImagesToLoad.length) {
-                        setTimeout(finishLoading, 300);
-                    }
-                };
-                img.src = src;
-            });
-        }
+        // 啟動圖片預載
+        essentialImages.forEach(src => {
+            const img = new Image();
+            img.onload = img.onerror = () => {
+                if (isGameInitialized) return;
+                loadedCount++;
+                let pct = Math.floor((loadedCount / essentialImages.length) * 100);
+                if(loadingBar) loadingBar.style.width = pct + '%';
+                if(loadingText) loadingText.innerText = pct + '%';
+                
+                if (loadedCount >= essentialImages.length) {
+                    setTimeout(finishLoading, 200);
+                }
+            };
+            img.src = src;
+        });
+
+        // 強制保險機制：不管圖片有沒有載完，2.5秒後直接進入遊戲
+        setTimeout(() => {
+            if (!isGameInitialized) {
+                console.warn("資源讀取時間過長，啟動強制進入遊戲程序。");
+                if(loadingBar) loadingBar.style.width = '100%';
+                if(loadingText) loadingText.innerText = '100%';
+                finishLoading();
+            }
+        }, 2500); 
     });
 
     function finishLoading() {
+        if (isGameInitialized) return;
+        isGameInitialized = true; 
+        
         const ls = document.getElementById('loading-screen');
         if(ls) {
             ls.style.opacity = '0';
@@ -988,12 +991,20 @@
         const skipBtn = document.getElementById('skip-intro-btn');
         
         if (introVideo) {
+            // 在此處才賦予影片來源，避免一開網頁就佔據頻寬
+            introVideo.src = "images/intro.mp4";
+            introVideo.play().catch(e => finishIntro());
+            
             introVideo.addEventListener('ended', finishIntro);
             introVideo.addEventListener('error', finishIntro); 
+            
             let isPlaying = false;
             introVideo.addEventListener('playing', () => { isPlaying = true; });
-            setTimeout(() => { if (!isPlaying && !introFinished) finishIntro(); }, 2000);
+            setTimeout(() => { if (!isPlaying && !introFinished) finishIntro(); }, 2500);
+        } else {
+            finishIntro();
         }
+        
         if (skipBtn) {
             skipBtn.addEventListener('click', finishIntro);
         }
@@ -1004,7 +1015,13 @@
         if (introFinished) return;
         introFinished = true; 
         const introVideo = document.getElementById('intro-video');
-        try { if (introVideo) introVideo.pause(); } catch(err) {}
+        if (introVideo) {
+            try { 
+                introVideo.pause(); 
+                introVideo.removeAttribute('src'); // 拔掉來源，徹底釋放頻寬
+                introVideo.load();
+            } catch(err) {}
+        }
         showScreen('main-screen', 'MENU');
     }
 
@@ -2185,7 +2202,7 @@
                 
                 if (state.level === saveFile.unlockedLevel) {
                     saveFile.unlockedLevel++;
-                    saveData(); // 立刻存檔更新狀態
+                    saveData();
                 }
             } else {
                 title.innerText = "💧 挑戰失敗 💧"; title.style.color = "#ff4757"; title.style.textShadow = "0 0 15px #ff4757";
@@ -2264,5 +2281,3 @@
     }
     function closeRoomModal() { document.getElementById('room-item-modal').style.display = 'none'; }
 </script>
-</body>
-</html>
