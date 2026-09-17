@@ -38,6 +38,17 @@
 
         #fade-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: #000; z-index: 99999; transition: opacity 1.5s ease-in-out; pointer-events: none; }
 
+        /* ====== 預載入畫面 ====== */
+        #loading-screen {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: #050a1f; 
+            z-index: 999999; display: flex; flex-direction: column; justify-content: center; align-items: center; 
+            transition: opacity 0.5s ease;
+        }
+        .loading-title { color: #00ffff; font-size: 24px; font-weight: bold; margin-bottom: 20px; text-shadow: 0 0 10px rgba(0,255,255,0.8); letter-spacing: 2px;}
+        .loading-bar-wrap { width: 60%; max-width: 300px; height: 12px; background: rgba(255,255,255,0.1); border-radius: 6px; overflow: hidden; border: 1px solid rgba(0,255,255,0.3);}
+        #loading-bar { width: 0%; height: 100%; background: linear-gradient(90deg, #00bfff, #00ffff); transition: width 0.1s; }
+        #loading-text { margin-top: 10px; font-size: 14px; color: #00ffff; font-weight: bold; }
+
         .screen { 
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
             display: flex; flex-direction: column; justify-content: flex-start; align-items: center; 
@@ -178,7 +189,6 @@
         .nav-item:hover .nav-icon-img, .nav-item:active .nav-icon-img { transform: scale(1.15); filter: drop-shadow(0 0 10px rgba(0,255,255,0.8)); }
         .nav-item:hover .nav-text, .nav-item:active .nav-text { color: #00ffff; }
 
-        /* ====== 房間系統 UI ====== */
         .room-display { position: relative; width: 100%; height: 60vh; margin-top: 5px; border-radius: 15px; overflow: hidden; border: 3px solid rgba(0, 255, 255, 0.5); box-shadow: 0 0 20px rgba(0, 255, 255, 0.3); background-color: #0d1b2a; }
         .room-layer { position: absolute; bottom: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transition: all 0.3s ease;}
         #room-outfit-layer { object-fit: contain; bottom: 5%; left: 50%; transform: translateX(-50%); height: 60%; max-width: 60%; z-index: 4; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5)); }
@@ -207,10 +217,9 @@
         .room-item-card.locked { filter: grayscale(100%) brightness(0.4); cursor: not-allowed; }
         .room-item-name { position: absolute; bottom: 5px; font-size: 10px; font-weight: bold; color: #fff; background: rgba(0,0,0,0.7); padding: 2px 5px; border-radius: 4px; text-align: center; width: 90%;}
 
-        /* ====== 魔法珍珠商店專屬樣式 ====== */
         #shop-screen { background-image: url('images/bg-altar.jpg'); background-color: #050a1f; }
         .shop-altar-container { flex: 1; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; width: 100%; position: relative; }
-        .altar-shell { width: 80%; max-width: 400px; object-fit: contain; filter: drop-shadow(0 20px 30px rgba(0,0,0,0.8)) drop-shadow(0 0 30px rgba(0,255,255,0.3)); transition: transform 0.3s ease; margin-top: 25vh;}
+        .altar-shell { width: 80%; max-width: 400px; object-fit: contain; margin-bottom: 20px; filter: drop-shadow(0 20px 30px rgba(0,0,0,0.8)) drop-shadow(0 0 30px rgba(0,255,255,0.3)); transition: transform 0.3s ease; margin-top: 25vh;}
         .altar-shell.shaking { animation: shake-shell 0.5s ease-in-out infinite alternate; filter: drop-shadow(0 0 50px rgba(255,255,255,0.8)) brightness(1.3); }
         @keyframes shake-shell { 0% { transform: rotate(-5deg) scale(1); } 100% { transform: rotate(5deg) scale(1.05); } }
         
@@ -229,7 +238,6 @@
         .gacha-result-img { width: 80%; height: 80%; object-fit: contain; z-index: 2; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.8)); animation: floatGacha 3s ease-in-out infinite; }
         @keyframes floatGacha { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
-        /* ====== 卡牌收藏冊 (魔法書 UI) ====== */
         #gallery-screen { background-image: url('images/bg-main.jpg'); background-color: #112240; justify-content: flex-start; padding-top: max(45px, env(safe-area-inset-top, 45px)); }
         .book-container { width: 96%; max-width: 500px; display: flex; flex-direction: column; align-items: center; margin-top: 10px; flex: 1; margin-bottom: 15px;}
         .book-tabs { display: flex; justify-content: flex-start; width: 92%; margin-bottom: -2px; z-index: 2; gap: 5px; }
@@ -255,7 +263,6 @@
         .poker-card.equipped { border: 2px solid #00ffff; filter: drop-shadow(0 0 10px #00ffff) brightness(1.1); transform: translateY(-2px); }
         .equip-tag { position: absolute; top: 4px; right: 4px; background: linear-gradient(135deg, #00ffcc, #00bfff); color: #000; font-size: 10px; font-weight: 900; padding: 3px 6px; border-radius: 6px; z-index: 4; box-shadow: 0 2px 4px rgba(0,0,0,0.6); letter-spacing: 0.5px; }
 
-        /* 卡牌詳細故事視窗 */
         .card-detail-content { width: 85%; max-width: 340px; padding: 25px 20px; display: flex; flex-direction: column; align-items: center;}
         .cd-img-box { width: 120px; height: 120px; border-radius: 50%; background: radial-gradient(circle, rgba(0,255,255,0.2) 0%, rgba(0,0,0,0) 70%); display: flex; justify-content: center; align-items: center; margin-bottom: 10px; filter: drop-shadow(0 0 15px rgba(0,255,255,0.3));}
         .cd-img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.5));}
@@ -263,7 +270,6 @@
         .cd-func-tag { background: rgba(0,255,255,0.2); border: 1px solid #00ffff; padding: 4px 12px; border-radius: 15px; font-size: 13px; color: #fff; font-weight: bold; margin-bottom: 15px;}
         .cd-desc { background: rgba(0,0,0,0.5); padding: 15px; border-radius: 10px; border-left: 3px solid #00ffff; color: #ddd; font-size: 14px; line-height: 1.6; text-align: left; width: 100%; margin-bottom: 20px;}
 
-        /* ====== 戰鬥畫面排版 ====== */
         #gameplay-screen { background-color: #000851; z-index: 5; padding: 0 !important; overflow: hidden; background: none; display: flex; flex-direction: column; height: 100%; width: 100%; }
         .top-bar { display: flex; justify-content: space-between; align-items: center; padding: max(15px, env(safe-area-inset-top, 15px)) 15px 8px 15px; width: 100%; background: rgba(10, 20, 50, 0.85); border-bottom: 1px solid rgba(255,255,255,0.2); z-index: 10; flex-shrink: 0; }
         .btn-exit { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255,255,255,0.5); border-radius: 12px; color: #fff; padding: 5px 12px; cursor: pointer; font-size: 14px; font-weight: bold; backdrop-filter: blur(5px); margin-right: 10px; transition: all 0.2s; flex-shrink: 0; }
@@ -382,17 +388,24 @@
 </head>
 <body>
 
-<!-- 音效與資料載入置於頂部 -->
+<!-- ====== 預載入進度畫面 ====== -->
+<div id="loading-screen">
+    <h2 class="loading-title">正在讀取魔法海域...</h2>
+    <div class="loading-bar-wrap">
+        <div id="loading-bar"></div>
+    </div>
+    <div id="loading-text">0%</div>
+</div>
+
+<div class="currency-display" id="global-pearl-ui" style="display: none;">
+    <img src="images/ui-pearl-icon.png" style="width: 20px; height: 20px; margin-right: 5px; object-fit: contain; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.5));" onerror="this.style.display='none';">
+    <span class="currency-amount" id="global-pearl-amount">0</span>
+</div>
+
 <audio id="bgm-main" src="audio/bgm-main.mp3" loop></audio>
 <audio id="bgm-battle" src="audio/bgm-battle.mp3" loop></audio>
 
 <div id="game-container">
-    
-    <div class="currency-display" id="global-pearl-ui" style="display: none;">
-        <img src="images/ui-pearl-icon.png" style="width: 20px; height: 20px; margin-right: 5px; object-fit: contain; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.5));" onerror="this.style.display='none';">
-        <span class="currency-amount" id="global-pearl-amount">0</span>
-    </div>
-
     <div id="fade-overlay"></div>
     
     <div id="intro-screen" class="screen active">
@@ -545,7 +558,6 @@
             
             <div class="book-page">
                 <div id="book-grid" class="book-grid">
-                    <!-- 圖鑑內容由 JS 動態生成 -->
                 </div>
                 
                 <div class="page-nav">
@@ -557,7 +569,6 @@
         </div>
     </div>
 
-    <!-- 卡牌故事彈窗 -->
     <div id="card-detail-modal" class="modal-overlay">
         <div class="settings-content card-detail-content">
             <div class="settings-close" onclick="closeCardDetail()">×</div>
@@ -624,7 +635,6 @@
         </div>
     </div>
 
-    <!-- 夥伴進場特效 -->
     <div id="partner-overlay" class="partner-overlay" style="display: none;">
         <div class="partner-overlay-content">
             <img id="partner-overlay-img" src="" class="partner-overlay-img" onerror="this.style.display='none';">
@@ -706,8 +716,9 @@
         </div>
     </div>
 
+    <!-- 教學視窗修復高度自適應 -->
     <div id="tutorial-modal" class="modal-overlay">
-        <div class="settings-content" style="width: 90%; height: 75vh; max-width: 400px; display: flex; flex-direction: column; padding: 15px; box-sizing: border-box;">
+        <div class="settings-content" style="width: 90%; height: 85vh; max-width: 400px; display: flex; flex-direction: column; padding: 15px; box-sizing: border-box;">
             <div class="settings-close" onclick="closeTutorial()">×</div>
             <h2 style="margin-top: 0; color: #00ffff; margin-bottom: 10px;">冒險指南</h2>
             
@@ -721,7 +732,7 @@
             <div style="flex: 1; overflow-y: auto; text-align: left; font-size: 14px; line-height: 1.6; padding: 0 5px;" id="tut-content">
             </div>
             
-            <button class="btn" style="width: 100%; height: 50px; font-size: 16px; margin-top: 15px; margin-bottom: 0;" onclick="closeTutorial()">我了解了</button>
+            <button class="btn" style="width: 100%; height: 50px; font-size: 16px; margin-top: 15px; margin-bottom: 0; flex-shrink: 0;" onclick="closeTutorial()">我了解了</button>
         </div>
     </div>
 
@@ -765,7 +776,6 @@
         "深海之瞳", "魔法先驅", "海王星的微笑", "星際漫遊者", "亞特蘭提斯傳奇"
     ];
 
-    // ====== 修正：統一鍵值對應 (partner, mob, boss) ======
     const LORE_DB = {
         partner: [
             { name: "聖光小海馬", img: "partner-1.png", func: "💖 愛心上限+1", desc: "帶來治癒能量的可愛海馬，能在危急時保護公主的生命。" },
@@ -784,7 +794,7 @@
             { name: "貪吃小鯊魚", img: "mob-3.png", func: "純收藏卡牌", desc: "肚子永遠填不飽，看到什麼發光的東西都想咬一口的調皮鬼。" }
         ],
         boss: [
-            { name: "獨角海馬", img: "monster-1.png", func: "純收藏卡牌", desc: "受到深淵污染而變異的海馬，頭上堅硬的角是牠最強的武器。" },
+            { name: "獨角海馬", img: "monster-1.png", func: "純收藏卡牌", desc: "受到深淵污染而變異海馬，頭上堅硬的角是牠最強的武器。" },
             { name: "雙頭海蛇", img: "monster-2.png", func: "純收藏卡牌", desc: "擁有兩個頭的狡猾海蛇，噴吐出的毒液會干擾答題者的視線。" },
             { name: "三尾燈籠魚", img: "monster-3.png", func: "純收藏卡牌", desc: "深海的潛伏者，頭頂閃爍的燈籠會讓人產生時間錯亂的幻覺。" },
             { name: "四翼魔化飛魚", img: "monster-4.png", func: "純收藏卡牌", desc: "速度極快的魔化生物，能在水面上高速滑行，讓人難以捕捉。" },
@@ -856,7 +866,6 @@
         return parsedData;
     }
 
-    // ====== 修正：將所有全域變數集中宣告 ======
     let saveFile = loadAndVerifySaveData();
     let state = { 
         level: 1, hp: 3, maxHp: 3, 
@@ -870,7 +879,7 @@
 
     let volBGM = 0.5;
     let volSFX = 0.5;
-    let gameState = 'INTRO'; 
+    let gameState = 'LOADING'; 
     let currentViewingAdvanced = false; 
     let bubbleInterval = null; 
     let partnerSwimInterval = null; 
@@ -882,7 +891,7 @@
 
     let activeTimeouts = [];
     let introFinished = false;
-    let hasStartedAudio = false; // 修復「開始冒險」按鈕失效的關鍵
+    let hasStartedAudio = false; 
 
     function safeSetTimeout(fn, delay) {
         let id = setTimeout(() => {
@@ -898,8 +907,65 @@
         activeTimeouts = [];
     }
 
-    // 系統初始化
+    // ====== 新增：圖片預載入系統 ======
     document.addEventListener("DOMContentLoaded", function() {
+        const essentialImages = [
+            'images/bg-main.jpg', 'images/bg-lobby.jpg', 'images/bg-underwater.jpg', 'images/bg-result.jpg', 'images/bg-altar.jpg',
+            'images/btn-primary.png', 'images/btn-answer.png', 'images/btn-level.png', 
+            'images/ui-pearl-panel.png', 'images/ui-pearl-icon.png', 'images/ui-nav-panel.png',
+            'images/ui-nav-icon-room.png', 'images/ui-nav-icon-shop.png', 'images/ui-nav-icon-album.png', 'images/ui-nav-icon-settings.png',
+            'images/ui-card-front.png', 'images/ui-card-back.png', 'images/ui-speech-bg.png',
+            'images/ui-altar-shell-closed.png', 'images/ui-altar-shell-open.png',
+            'images/icon-heart-full.png', 'images/icon-heart-empty.png', 'images/logo.png',
+            'images/char-mermaid-default.png', 'images/char-mermaid-snow.png', 'images/char-mermaid-star.png',
+            'images/char-mermaid-default-atk.png', 'images/char-mermaid-snow-atk.png', 'images/char-mermaid-star-atk.png',
+            'images/mob-practice.png'
+        ];
+        
+        let allImagesToLoad = [...essentialImages];
+        ['partner', 'mob', 'boss'].forEach(cat => {
+            LORE_DB[cat].forEach(item => allImagesToLoad.push(`images/${item.img}`));
+        });
+        ['outfit', 'bg', 'bed', 'habitat'].forEach(cat => {
+            ITEM_DB[cat].forEach(item => allImagesToLoad.push(`images/${item.img}`));
+        });
+
+        allImagesToLoad = [...new Set(allImagesToLoad)];
+
+        let loadedCount = 0;
+        const loadingBar = document.getElementById('loading-bar');
+        const loadingText = document.getElementById('loading-text');
+
+        if (allImagesToLoad.length === 0) {
+            finishLoading();
+        } else {
+            allImagesToLoad.forEach(src => {
+                const img = new Image();
+                img.onload = img.onerror = () => {
+                    loadedCount++;
+                    let pct = Math.floor((loadedCount / allImagesToLoad.length) * 100);
+                    if(loadingBar) loadingBar.style.width = pct + '%';
+                    if(loadingText) loadingText.innerText = pct + '%';
+                    if (loadedCount >= allImagesToLoad.length) {
+                        setTimeout(finishLoading, 300);
+                    }
+                };
+                img.src = src;
+            });
+        }
+    });
+
+    function finishLoading() {
+        const ls = document.getElementById('loading-screen');
+        if(ls) {
+            ls.style.opacity = '0';
+            setTimeout(() => ls.style.display = 'none', 500);
+        }
+        initGameSequence();
+    }
+
+    function initGameSequence() {
+        gameState = 'INTRO';
         const overlay = document.getElementById('fade-overlay');
         if(overlay) {
             safeSetTimeout(() => { overlay.style.opacity = '0'; }, 100);
@@ -924,13 +990,14 @@
         if (introVideo) {
             introVideo.addEventListener('ended', finishIntro);
             introVideo.addEventListener('error', finishIntro); 
+            let isPlaying = false;
+            introVideo.addEventListener('playing', () => { isPlaying = true; });
+            setTimeout(() => { if (!isPlaying && !introFinished) finishIntro(); }, 2000);
         }
         if (skipBtn) {
             skipBtn.addEventListener('click', finishIntro);
         }
-        
-        setTimeout(() => { if (!introFinished) finishIntro(); }, 10000);
-    });
+    }
 
     function finishIntro(e) {
         if (e && e.stopPropagation) e.stopPropagation(); 
@@ -1183,6 +1250,10 @@
             curGalleryPage = 0;
             renderGallery();
         }
+        
+        if (stateTag === 'LEVEL_SELECT') {
+            updateLevelUI();
+        }
 
         if(hasStartedAudio) updateBGM();
 
@@ -1394,81 +1465,6 @@
         saveData(); renderGallery(); openCardDetail(selectedDetailItem.tab, selectedDetailItem.index); 
     }
 
-    function getBossName(levelIndex, isEndless = false) {
-        if (isEndless) {
-            let prefix = Math.random() > 0.5 ? "深淵" : "";
-            if (levelIndex === 9) return prefix ? "十面埋伏-深淵海神克蘇魯" : "十面埋伏-海神克蘇魯的虛影";
-            return prefix + bossData[levelIndex].name;
-        }
-        if (state.level === 10) return "十面埋伏-海神克蘇魯的虛影";
-        if (state.level === 20) return "十面埋伏-深淵海神克蘇魯";
-        if (state.level > 10) return "深淵" + bossData[levelIndex].name;
-        return bossData[levelIndex].name;
-    }
-
-    function switchChapter(isAdvanced) {
-        const isUnlockedAdv = saveFile.unlockedLevel >= 11;
-        if (isAdvanced && !isUnlockedAdv) { alert("請先通關「普通海域」的最終大魔王，才能解鎖進階海域！"); return; }
-        currentViewingAdvanced = isAdvanced;
-        const tabNormal = document.getElementById('tab-normal'); const tabAdvanced = document.getElementById('tab-advanced');
-        if (isAdvanced) { tabAdvanced.classList.add('active'); tabNormal.classList.remove('active'); } 
-        else { tabNormal.classList.add('active'); tabAdvanced.classList.remove('active'); }
-        updateLevelUI();
-    }
-
-    function updateLevelUI() {
-        const grid = document.getElementById('level-grid');
-        const tabAdvanced = document.getElementById('tab-advanced');
-        const specialUI = document.getElementById('special-modes-ui');
-        if(!grid) return;
-
-        grid.innerHTML = '';
-        const isUnlockedAdv = saveFile.unlockedLevel >= 11;
-        if (!isUnlockedAdv) tabAdvanced.classList.add('locked-tab'); else tabAdvanced.classList.remove('locked-tab');
-
-        for(let i = 1; i <= 10; i++) {
-            let actualLevel = currentViewingAdvanced ? (i === 10 ? 20 : i + 10) : i;
-            let wrapper = document.createElement('div'); let btn = document.createElement('button'); let bgPanel = document.createElement('div');
-            bgPanel.className = 'level-bg-panel'; wrapper.className = 'level-btn-wrapper';
-
-            if (saveFile.unlockedLevel > actualLevel) {
-                wrapper.classList.add('cleared');
-                let tick = document.createElement('div'); tick.className = 'cleared-tick'; tick.innerText = '✓';
-                wrapper.appendChild(tick);
-            } else if (saveFile.unlockedLevel === actualLevel) { wrapper.classList.add('current'); } 
-            else { wrapper.classList.add('locked'); }
-
-            if (saveFile.unlockedLevel >= actualLevel) {
-                if (i === 10) {
-                    btn.className = currentViewingAdvanced ? 'level-btn adv-btn boss-level-btn' : 'level-btn boss-level-btn';
-                    btn.innerHTML = currentViewingAdvanced ? `👑 進階<br>大魔王` : `👑 最終<br>大魔王`;
-                } else {
-                    btn.className = currentViewingAdvanced ? 'level-btn adv-btn' : 'level-btn'; 
-                    btn.innerHTML = currentViewingAdvanced ? `進階 ${i}` : `第 ${i} 關`; 
-                }
-                btn.onclick = () => startGame(actualLevel);
-            } else {
-                btn.className = 'level-btn locked'; 
-                if (i === 10) { btn.className += ' boss-level-btn'; btn.innerHTML = `👑<br>🔒`; } 
-                else { btn.innerHTML = `🔒<br>未解鎖`; }
-                btn.onclick = () => alert("這片海域還被濃霧籠罩著...請先通關前面的關卡！");
-            }
-            wrapper.appendChild(bgPanel); wrapper.appendChild(btn); grid.appendChild(wrapper);
-        }
-        if (saveFile.unlockedLevel >= 21) specialUI.style.display = 'flex'; else specialUI.style.display = 'none';
-    }
-
-    function openPracticeModal() { document.getElementById('practice-modal').style.display = 'flex'; }
-    function closePracticeModal() { document.getElementById('practice-modal').style.display = 'none'; }
-    function confirmPracticeMode(range) { closePracticeModal(); startPracticeGame(range); }
-
-    const TUTORIAL_TEXTS = {
-        battle: `<div class="tutorial-text-block"><div style="font-size: 16px; font-weight: bold; color: #00ffff; margin-bottom: 5px;">🎯 核心目標</div>選擇正確的九九乘法答案，使用星光魔法擊退海怪！</div><div class="tutorial-text-block"><div style="font-size: 16px; font-weight: bold; color: #ffeb3b; margin-bottom: 5px;">❤️ 戰鬥規則</div>答錯或倒數結束會扣除愛心。愛心歸零則挑戰失敗。<br>只有<b>首次通關</b>關卡才能獲得珍珠懸賞金喔！</div><div class="tutorial-text-block"><div style="font-size: 16px; font-weight: bold; color: #ff4757; margin-bottom: 5px;">👑 進階與大魔王</div>通關第 10 關可解鎖更難的<b>進階海域</b>。<br>在特定的 Boss 關卡中，海怪會施放干擾視線的特殊魔法，請特別小心！</div>`,
-        shop: `<div class="tutorial-text-block"><div style="font-size: 16px; font-weight: bold; color: #00ffff; margin-bottom: 5px;">🐚 喚醒寶物</div>商店分為三個蛋池，花費珍珠即可隨機獲得大獎：<br>• <b>神聖夥伴</b> (100 珍珠)<br>• <b>家具裝潢</b> (200 珍珠)<br>• <b>華麗套裝</b> (300 珍珠)</div><div class="tutorial-text-block"><div style="font-size: 16px; font-weight: bold; color: #ffeb3b; margin-bottom: 5px;">♻️ 重複防護</div>如果抽到了已經擁有的卡牌或道具，祭壇會自動將其轉化為稀有的<b>【星語祝福稱號】</b>送給妳喔！</div>`,
-        room: `<div class="tutorial-text-block"><div style="font-size: 16px; font-weight: bold; color: #00ffff; margin-bottom: 5px;">👗 自由裝扮</div>點擊下方分類，可以為人魚公主換上在商店抽到的美麗套裝，或是佈置獨一無二的房間。</div><div class="tutorial-text-block"><div style="font-size: 16px; font-weight: bold; color: #ffeb3b; margin-bottom: 5px;">🏷️ 裝備稱號</div>在商店抽到的【星語祝福稱號】可以在這裡選擇裝備。<br>裝備後，稱號會華麗地展示在遊戲大廳中喔！</div>`,
-        partner: `<div class="tutorial-text-block"><div style="font-size: 16px; font-weight: bold; color: #00ffff; margin-bottom: 5px;">📖 魔法圖鑑書</div>這裡記錄了所有妳遇過的海怪、擊敗的魔王，以及淨化後的星光夥伴！</div><div class="tutorial-text-block"><div style="font-size: 16px; font-weight: bold; color: #ffeb3b; margin-bottom: 5px;">✨ 夥伴獲得</div>通關第 1 關後會自動獲得第一隻夥伴。<br>之後的其他夥伴，都需要去<b>【魔法珍珠商店】</b>進行喚醒喔！</div><div class="tutorial-text-block"><div style="font-size: 16px; font-weight: bold; color: #ffeb3b; margin-bottom: 5px;">🛡️ 夥伴出戰</div>點擊【✨神聖夥伴】書籤內的卡牌即可裝備出戰！夥伴會在戰鬥中提供強大的魔法增益。</div>`
-    };
-
     function openTutorial(defaultTab = 'battle') { document.getElementById('tutorial-modal').style.display = 'flex'; switchTutTab(defaultTab); }
     function closeTutorial() { document.getElementById('tutorial-modal').style.display = 'none'; }
     function switchTutTab(tabName) {
@@ -1479,7 +1475,6 @@
 
     function pullGacha(poolType) {
         let cost = 0; let pool = []; let typeName = "";
-        
         if (poolType === 'partner') {
             cost = 100; typeName = "神聖夥伴";
             pool = LORE_DB.partner.map((p, index) => ({...p, id: index, gachaType: 'partner'}));
@@ -1570,6 +1565,74 @@
         shellImg.src = 'images/ui-altar-shell-closed.png'; shellImg.classList.add('float-anim');
         document.querySelectorAll('.btn-gacha-small').forEach(b => b.disabled = false);
     }
+
+    function getBossName(levelIndex, isEndless = false) {
+        if (isEndless) {
+            let prefix = Math.random() > 0.5 ? "深淵" : "";
+            if (levelIndex === 9) return prefix ? "十面埋伏-深淵海神克蘇魯" : "十面埋伏-海神克蘇魯的虛影";
+            return prefix + bossData[levelIndex].name;
+        }
+        if (state.level === 10) return "十面埋伏-海神克蘇魯的虛影";
+        if (state.level === 20) return "十面埋伏-深淵海神克蘇魯";
+        if (state.level > 10) return "深淵" + bossData[levelIndex].name;
+        return bossData[levelIndex].name;
+    }
+
+    function switchChapter(isAdvanced) {
+        const isUnlockedAdv = saveFile.unlockedLevel >= 11;
+        if (isAdvanced && !isUnlockedAdv) { alert("請先通關「普通海域」的最終大魔王，才能解鎖進階海域！"); return; }
+        currentViewingAdvanced = isAdvanced;
+        const tabNormal = document.getElementById('tab-normal'); const tabAdvanced = document.getElementById('tab-advanced');
+        if (isAdvanced) { tabAdvanced.classList.add('active'); tabNormal.classList.remove('active'); } 
+        else { tabNormal.classList.add('active'); tabAdvanced.classList.remove('active'); }
+        updateLevelUI();
+    }
+
+    function updateLevelUI() {
+        const grid = document.getElementById('level-grid');
+        const tabAdvanced = document.getElementById('tab-advanced');
+        const specialUI = document.getElementById('special-modes-ui');
+        if(!grid) return;
+
+        grid.innerHTML = '';
+        const isUnlockedAdv = saveFile.unlockedLevel >= 11;
+        if (!isUnlockedAdv) tabAdvanced.classList.add('locked-tab'); else tabAdvanced.classList.remove('locked-tab');
+
+        for(let i = 1; i <= 10; i++) {
+            let actualLevel = currentViewingAdvanced ? (i === 10 ? 20 : i + 10) : i;
+            let wrapper = document.createElement('div'); let btn = document.createElement('button'); let bgPanel = document.createElement('div');
+            bgPanel.className = 'level-bg-panel'; wrapper.className = 'level-btn-wrapper';
+
+            if (saveFile.unlockedLevel > actualLevel) {
+                wrapper.classList.add('cleared');
+                let tick = document.createElement('div'); tick.className = 'cleared-tick'; tick.innerText = '✓';
+                wrapper.appendChild(tick);
+            } else if (saveFile.unlockedLevel === actualLevel) { wrapper.classList.add('current'); } 
+            else { wrapper.classList.add('locked'); }
+
+            if (saveFile.unlockedLevel >= actualLevel) {
+                if (i === 10) {
+                    btn.className = currentViewingAdvanced ? 'level-btn adv-btn boss-level-btn' : 'level-btn boss-level-btn';
+                    btn.innerHTML = currentViewingAdvanced ? `👑 進階<br>大魔王` : `👑 最終<br>大魔王`;
+                } else {
+                    btn.className = currentViewingAdvanced ? 'level-btn adv-btn' : 'level-btn'; 
+                    btn.innerHTML = currentViewingAdvanced ? `進階 ${i}` : `第 ${i} 關`; 
+                }
+                btn.onclick = () => startGame(actualLevel);
+            } else {
+                btn.className = 'level-btn locked'; 
+                if (i === 10) { btn.className += ' boss-level-btn'; btn.innerHTML = `👑<br>🔒`; } 
+                else { btn.innerHTML = `🔒<br>未解鎖`; }
+                btn.onclick = () => alert("這片海域還被濃霧籠罩著...請先通關前面的關卡！");
+            }
+            wrapper.appendChild(bgPanel); wrapper.appendChild(btn); grid.appendChild(wrapper);
+        }
+        if (saveFile.unlockedLevel >= 21) specialUI.style.display = 'flex'; else specialUI.style.display = 'none';
+    }
+
+    function openPracticeModal() { document.getElementById('practice-modal').style.display = 'flex'; }
+    function closePracticeModal() { document.getElementById('practice-modal').style.display = 'none'; }
+    function confirmPracticeMode(range) { closePracticeModal(); startPracticeGame(range); }
 
     function triggerPartnerEntry(buffMsg, callback) {
         if (saveFile.equippedPartner === null) { if (callback) callback(); return; }
@@ -2096,6 +2159,7 @@
                 title.innerText = "⭐ 關卡完成！ ⭐"; title.style.color = "#ffeb3b"; title.style.textShadow = "0 0 15px #ffeb3b";
                 
                 let extraMsg = "";
+                
                 if (state.level === 1 && state.isFirstClear && !saveFile.unlockedCards.includes(0)) {
                     let partner = LORE_DB.partner[0];
                     extraMsg = `
@@ -2118,8 +2182,11 @@
                 else extraMsg = `星光魔法成功淨化了海怪！`;
                 
                 desc.innerHTML = pearlRewardHTML + extraMsg;
-                if (state.level === saveFile.unlockedLevel) saveFile.unlockedLevel++;
-                saveData();
+                
+                if (state.level === saveFile.unlockedLevel) {
+                    saveFile.unlockedLevel++;
+                    saveData(); // 立刻存檔更新狀態
+                }
             } else {
                 title.innerText = "💧 挑戰失敗 💧"; title.style.color = "#ff4757"; title.style.textShadow = "0 0 15px #ff4757";
                 desc.innerHTML = `魔法愛心消耗殆盡，稍微休息一下再出發吧！`;
@@ -2199,4 +2266,3 @@
 </script>
 </body>
 </html>
-    
