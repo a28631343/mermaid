@@ -38,16 +38,16 @@
 
         #fade-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: #000; z-index: 99999; transition: opacity 1.5s ease-in-out; pointer-events: none; }
 
-        /* ====== 預載入畫面 ====== */
+        /* ====== 新版極速載入畫面 ====== */
         #loading-screen {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: #050a1f; 
             z-index: 999999; display: flex; flex-direction: column; justify-content: center; align-items: center; 
             transition: opacity 0.5s ease;
         }
         .loading-title { color: #00ffff; font-size: 24px; font-weight: bold; margin-bottom: 20px; text-shadow: 0 0 10px rgba(0,255,255,0.8); letter-spacing: 2px;}
-        .loading-bar-wrap { width: 60%; max-width: 300px; height: 12px; background: rgba(255,255,255,0.1); border-radius: 6px; overflow: hidden; border: 1px solid rgba(0,255,255,0.3);}
-        #loading-bar { width: 0%; height: 100%; background: linear-gradient(90deg, #00bfff, #00ffff); transition: width 0.1s; }
-        #loading-text { margin-top: 10px; font-size: 14px; color: #00ffff; font-weight: bold; }
+        .loading-spinner { width: 50px; height: 50px; border: 5px solid rgba(0, 255, 255, 0.3); border-top: 5px solid #00ffff; border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 15px;}
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        #loading-text { font-size: 14px; color: #00ffff; font-weight: bold; }
 
         .screen { 
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
@@ -185,9 +185,9 @@
         .nav-icon-img { width: 60px; height: 60px; margin-bottom: 2px; object-fit: contain; transition: all 0.2s; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); }
         .nav-icon { font-size: 26px; margin-bottom: 4px; filter: grayscale(50%); transition: all 0.2s; }
         .nav-text { font-size: 12px; text-shadow: 1px 1px 2px #000; transition: color 0.2s; white-space: nowrap; }
-        .nav-item:hover, .nav-item:active { transform: translateY(-3px); }
-        .nav-item:hover .nav-icon-img, .nav-item:active .nav-icon-img { transform: scale(1.15); filter: drop-shadow(0 0 10px rgba(0,255,255,0.8)); }
-        .nav-item:hover .nav-text, .nav-item:active .nav-text { color: #00ffff; }
+        .nav-item:active { transform: translateY(3px); }
+        .nav-item:active .nav-icon-img { transform: scale(1.15); filter: drop-shadow(0 0 10px rgba(0,255,255,0.8)); }
+        .nav-item:active .nav-text { color: #00ffff; }
 
         /* ====== 房間系統 UI ====== */
         .room-display { position: relative; width: 100%; height: 60vh; margin-top: 5px; border-radius: 15px; overflow: hidden; border: 3px solid rgba(0, 255, 255, 0.5); box-shadow: 0 0 20px rgba(0, 255, 255, 0.3); background-color: #0d1b2a; }
@@ -199,8 +199,8 @@
         .room-categories { display: flex; justify-content: space-around; align-items: center; width: 100%; padding: 10px 5px; margin-top: 10px; background: rgba(10, 20, 50, 0.6); border-radius: 20px; backdrop-filter: blur(5px); border: 1px solid rgba(0, 255, 255, 0.2); }
         .room-cat-btn { background: transparent; border: none; outline: none; display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; transition: all 0.2s; padding: 5px; width: 18%; }
         .room-cat-btn:active { transform: scale(0.9); }
-        .room-cat-btn:hover .room-cat-icon { transform: scale(1.1); filter: drop-shadow(0 0 10px rgba(0,255,255,0.8)); }
-        .room-cat-btn:hover .room-cat-text { color: #00ffff; }
+        .room-cat-btn:active .room-cat-icon { transform: scale(1.1); filter: drop-shadow(0 0 10px rgba(0,255,255,0.8)); }
+        .room-cat-btn:active .room-cat-text { color: #00ffff; }
         .room-cat-icon { width: 45px; height: 45px; margin-bottom: 5px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); transition: all 0.2s; }
         .room-cat-text { color: #fff; font-size: 11px; font-weight: bold; text-shadow: 1px 1px 2px #000; transition: color 0.2s; white-space: nowrap; }
 
@@ -226,8 +226,7 @@
         @keyframes shake-shell { 0% { transform: rotate(-5deg) scale(1); } 100% { transform: rotate(5deg) scale(1.05); } }
         
         .btn-gacha-small { width: 32%; height: 75px; font-size: 16px; line-height: 1.3; background-image: none; background: linear-gradient(135deg, #9b59b6, #8e44ad); border: 2px solid #e056fd; border-radius: 12px; box-shadow: 0 0 10px rgba(155, 89, 182, 0.6), inset 0 0 5px rgba(255,255,255,0.3); display: flex; flex-direction: column; justify-content: center; align-items: center; color: #fff; text-shadow: 1px 1px 2px #000; padding: 5px; transition: all 0.2s; cursor: pointer; }
-        .btn-gacha-small:hover { background: linear-gradient(135deg, #a25bc2, #944bbc); border-color: #fff; box-shadow: 0 0 20px rgba(224, 86, 253, 0.8); transform: translateY(-2px); }
-        .btn-gacha-small:active { transform: translateY(2px); }
+        .btn-gacha-small:active { background: linear-gradient(135deg, #a25bc2, #944bbc); border-color: #fff; box-shadow: 0 0 20px rgba(224, 86, 253, 0.8); transform: translateY(-2px); }
         .btn-gacha-small:disabled { filter: grayscale(100%) brightness(0.5); cursor: not-allowed; animation: none; box-shadow: none; border-color: #555; transform: none; }
 
         .gacha-modal-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); backdrop-filter: blur(10px); z-index: 300; display: flex; flex-direction: column; justify-content: center; align-items: center; }
@@ -257,7 +256,7 @@
         .page-indicator { color: #fff; font-weight: bold; text-shadow: 1px 1px 2px #000; font-size: 16px;}
 
         .poker-card { position: relative; width: 100%; aspect-ratio: 2.2 / 3.3; background: rgba(0,0,0,0.5); border-radius: 8px; cursor: pointer; transition: all 0.25s; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.6)); overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 2px solid transparent; }
-        .poker-card:hover { transform: translateY(-3px) scale(1.02); filter: drop-shadow(0 6px 12px rgba(0,255,255,0.4)); }
+        .poker-card:active { transform: translateY(-3px) scale(1.02); filter: drop-shadow(0 6px 12px rgba(0,255,255,0.4)); }
         .poker-card.locked { filter: grayscale(100%) brightness(0.35); cursor: not-allowed; }
         .card-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1;}
         .card-partner-img { position: absolute; top: 15%; width: 75%; height: 50%; object-fit: contain; z-index: 2; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.6)); }
@@ -266,6 +265,7 @@
         .poker-card.equipped { border: 2px solid #00ffff; filter: drop-shadow(0 0 10px #00ffff) brightness(1.1); transform: translateY(-2px); }
         .equip-tag { position: absolute; top: 4px; right: 4px; background: linear-gradient(135deg, #00ffcc, #00bfff); color: #000; font-size: 10px; font-weight: 900; padding: 3px 6px; border-radius: 6px; z-index: 4; box-shadow: 0 2px 4px rgba(0,0,0,0.6); letter-spacing: 0.5px; }
 
+        /* 卡牌詳細故事視窗 */
         .card-detail-content { width: 85%; max-width: 340px; padding: 25px 20px; display: flex; flex-direction: column; align-items: center;}
         .cd-img-box { width: 120px; height: 120px; border-radius: 50%; background: radial-gradient(circle, rgba(0,255,255,0.2) 0%, rgba(0,0,0,0) 70%); display: flex; justify-content: center; align-items: center; margin-bottom: 10px; filter: drop-shadow(0 0 15px rgba(0,255,255,0.3));}
         .cd-img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.5));}
@@ -291,7 +291,6 @@
         .bottom-controls { display: flex; justify-content: space-evenly; align-items: center; padding: 15px 10px; padding-bottom: max(15px, env(safe-area-inset-bottom, 15px)); width: 100%; z-index: 15; flex-shrink: 0; background: rgba(5, 10, 31, 0.95); border-top: 2px solid rgba(0, 255, 255, 0.3); }
         .answer-btn { background-image: url('images/btn-answer.png'); background-color: transparent; background-size: contain; background-position: center; background-repeat: no-repeat; border: none; width: 28vw; max-width: 90px; height: 28vw; max-height: 90px; font-size: 32px; font-weight: 900; color: #fff; text-shadow: 0 3px 6px rgba(0,0,0,0.8), 0 0 10px rgba(0,255,255,0.5); cursor: pointer; display: flex; justify-content: center; align-items: center; filter: drop-shadow(0 5px 8px rgba(0,0,0,0.5)); transition: all 0.1s; outline: none; touch-action: manipulation; }
         .answer-btn:active { transform: scale(0.9) translateY(4px); filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5)); }
-        .answer-btn:focus { filter: brightness(1.2) drop-shadow(0 0 10px rgba(0,255,255,0.8)); }
         .answer-btn:disabled { filter: grayscale(100%) brightness(0.5); cursor: not-allowed; }
         .answer-btn.flash-correct { filter: brightness(1.5) drop-shadow(0 0 15px rgba(0,255,0,0.8)); transform: scale(1.05); }
         .answer-btn.flash-wrong { filter: brightness(1.5) drop-shadow(0 0 15px rgba(255,0,0,0.8)); transform: scale(0.95); }
@@ -394,7 +393,8 @@
 
 <!-- ====== 預載入進度畫面 ====== -->
 <div id="loading-screen">
-    <h2 class="loading-title">正在讀取魔法海域...</h2>
+    <div class="loading-spinner"></div>
+    <h2 class="loading-title">正在讀取魔法海域</h2>
     <div class="loading-bar-wrap">
         <div id="loading-bar"></div>
     </div>
@@ -406,7 +406,6 @@
     <span class="currency-amount" id="global-pearl-amount">0</span>
 </div>
 
-<!-- 修正：加上 preload="none" 防止網頁一開就下載幾十 MB 的音樂卡死網路 -->
 <audio id="bgm-main" preload="none"><source src="audio/bgm-main.mp3" type="audio/mpeg"></audio>
 <audio id="bgm-battle" preload="none"><source src="audio/bgm-battle.mp3" type="audio/mpeg"></audio>
 
@@ -414,7 +413,6 @@
     <div id="fade-overlay"></div>
     
     <div id="intro-screen" class="screen active">
-        <!-- 修正：拿掉 src，改由 JS 控制載入，並取消 preload -->
         <video id="intro-video" muted playsinline preload="none"></video>
         <button id="skip-intro-btn">跳過 (Skip)</button>
     </div>
@@ -727,7 +725,7 @@
 
     <!-- 教學視窗修復高度自適應 -->
     <div id="tutorial-modal" class="modal-overlay">
-        <div class="settings-content" style="width: 90%; height: 85vh; max-width: 400px; display: flex; flex-direction: column; padding: 15px; box-sizing: border-box;">
+        <div class="settings-content" style="width: 90%; max-height: 85vh; max-width: 400px; display: flex; flex-direction: column; padding: 15px; box-sizing: border-box; overflow: hidden;">
             <div class="settings-close" onclick="closeTutorial()">×</div>
             <h2 style="margin-top: 0; color: #00ffff; margin-bottom: 10px;">冒險指南</h2>
             
@@ -738,7 +736,7 @@
                 <button class="tab-btn tut-tab" onclick="switchTutTab('partner')" id="tut-tab-partner" style="padding: 5px 0;">📖 夥伴</button>
             </div>
             
-            <div style="flex: 1; overflow-y: auto; text-align: left; font-size: 14px; line-height: 1.6; padding: 0 5px;" id="tut-content">
+            <div style="flex: 1; overflow-y: auto; min-height: 0; text-align: left; font-size: 14px; line-height: 1.6; padding: 0 5px;" id="tut-content">
             </div>
             
             <button class="btn" style="width: 100%; height: 50px; font-size: 16px; margin-top: 15px; margin-bottom: 0; flex-shrink: 0;" onclick="closeTutorial()">我了解了</button>
@@ -749,6 +747,30 @@
 
 <!-- 所有的腳本統一置於檔案底端 -->
 <script>
+    // ====== 遊戲核心設定 (GAME_CONFIG) ======
+    const GAME_CONFIG = {
+        player: {
+            baseHp: 3,
+            timerNormal: 100, // 毫秒/格 (100格 = 10秒)
+            timerHard: 60     // 困難模式 (6秒)
+        },
+        economy: {
+            firstClearNormal: 30,
+            firstClearBoss: 100,
+            practiceReward: 10,
+            endlessMultiplier: 5
+        },
+        gachaCost: {
+            partner: 100,
+            furniture: 200,
+            outfit: 300
+        },
+        combat: {
+            bossSkillChance: 0.25,
+            bossSkillDuration: 800
+        }
+    };
+
     const ITEM_DB = {
         outfit: [
             { id: 'outfit_default', name: '粉紅套裝', img: 'char-mermaid-default.png', type: 'outfit' },
@@ -877,7 +899,7 @@
 
     let saveFile = loadAndVerifySaveData();
     let state = { 
-        level: 1, hp: 3, maxHp: 3, 
+        level: 1, hp: GAME_CONFIG.player.baseHp, maxHp: GAME_CONFIG.player.baseHp, 
         monstersDefeated: 0, maxMonsters: 3, 
         monsterHp: 2, monsterMaxHp: 2,       
         isBoss: false, bossHp: 3, baseBossHp: 3, 
@@ -1493,13 +1515,13 @@
     function pullGacha(poolType) {
         let cost = 0; let pool = []; let typeName = "";
         if (poolType === 'partner') {
-            cost = 100; typeName = "神聖夥伴";
+            cost = GAME_CONFIG.gachaCost.partner; typeName = "神聖夥伴";
             pool = LORE_DB.partner.map((p, index) => ({...p, id: index, gachaType: 'partner'}));
         } else if (poolType === 'outfit') {
-            cost = 300; typeName = "華麗套裝";
+            cost = GAME_CONFIG.gachaCost.outfit; typeName = "華麗套裝";
             pool = ITEM_DB.outfit.map(item => ({...item, gachaType: 'item'}));
         } else if (poolType === 'furniture') {
-            cost = 200; typeName = "家具裝潢";
+            cost = GAME_CONFIG.gachaCost.furniture; typeName = "家具裝潢";
             ['bg', 'bed', 'habitat'].forEach(cat => {
                 if (ITEM_DB[cat]) ITEM_DB[cat].forEach(item => pool.push({...item, gachaType: 'item'}));
             });
@@ -1670,7 +1692,7 @@
     }
 
     function applyBuffs() {
-        state.maxHp = 3; state.baseBossHp = 3; state.timeBuff = false;
+        state.maxHp = GAME_CONFIG.player.baseHp; state.baseBossHp = 3; state.timeBuff = false;
         const pContainer = document.getElementById('char-partner-container');
         const pImg = document.getElementById('char-partner');
         const pFallback = document.getElementById('fallback-partner');
@@ -1678,7 +1700,7 @@
 
         if(saveFile.equippedPartner !== null) {
             let pType = saveFile.equippedPartner % 3;
-            if(pType === 0) { state.maxHp = 4; buffMsg = "別怕！我來保護妳！<br>💖(愛心上限+1)"; }
+            if(pType === 0) { state.maxHp = GAME_CONFIG.player.baseHp + 1; buffMsg = "別怕！我來保護妳！<br>💖(愛心上限+1)"; }
             if(pType === 1) { state.timeBuff = true; buffMsg = "時間停止吧！<br>⏳(倒數變慢)"; }
             if(pType === 2) { state.baseBossHp = 2; buffMsg = "一起把魔王打飛吧！<br>⚔️(Boss血量-1)"; }
             
@@ -1901,14 +1923,14 @@
         for(let i=0; i<3; i++) document.getElementById(`btn-ans-${i}`).innerText = options[i];
 
         if (state.isBoss && state.isHardMode) {
-            if (Math.random() > 0.75) { 
+            if (Math.random() > GAME_CONFIG.combat.bossSkillChance) { 
                 let skillType = Math.floor(Math.random() * 3);
                 if (skillType === 0) { document.getElementById('ui-question').classList.add('interference'); showSpeech("深海迷霧！", false, true); }
                 else if (skillType === 1) { state.timer -= 25; showSpeech("時間吞噬！", false, true); }
                 else if (skillType === 2) {
                     for(let i=0; i<3; i++) {
                         document.getElementById(`btn-ans-${i}`).style.color = "transparent";
-                        safeSetTimeout(() => { const btn = document.getElementById(`btn-ans-${i}`); if(btn) btn.style.color = "#fff"; }, 800);
+                        safeSetTimeout(() => { const btn = document.getElementById(`btn-ans-${i}`); if(btn) btn.style.color = "#fff"; }, GAME_CONFIG.combat.bossSkillDuration);
                     }
                     showSpeech("暗影遮蔽！", false, true);
                 }
@@ -1926,7 +1948,7 @@
         const timerBar = document.getElementById('ui-timer');
         timerBar.style.width = '100%'; timerBar.style.background = 'linear-gradient(90deg, #00ffcc, #00bfff)';
         
-        let speed = state.isHardMode ? 60 : 100;
+        let speed = state.isHardMode ? GAME_CONFIG.player.timerHard : GAME_CONFIG.player.timerNormal;
         if(state.timeBuff) speed = Math.floor(speed * 1.25); 
 
         state.timerInterval = setInterval(() => {
@@ -2145,9 +2167,9 @@
         
         if (state.isPractice) {
             if (isWin) {
-                state.sessionPearls = 10; addPearls(state.sessionPearls);
+                state.sessionPearls = GAME_CONFIG.economy.practiceReward; addPearls(state.sessionPearls);
                 title.innerText = "🎓 練習達成 🎓"; title.style.color = "#3498db"; title.style.textShadow = "0 0 15px #3498db";
-                desc.innerHTML = `完成了 50 題數學練習！非常棒！<br><div style="margin: 15px 0; font-size: 18px; color: #f1c40f; text-shadow: 0 2px 4px #000; font-weight: bold;">懸賞金：🐚 +10</div>`;
+                desc.innerHTML = `完成了 50 題數學練習！非常棒！<br><div style="margin: 15px 0; font-size: 18px; color: #f1c40f; text-shadow: 0 2px 4px #000; font-weight: bold;">懸賞金：🐚 +${state.sessionPearls}</div>`;
             } else {
                 title.innerText = "🎓 練習結束 🎓"; title.style.color = "#3498db"; title.style.textShadow = "0 0 15px #3498db";
                 desc.innerHTML = `你完成了 ${state.endlessScore} 題練習。<br>繼續加油喔！`;
@@ -2155,12 +2177,12 @@
         } else {
             if (isWin && !state.isEndless) {
                 if (state.isFirstClear) {
-                    if (state.level === 10 || state.level === 20) state.sessionPearls = 100; 
-                    else state.sessionPearls = 30;  
+                    if (state.level === 10 || state.level === 20) state.sessionPearls = GAME_CONFIG.economy.firstClearBoss; 
+                    else state.sessionPearls = GAME_CONFIG.economy.firstClearNormal;  
                     addPearls(state.sessionPearls);
                 } else { state.sessionPearls = 0; }
             } else if (isWin && state.isEndless) {
-                state.sessionPearls = state.endlessScore * 5; addPearls(state.sessionPearls);
+                state.sessionPearls = state.endlessScore * GAME_CONFIG.economy.endlessMultiplier; addPearls(state.sessionPearls);
             }
 
             let pearlRewardHTML = "";
@@ -2281,3 +2303,5 @@
     }
     function closeRoomModal() { document.getElementById('room-item-modal').style.display = 'none'; }
 </script>
+</body>
+</html>
