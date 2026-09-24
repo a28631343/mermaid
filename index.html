@@ -358,8 +358,8 @@
         .level-bg-panel { display:none; }
         .room-display { height:min(55vh,450px); min-height:170px; }
         .room-preview { position:relative; width:100%;height:100%; overflow:hidden; background:radial-gradient(circle at 80% 12%,#fff,transparent 29%),linear-gradient(#c6f4fe,#51bdbd); }
-        .room-preview[data-bg=bg_snow] { background:linear-gradient(#fff,#cce7ff 64%,#9bd3ed); }
-        .room-preview[data-bg=bg_star] { background:radial-gradient(circle at 40% 25%,#fff6,transparent 30%),linear-gradient(#162464,#5588ca); }
+        .room-preview[data-bg=bg_crystal] { background:linear-gradient(#fff,#cce7ff 64%,#9bd3ed); }
+        .room-preview[data-bg=bg_starry] { background:radial-gradient(circle at 40% 25%,#fff6,transparent 30%),linear-gradient(#162464,#5588ca); }
         .room-preview span { position:absolute; line-height:1; text-shadow:0 10px 20px #06516c55; }
         .room-decor { font-size:clamp(60px,14vw,110px); left:7%; bottom:14%; }
         .room-avatar { font-size:clamp(110px,27vw,230px); left:50%; bottom:5%; transform:translateX(-50%); }
@@ -392,17 +392,61 @@
         button:focus-visible,.bookmark:focus-visible { outline:3px solid #ffc95c; outline-offset:3px; }
         @media(max-height:600px) { .lobby-header { margin-top:22px; }.lobby-character { font-size:clamp(75px,20vw,150px); }.lobby-bottom-nav { height:74px; }.nav-icon {font-size:21px}.btn-start-adventure {height:52px}.character.mermaid,.character.monster {font-size:clamp(65px,17vw,125px)} }
         @media(max-width:420px) { .book-page { padding:10px; }.book-grid {gap:8px}.bookmark { font-size:12px;padding:8px 7px; }.top-bar {gap:5px;padding-left:8px;padding-right:8px}.btn-exit,.btn-pause {font-size:12px;padding:7px}.progress-bar {font-size:12px}.answer-btn {width:27vw;height:27vw}.btn-gacha-small {font-size:13px}.shop-action-area {bottom:7%!important;} }
+
+        .lobby-art { position:relative;width:min(75vw,350px);height:min(47vh,370px);display:grid;place-items:center; }
+        .lobby-art .lobby-character {position:relative;}
+        .art-cover {position:absolute;inset:0;width:100%;height:100%;object-fit:contain;z-index:2;}
+        #game-logo {display:block;width:min(90%,420px);max-height:120px;object-fit:contain;margin:10px auto;}
+        .pearl-art {width:22px;height:22px;object-fit:contain;margin-right:6px;}
+        .lobby-partner-wrap img {position:absolute;inset:0;object-fit:contain;}
+        .altar-art { position:relative;width:100%;height:min(54vh,440px);display:grid;place-items:center; }
+        .altar-art .altar-shell {position:absolute;margin:0;width:100%;height:100%;display:grid;place-items:center;object-fit:contain;}
+        .gacha-item-showcase > img,.cd-img-box > img {position:absolute;inset:10%;width:80%;height:80%;object-fit:contain;z-index:3;}
+        .cd-img-box {position:relative;}
+        .room-preview > .room-bg-art {position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+        .art-wrap {position:relative;display:grid;place-items:center;overflow:hidden;}
+        .art-wrap > img {position:absolute;inset:0;width:100%;height:100%;object-fit:contain;z-index:2;}
+        .room-preview > .art-wrap {position:absolute;z-index:2;}
+        .room-preview .art-wrap > span {position:relative;line-height:1;}
+        .room-preview > .room-avatar {width:45%;height:75%;}
+        .room-preview > .room-bed,.room-preview > .room-decor {width:32%;height:36%;}
+        .room-preview > .room-avatar > img {object-position:center bottom;}
+        .room-item-card > .art-wrap {width:80%;height:75%;}
+        .room-item-card > .art-wrap > span {font-size:clamp(38px,8vw,68px);}
+        .poker-card > .art-wrap {width:85%;height:72%;margin-bottom:12px;}
+        .poker-card > .art-wrap > span {font-size:clamp(38px,8vw,68px);}
+        .partner-overlay-silhouette.asset-ready,.warning-boss-silhouette.asset-ready {font-size:0;}
+        .partner-overlay-silhouette {font-size:clamp(140px,30vw,260px);background-position:center;background-repeat:no-repeat;background-size:contain;}
+        .warning-boss-silhouette {font-size:clamp(170px,42vw,350px);}
+        .btn.asset-ready,.level-btn.asset-ready,.answer-btn.asset-ready,.btn-start-adventure.asset-ready {background-color:transparent;}
+        @media(max-height:600px) {.lobby-art {height:min(37vh,240px)}.altar-art {height:min(42vh,270px)}}
+
+        /* Original backgrounds and UI images take over only after an image load succeeds. */
+        #game-container.asset-bg-lobby #main-screen {background-image:url('images/bg-lobby.jpg')}
+        #game-container.asset-bg-main #level-screen,#game-container.asset-bg-main #gallery-screen,#game-container.asset-bg-main #room-screen {background-image:url('images/bg-main.jpg')}
+        #game-container.asset-bg-altar #shop-screen {background-image:url('images/bg-altar.jpg')}
+        #game-container.asset-bg-result #result-screen {background-image:url('images/bg-result.jpg')}
+        #game-container.asset-bg-underwater .middle-combat-area {background-image:url('images/bg-underwater.jpg');background-size:auto 100%;background-repeat:repeat-x}
+        #game-container.asset-ui-pearl-panel .currency-display {background-image:url('images/ui-pearl-panel.png');background-color:transparent;border:0;box-shadow:none}
+        #game-container.asset-btn-primary .btn:not(.secondary):not(.btn-start-adventure) {background-image:url('images/btn-primary.png');background-color:transparent;background-size:contain;background-position:center;background-repeat:no-repeat;border:0;box-shadow:none;color:white}
+        #game-container.asset-ui-btn-start .btn-start-adventure {background-image:url('images/ui-btn-start.png');background-color:transparent;background-size:contain;background-position:center;background-repeat:no-repeat;border:0;box-shadow:none;color:#1b2856}
+        #game-container.asset-btn-level .level-btn:not(.locked):not(.boss-level-btn) {background-image:url('images/btn-level.png');background-color:transparent;background-size:100% 100%;border:0;box-shadow:none;color:#fff;text-shadow:0 1px 3px #092a59}
+        #game-container.asset-btn-answer .answer-btn {background-image:url('images/btn-answer.png');background-color:transparent;background-size:contain;background-position:center;background-repeat:no-repeat;border:0;box-shadow:none;color:#fff;text-shadow:0 2px 3px #093a63}
+        #game-container.asset-ui-nav-panel .lobby-bottom-nav {background-image:url('images/ui-nav-panel.png');background-color:transparent;background-size:100% 100%;border:0;box-shadow:none}
+        #game-container.asset-ui-speech-bg .speech-bubble {background-image:url('images/ui-speech-bg.png');background-color:transparent;border:0;box-shadow:none;background-size:100% 100%}
+        #game-container.asset-ui-card-front .poker-card:not(.locked) {background-image:url('images/ui-card-front.png');background-size:100% 100%}
+        #game-container.asset-ui-card-back .poker-card.locked {background-image:url('images/ui-card-back.png');background-size:100% 100%}
     </style>
 </head>
 <body>
 
 <div class="currency-display" id="global-pearl-ui" style="display: none;">
-    <span aria-hidden="true" class="pearl-icon">🐚</span>
+    <img src="images/ui-pearl-icon.png" class="pearl-art" alt="" onload="this.nextElementSibling.style.display='none'" onerror="this.remove()"><span aria-hidden="true" class="pearl-icon">🐚</span>
     <span class="currency-amount" id="global-pearl-amount">0</span>
 </div>
 
-<audio id="bgm-main" loop></audio>
-<audio id="bgm-battle" loop></audio>
+<audio id="bgm-main" loop preload="none"><source src="audio/bgm-main.mp3" type="audio/mpeg"></audio>
+<audio id="bgm-battle" loop preload="none"><source src="audio/bgm-battle.mp3" type="audio/mpeg"></audio>
 
 <div id="game-container">
     <div id="fade-overlay" style="display:none"></div>
@@ -427,16 +471,16 @@
         </button>
 
         <div class="lobby-header">
-            <div class="brand-kicker">ATLANTIS · MATH QUEST</div><h1 class="game-title">重返亞特蘭提斯<br><span>人魚公主與數靈聖域</span></h1>
+            <div class="brand-kicker">ATLANTIS · MATH QUEST</div><img id="game-logo" src="images/logo.png" alt="重返亞特蘭提斯：人魚公主與數靈聖域" onload="this.nextElementSibling.style.display='none'" onerror="this.remove()"><h1 class="game-title">重返亞特蘭提斯<br><span>人魚公主與數靈聖域</span></h1>
         </div>
 
         <div class="lobby-center-stage">
             <div id="lobby-player-title" class="player-title-display"></div>
             <div class="lobby-halo"></div>
-            <div class="lobby-character float-anim" id="lobby-fallback-mermaid" role="img" aria-label="人魚公主">🧜‍♀️</div>
+            <div class="lobby-art"><img id="lobby-mermaid" class="art-cover float-anim" alt="" style="display:none"><div class="lobby-character float-anim" id="lobby-fallback-mermaid" role="img" aria-label="人魚公主">🧜‍♀️</div></div>
 
             <div id="lobby-partner-container" class="lobby-partner-wrap partner-hover-anim">
-                <div class="lobby-partner-img" id="lobby-fallback-partner">✨</div>
+                <img id="lobby-partner" class="lobby-partner-img" alt="" style="display:none"><div class="lobby-partner-img" id="lobby-fallback-partner">✨</div>
             </div>
         </div>
 
@@ -446,19 +490,19 @@
 
         <div class="lobby-bottom-nav">
             <button class="nav-item" onclick="showScreen('room-screen', 'ROOM')">
-                <div class="nav-icon">🏠</div>
+                <img src="images/ui-nav-icon-room.png" class="nav-icon-img" alt="" onload="this.nextElementSibling.style.display='none'" onerror="this.remove()"><div class="nav-icon">🏠</div>
                 <span class="nav-text">人魚公主房間</span>
             </button>
             <button class="nav-item" onclick="checkAndOpenShop()">
-                <div class="nav-icon">🐚</div>
+                <img src="images/ui-nav-icon-shop.png" class="nav-icon-img" alt="" onload="this.nextElementSibling.style.display='none'" onerror="this.remove()"><div class="nav-icon">🐚</div>
                 <span class="nav-text">魔法珍珠商店</span>
             </button>
             <button class="nav-item" onclick="showScreen('gallery-screen', 'GALLERY')">
-                <div class="nav-icon">📖</div>
+                <img src="images/ui-nav-icon-album.png" class="nav-icon-img" alt="" onload="this.nextElementSibling.style.display='none'" onerror="this.remove()"><div class="nav-icon">📖</div>
                 <span class="nav-text">魔法圖鑑書</span>
             </button>
             <button class="nav-item" onclick="openSettings()">
-                <div class="nav-icon">⚙️</div>
+                <img src="images/ui-nav-icon-settings.png" class="nav-icon-img" alt="" onload="this.nextElementSibling.style.display='none'" onerror="this.remove()"><div class="nav-icon">⚙️</div>
                 <span class="nav-text">功能選單</span>
             </button>
         </div>
@@ -473,25 +517,25 @@
         </div>
 
         <div class="shop-altar-container">
-            <div id="altar-shell" class="altar-shell float-anim" role="img" aria-label="魔法珍珠貝殼">🐚</div>
+            <div class="altar-art"><img id="altar-shell-img" class="altar-shell float-anim" alt="" style="display:none"><div id="altar-shell" class="altar-shell float-anim" role="img" aria-label="魔法珍珠貝殼">🐚</div></div>
 
             <div class="shop-action-area" style="position: absolute; bottom: 8%; width: 92%; max-width: 400px; display: flex; justify-content: space-between;">
                 <button class="btn-gacha-small" onclick="pullGacha('partner')">
                     <span style="font-weight: bold;">神聖夥伴</span>
                     <div style="display: flex; align-items: center; margin-top: 5px; color: #f1c40f; font-size: 14px;">
-                        🐚 100
+                        <img src="images/ui-pearl-icon.png" alt="" class="pearl-art" onload="this.nextElementSibling.style.display='none'" onerror="this.remove()"><span aria-hidden="true">🐚</span> 100
                     </div>
                 </button>
                 <button class="btn-gacha-small" onclick="pullGacha('furniture')">
                     <span style="font-weight: bold;">家具裝潢</span>
                     <div style="display: flex; align-items: center; margin-top: 5px; color: #f1c40f; font-size: 14px;">
-                        🐚 200
+                        <img src="images/ui-pearl-icon.png" alt="" class="pearl-art" onload="this.nextElementSibling.style.display='none'" onerror="this.remove()"><span aria-hidden="true">🐚</span> 200
                     </div>
                 </button>
                 <button class="btn-gacha-small" onclick="pullGacha('outfit')">
                     <span style="font-weight: bold;">華麗套裝</span>
                     <div style="display: flex; align-items: center; margin-top: 5px; color: #f1c40f; font-size: 14px;">
-                        🐚 300
+                        <img src="images/ui-pearl-icon.png" alt="" class="pearl-art" onload="this.nextElementSibling.style.display='none'" onerror="this.remove()"><span aria-hidden="true">🐚</span> 300
                     </div>
                 </button>
             </div>
@@ -502,7 +546,7 @@
                 <h1 style="color: #ffeb3b; text-shadow: 0 0 15px #ffeb3b; margin-top: 0; margin-bottom: 20px;">恭喜獲得！</h1>
                 <div class="gacha-item-showcase" id="gacha-item-showcase">
                     <div class="gacha-light-rays"></div>
-                    <div id="gacha-result-img" class="gacha-result-img" role="img">✨</div>
+                    <img id="gacha-result-art" class="gacha-result-img" alt="" style="display:none"><div id="gacha-result-img" class="gacha-result-img" role="img">✨</div>
                 </div>
                 <div id="gacha-result-name" style="font-size: 24px; font-weight: 900; color: #fff; margin-top: 20px; text-shadow: 1px 2px 4px #000, 0 0 10px #00ffff;">道具名稱</div>
                 <div id="gacha-result-type" style="font-size: 14px; color: #aaa; margin-bottom: 30px; text-align: center;">道具類型</div>
@@ -563,7 +607,7 @@
         <div class="settings-content card-detail-content">
             <div class="settings-close" onclick="closeCardDetail()">×</div>
             <div class="cd-img-box">
-                <div id="cd-img" class="cd-img" role="img">✨</div>
+                <img id="cd-art" class="cd-img" alt="" style="display:none"><div id="cd-img" class="cd-img" role="img">✨</div>
             </div>
             <h2 id="cd-name" class="cd-name">名稱</h2>
             <div id="cd-func" class="cd-func-tag">功能</div>
@@ -584,23 +628,23 @@
 
         <div class="room-categories">
             <button class="room-cat-btn" onclick="openRoomModal('bg')">
-                <div class="room-cat-icon" aria-hidden="true">🖼️</div>
+                <img src="images/ui-icon-bg.png" class="room-cat-icon" alt="" onload="this.nextElementSibling.style.display='none'" onerror="this.remove()"><div class="room-cat-icon" aria-hidden="true">🖼️</div>
                 <span class="room-cat-text">房間背景</span>
             </button>
             <button class="room-cat-btn" onclick="openRoomModal('outfit')">
-                <div class="room-cat-icon" aria-hidden="true">👗</div>
+                <img src="images/ui-icon-outfit.png" class="room-cat-icon" alt="" onload="this.nextElementSibling.style.display='none'" onerror="this.remove()"><div class="room-cat-icon" aria-hidden="true">👗</div>
                 <span class="room-cat-text">華麗套裝</span>
             </button>
             <button class="room-cat-btn" onclick="openRoomModal('habitat')">
-                <div class="room-cat-icon" aria-hidden="true">🪸</div>
+                <img src="images/ui-icon-habitat.png" class="room-cat-icon" alt="" onload="this.nextElementSibling.style.display='none'" onerror="this.remove()"><div class="room-cat-icon" aria-hidden="true">🪸</div>
                 <span class="room-cat-text">夥伴的窩</span>
             </button>
             <button class="room-cat-btn" onclick="openRoomModal('bed')">
-                <div class="room-cat-icon" aria-hidden="true">🛏️</div>
+                <img src="images/ui-icon-bed.png" class="room-cat-icon" alt="" onload="this.nextElementSibling.style.display='none'" onerror="this.remove()"><div class="room-cat-icon" aria-hidden="true">🛏️</div>
                 <span class="room-cat-text">公主床舖</span>
             </button>
             <button class="room-cat-btn" onclick="openRoomModal('title')">
-                <div class="room-cat-icon" aria-hidden="true">🏷️</div>
+                <img src="images/ui-icon-title.png" class="room-cat-icon" alt="" onload="this.nextElementSibling.style.display='none'" onerror="this.remove()"><div class="room-cat-icon" aria-hidden="true">🏷️</div>
                 <span class="room-cat-text">星語稱號</span>
             </button>
         </div>
@@ -622,7 +666,7 @@
         <div class="partner-overlay-content">
             <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 25px;">
                 <div style="background: linear-gradient(135deg, #00ffcc, #00bfff); color: #000; font-size: 15px; font-weight: 900; padding: 6px 20px; border-radius: 30px; box-shadow: 0 0 15px rgba(0,255,255,0.8); display: flex; align-items: center; letter-spacing: 2px;">
-                    <span id="partner-overlay-icon" aria-hidden="true">✨</span>
+                    <img id="partner-overlay-icon-art" alt="" style="display:none;width:24px;height:24px;object-fit:contain;margin-right:6px"><span id="partner-overlay-icon" aria-hidden="true">✨</span>
                     神聖夥伴支援
                 </div>
             </div>
@@ -644,15 +688,15 @@
                 <div class="timer-bar-container"><div class="timer-bar" id="ui-timer"></div></div>
             </div>
             <div class="stage-elements">
-                <div class="character mermaid" id="fallback-mermaid" role="img" aria-label="人魚公主">🧜‍♀️</div>
+                <img id="char-mermaid" class="character mermaid asset-sprite" alt="" style="display:none"><div class="character mermaid" id="fallback-mermaid" role="img" aria-label="人魚公主">🧜‍♀️</div>
 
                 <div id="char-partner-container" class="partner-container">
-                    <div class="partner-img" id="fallback-partner">✨</div>
+                    <img id="char-partner" class="partner-img" alt="" style="display:none"><div class="partner-img" id="fallback-partner">✨</div>
                 </div>
 
                 <div class="speech-bubble" id="ui-speech">準備好了嗎？</div>
 
-                <div class="character monster" id="fallback-monster" role="img" aria-label="深海魔物">👾</div>
+                <img id="char-monster" class="character monster asset-sprite" alt="" style="display:none"><div class="character monster" id="fallback-monster" role="img" aria-label="深海魔物">👾</div>
 
                 <div id="monster-ui" class="monster-ui">
                     <div class="monster-hp-bar"><div id="monster-hp-fill" class="monster-hp-fill"></div></div>
@@ -708,7 +752,8 @@
         <div class="settings-content">
             <div class="settings-close" onclick="closeSettings()">×</div>
             <h2 style="color: #01579b; font-weight: 900; margin-top: 0; text-shadow: none;">設定</h2>
-<p class="settings-note">此版本使用裝置產生的遊戲音效。</p>
+<p class="settings-note">有原版音樂檔時播放背景音樂；缺少檔案時仍可使用裝置產生的音效。</p>
+            <div class="slider-group"><label class="slider-label" for="bgm-slider">背景音樂 (BGM) <span id="bgm-value" style="float:right">50%</span></label><input type="range" id="bgm-slider" min="0" max="100" value="50" oninput="updateVolume('bgm')"></div>
             <div class="slider-group">
                 <label class="slider-label">遊戲音效 (SFX) <span id="sfx-value" style="float: right;">50%</span></label>
                 <input type="range" id="sfx-slider" min="0" max="100" value="50" oninput="updateVolume('sfx')">
@@ -896,6 +941,67 @@
         else if (type === 'pearl') { osc.type = 'sine'; osc.frequency.setValueAtTime(1200, now); osc.frequency.setValueAtTime(1600, now + 0.1); gainNode.gain.setValueAtTime(baseGain * 0.5, now); gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.2); osc.start(now); osc.stop(now + 0.2); }
     }
 
+    // Restore the original filename first; show the emoji only when the asset fails or is still loading.
+    function setArtwork(imageId, fallbackId, filename, emoji, backupFilename) {
+        const image=document.getElementById(imageId), fallback=document.getElementById(fallbackId);
+        if (!image || !fallback) return;
+        fallback.textContent=emoji; fallback.style.visibility='visible'; image.style.display='none';
+        const request=(image._assetRequest || 0)+1; image._assetRequest=request;
+        const filenames=[filename,backupFilename].filter(Boolean);
+        let index=0;
+        const next=()=>{
+            if (image._assetRequest!==request) return;
+            if (index>=filenames.length) {image.removeAttribute('src');image.style.display='none';fallback.style.visibility='visible';return;}
+            image.onload=()=>{if(image._assetRequest===request){image.style.display='block';fallback.style.visibility='hidden';}};
+            image.onerror=next;
+            image.src=`images/${filenames[index++]}`;
+        };
+        next();
+    }
+    function showAttackArtwork() {
+        const image=document.getElementById('char-mermaid');
+        if(image.style.display!=='block')return;
+        const outfit=ITEM_DB.outfit.find(item=>item.id===saveFile.equipped.outfit);
+        const attackFile=outfit.img.replace(/\.png$/, '-atk.png');
+        const normalSrc=image.src, request=image._assetRequest;
+        const probe=document.createElement('img');
+        probe.onload=()=>{
+            if(image._assetRequest!==request || image.style.display!=='block')return;
+            image.src=probe.src;
+            safeSetTimeout(()=>{if(image._assetRequest===request)image.src=normalSrc;},400);
+        };
+        probe.onerror=()=>{};
+        probe.src=`images/${attackFile}`;
+    }
+    function activeSprite(imageId,fallbackId) {
+        const image=document.getElementById(imageId);
+        return image.style.display==='block' ? image : document.getElementById(fallbackId);
+    }
+    function setBackgroundArt(id,filename) {
+        const element=document.getElementById(id);
+        if(!element)return;
+        const request=(element._assetRequest||0)+1;element._assetRequest=request;
+        element.classList.remove('asset-ready');element.style.backgroundImage='none';
+        const probe=document.createElement('img');
+        probe.onload=()=>{if(element._assetRequest===request){element.style.backgroundImage=`url('images/${filename}')`;element.classList.add('asset-ready');}};
+        probe.onerror=()=>{};
+        probe.src=`images/${filename}`;
+    }
+    function artMarkup(filename,emoji,cssClass='') {
+        return `<span class="art-wrap ${cssClass}"><img src="images/${filename}" alt="" onload="this.nextElementSibling.style.visibility='hidden'" onerror="this.remove()"><span aria-hidden="true">${emoji}</span></span>`;
+    }
+    function checkOriginalBackgrounds() {
+        const assets=['bg-lobby.jpg','bg-main.jpg','bg-altar.jpg','bg-result.jpg','bg-underwater.jpg','ui-pearl-panel.png','btn-primary.png','ui-btn-start.png','btn-level.png','btn-answer.png','ui-nav-panel.png','ui-speech-bg.png','ui-card-front.png','ui-card-back.png'];
+        const root=document.getElementById('game-container');
+        assets.forEach(file=>{
+            const probe=document.createElement('img');
+            const className='asset-'+file.replace(/\.[^.]+$/,'');
+            probe.onload=()=>root.classList.add(className);
+            probe.onerror=()=>root.classList.remove(className);
+            probe.src=`images/${file}`;
+        });
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
         try {
             volBGM = localStorage.getItem('mermaidVolBGM') !== null ? Number(localStorage.getItem('mermaidVolBGM')) : 0.5;
@@ -904,7 +1010,7 @@
             volSFX = Number.isFinite(volSFX) ? Math.max(0,Math.min(1,volSFX)) : 0.5;
         } catch(e) {}
         initVolumeUI(); updatePearlUI(); updateLevelUI(); bindAnswerButtons(); updateQuestRedDot();
-        showScreen('main-screen','MENU');
+        showScreen('main-screen','MENU');checkOriginalBackgrounds();
     });
 
     function showScreen(id, stateTag) {
@@ -913,7 +1019,7 @@
         const entry=document.getElementById('partner-overlay');entry.style.display='none';entry.classList.remove('show');
         document.getElementById('boss-warning').classList.remove('show');
         document.getElementById('fade-overlay').style.display='none';
-        document.getElementById('altar-shell').textContent='🐚';
+        setArtwork('altar-shell-img','altar-shell','ui-altar-shell-closed.png','🐚');
         document.getElementById('room-item-modal').style.display = 'none';
         if (stateTag !== 'SHOP') { document.getElementById('gacha-result-modal').style.display='none'; document.querySelectorAll('.btn-gacha-small').forEach(b => b.disabled=false); }
         for(let i=0; i<3; i++) { let btn = document.getElementById(`btn-ans-${i}`); if(btn) btn.disabled = false; }
@@ -1003,12 +1109,18 @@
         const title=document.getElementById('lobby-player-title');
         title.textContent=saveFile.equippedTitle ? `✧ ${saveFile.equippedTitle} ✧` : '';
         title.style.display=saveFile.equippedTitle ? 'block' : 'none';
+        const outfit=ITEM_DB.outfit.find(item=>item.id===saveFile.equipped.outfit);
         document.getElementById('lobby-fallback-mermaid').dataset.outfit=saveFile.equipped.outfit;
+        setArtwork('lobby-mermaid','lobby-fallback-mermaid',outfit.img,'🧜‍♀️','char-mermaid.png');
         const wrap=document.getElementById('lobby-partner-container');
         wrap.style.display=saveFile.equippedPartner===null ? 'none' : 'block';
-        if (saveFile.equippedPartner!==null) document.getElementById('lobby-fallback-partner').textContent=PARTNER_EMOJI[saveFile.equippedPartner];
+        if(saveFile.equippedPartner!==null) setArtwork('lobby-partner','lobby-fallback-partner',LORE_DB.partner[saveFile.equippedPartner].img,PARTNER_EMOJI[saveFile.equippedPartner],`monster-${saveFile.equippedPartner+1}.png`);
     }
-    function updateBattleAvatar() { document.getElementById('fallback-mermaid').dataset.outfit=saveFile.equipped.outfit; }
+    function updateBattleAvatar() {
+        const outfit=ITEM_DB.outfit.find(item=>item.id===saveFile.equipped.outfit);
+        document.getElementById('fallback-mermaid').dataset.outfit=saveFile.equipped.outfit;
+        setArtwork('char-mermaid','fallback-mermaid',outfit.img,'🧜‍♀️','char-mermaid.png');
+    }
     function openPracticeModal() { document.getElementById('practice-modal').style.display='flex'; }
     function closePracticeModal() { document.getElementById('practice-modal').style.display='none'; }
     function confirmPracticeMode(range) { closePracticeModal(); startPracticeGame(range); }
@@ -1187,31 +1299,32 @@
         } else { result = { type: wonItem.gachaType, item: wonItem }; }
         saveData();
 
-        const shellImg = document.getElementById('altar-shell'); playSFX('pearl'); shellImg.textContent='✨'; shellImg.classList.remove('float-anim');
+        const shellImg = document.getElementById('altar-shell'); playSFX('pearl'); setArtwork('altar-shell-img','altar-shell','ui-altar-shell-open.png','✨'); shellImg.classList.remove('float-anim');
         playSFX('win'); showGachaResult(result);
     }
 
     function showGachaResult(result) {
         const modal = document.getElementById('gacha-result-modal'); const showcase = document.getElementById('gacha-item-showcase'); const img = document.getElementById('gacha-result-img'); const name = document.getElementById('gacha-result-name'); const typeDisplay = document.getElementById('gacha-result-type');
         if (result.type === 'item' || result.type === 'partner' || result.type === 'duplicate_refund') {
-            img.textContent = (result.type === 'partner' || result.item.gachaType === 'partner') ? PARTNER_EMOJI[result.item.id] : ROOM_EMOJI[result.item.type]?.[ITEM_DB[result.item.type].findIndex(item=>item.id===result.item.id)] || '✨'; img.style.display = 'grid'; showcase.style.display = 'flex'; name.innerText = result.item.name;
+            const isPartner=result.type==='partner'||result.item.gachaType==='partner'; const emoji=isPartner ? PARTNER_EMOJI[result.item.id] : ROOM_EMOJI[result.item.type]?.[ITEM_DB[result.item.type].findIndex(item=>item.id===result.item.id)] || '✨'; setArtwork('gacha-result-art','gacha-result-img',result.item.img,emoji); img.style.display='grid'; showcase.style.display = 'flex'; name.innerText = result.item.name;
             let tName = "寶物"; if(result.type === 'partner') tName = "神聖夥伴"; else if(result.item.type === 'outfit') tName = "華麗套裝"; else if(result.item.type === 'bg') tName = "房間背景"; else if(result.item.type === 'bed') tName = "公主床舖"; else if(result.item.type === 'habitat') tName = "夥伴的窩";
             if (result.type === 'duplicate_refund') { typeDisplay.innerHTML = `【 ${tName} 】<br><br><span style="color:#d32f2f; font-size:16px; font-weight:bold; background:rgba(255,255,255,0.8); padding:5px 10px; border-radius:8px;">已擁有此道具且稱號全滿！返還 ${result.refund} 珍珠</span>`; } else { typeDisplay.innerText = `【 ${tName} 】`; }
         } else if (result.type === 'title') {
-            img.style.display = 'none'; showcase.style.display = 'none';
+            document.getElementById('gacha-result-art').style.display='none'; img.style.display='none'; showcase.style.display='none';
             name.innerHTML = `<div style="font-size:14px; color:#aaa; margin-bottom:10px;">(獲得重複的 ${result.fallbackFrom})</div><div style="font-size:26px; margin: 10px 0; padding: 15px; border:3px dashed #00ffff; color:#00ffff; border-radius:15px; background:rgba(0,0,0,0.6); box-shadow: 0 0 20px rgba(0,255,255,0.5);">✧ ${result.title} ✧</div>`;
             typeDisplay.innerText = `【 星語祝福稱號 】`;
         }
         modal.style.display = 'flex';
     }
-    function closeGachaResult() { document.getElementById('gacha-result-modal').style.display = 'none'; const shellImg = document.getElementById('altar-shell'); shellImg.textContent = '🐚'; shellImg.classList.add('float-anim'); document.querySelectorAll('.btn-gacha-small').forEach(b => b.disabled = false); }
+    function closeGachaResult() { document.getElementById('gacha-result-modal').style.display = 'none'; const shellImg = document.getElementById('altar-shell'); setArtwork('altar-shell-img','altar-shell','ui-altar-shell-closed.png','🐚'); shellImg.classList.add('float-anim'); document.querySelectorAll('.btn-gacha-small').forEach(b => b.disabled = false); }
 
     function updateRoomDisplay() {
         const eq=saveFile.equipped;
-        const index=type=>ITEM_DB[type].findIndex(item=>item.id===eq[type]);
+        const item=type=>ITEM_DB[type].find(entry=>entry.id===eq[type]);
+        const index=type=>ITEM_DB[type].indexOf(item(type));
         const preview=document.getElementById('room-preview');
         preview.dataset.bg=eq.bg;
-        preview.innerHTML=`<span class="room-decor">${ROOM_EMOJI.habitat[index('habitat')]}</span><span class="room-avatar" data-outfit="${eq.outfit}">🧜‍♀️</span><span class="room-bed">${ROOM_EMOJI.bed[index('bed')]}</span>`;
+        preview.innerHTML=`<img class="room-bg-art" src="images/${item('bg').img}" alt="" onerror="this.remove()">${artMarkup(item('habitat').img,ROOM_EMOJI.habitat[index('habitat')],'room-decor')}${artMarkup(item('outfit').img,'🧜‍♀️','room-avatar')}${artMarkup(item('bed').img,ROOM_EMOJI.bed[index('bed')],'room-bed')}`;
     }
 
     function openRoomModal(category) {
@@ -1230,7 +1343,7 @@
         items.forEach(item => {
             const isOwned = saveFile.inventory.includes(item.id); const isEquipped = saveFile.equipped[category] === item.id; let card = document.createElement('div'); card.className = `room-item-card ${isEquipped ? 'equipped' : ''} ${!isOwned ? 'locked' : ''}`;
             if (isOwned) card.onclick = () => equipRoomItem(category, item.id); else card.onclick = () => alert("尚未擁有此道具！\n\n請透過主選單的【魔法珍珠商店】喚醒獲得喔！");
-            card.innerHTML = `<span class="room-item-emoji">${ROOM_EMOJI[category][ITEM_DB[category].indexOf(item)]}</span><div class="room-item-name">${item.name}</div>${isEquipped ? '<div class="equip-tag" style="position:absolute; top:4px; right:4px; font-size:8px; background:#00ffcc; color:#000; padding:2px 5px; border-radius:6px; font-weight:bold;">裝備中</div>' : ''}${!isOwned ? '<div style="position:absolute; font-size:24px; text-shadow: 0 2px 4px #000;">🔒</div>' : ''}`; grid.appendChild(card);
+            card.innerHTML = `${artMarkup(item.img,ROOM_EMOJI[category][ITEM_DB[category].indexOf(item)],'room-item-art')}<div class="room-item-name">${item.name}</div>${isEquipped ? '<div class="equip-tag" style="position:absolute; top:4px; right:4px; font-size:8px; background:#00ffcc; color:#000; padding:2px 5px; border-radius:6px; font-weight:bold;">裝備中</div>' : ''}${!isOwned ? '<div style="position:absolute; font-size:24px; text-shadow: 0 2px 4px #000;">🔒</div>' : ''}`; grid.appendChild(card);
         });
     }
     function equipRoomItem(category, itemId) { saveFile.equipped[category] = itemId; saveData(); updateRoomDisplay(); openRoomModal(category); }
@@ -1254,7 +1367,7 @@
 
             if (isUnlocked) {
                 card.className = 'poker-card'; if (curGalleryTab === 'partner' && saveFile.equippedPartner === i) card.classList.add('equipped');
-                card.innerHTML = `<span class="card-emoji">${curGalleryTab==='partner'?PARTNER_EMOJI[i]:curGalleryTab==='mob'?MOB_EMOJI[i]:BOSS_EMOJI[i]}</span><div class="card-name-tag">${item.name}</div>${(curGalleryTab === 'partner' && saveFile.equippedPartner === i) ? '<div class="equip-tag">出戰中</div>' : ''}`;
+                card.innerHTML = `${artMarkup(item.img,curGalleryTab==='partner'?PARTNER_EMOJI[i]:curGalleryTab==='mob'?MOB_EMOJI[i]:BOSS_EMOJI[i],'gallery-art')}<div class="card-name-tag">${item.name}</div>${(curGalleryTab === 'partner' && saveFile.equippedPartner === i) ? '<div class="equip-tag">出戰中</div>' : ''}`;
                 card.onclick = () => openCardDetail(curGalleryTab, i);
             } else {
                 card.className = 'poker-card locked';
@@ -1267,7 +1380,7 @@
 
     function openCardDetail(tab, index) {
         selectedDetailItem = { tab: tab, index: index }; const item = LORE_DB[tab][index]; const modal = document.getElementById('card-detail-modal');
-        document.getElementById('cd-img').textContent = tab==='partner'?PARTNER_EMOJI[index]:tab==='mob'?MOB_EMOJI[index]:BOSS_EMOJI[index]; document.getElementById('cd-name').innerText = item.name; document.getElementById('cd-func').innerText = item.func; document.getElementById('cd-desc').innerHTML = item.desc;
+        setArtwork('cd-art','cd-img',item.img,tab==='partner'?PARTNER_EMOJI[index]:tab==='mob'?MOB_EMOJI[index]:BOSS_EMOJI[index]); document.getElementById('cd-name').innerText = item.name; document.getElementById('cd-func').innerText = item.func; document.getElementById('cd-desc').innerHTML = item.desc;
         const actionBtn = document.getElementById('cd-action-btn');
         if (tab === 'partner') { actionBtn.style.display = 'block'; actionBtn.innerText = (saveFile.equippedPartner === index) ? "卸下夥伴" : "裝備出戰"; actionBtn.style.background = (saveFile.equippedPartner === index) ? "rgba(255,0,0,0.5)" : ""; }
         else { actionBtn.style.display = 'none'; }
@@ -1326,7 +1439,7 @@
     function triggerPartnerEntry(buffMsg, callback) {
         if (saveFile.equippedPartner === null) { if (callback) callback(); return; }
         const overlay = document.getElementById('partner-overlay'), silhouette = document.getElementById('partner-overlay-silhouette'), icon = document.getElementById('partner-overlay-icon'), text = document.getElementById('partner-overlay-text');
-        silhouette.textContent=PARTNER_EMOJI[saveFile.equippedPartner]; icon.textContent=PARTNER_EMOJI[saveFile.equippedPartner];
+        silhouette.textContent=PARTNER_EMOJI[saveFile.equippedPartner]; icon.textContent=PARTNER_EMOJI[saveFile.equippedPartner]; setBackgroundArt('partner-overlay-silhouette',LORE_DB.partner[saveFile.equippedPartner].img);setArtwork('partner-overlay-icon-art','partner-overlay-icon',LORE_DB.partner[saveFile.equippedPartner].img,PARTNER_EMOJI[saveFile.equippedPartner]);
         text.innerHTML = buffMsg; overlay.style.display = 'flex';
         safeSetTimeout(() => { overlay.classList.add('show'); playSFX('win');
             safeSetTimeout(() => { overlay.classList.remove('show'); safeSetTimeout(() => { overlay.style.display = 'none'; if (callback) callback(); }, 500); }, GAME_CONFIG.ui.animationDelay);
@@ -1343,7 +1456,7 @@
             if(type===1) {state.timeBuff=true;buffMsg='時間停止吧！<br>⏳(倒數變慢)';}
             if(type===2) {state.baseBossHp=2;buffMsg='一起把魔王打飛吧！<br>⚔️(Boss血量-1)';}
             pContainer.style.display='block';
-            document.getElementById('fallback-partner').textContent=PARTNER_EMOJI[saveFile.equippedPartner];
+            setArtwork('char-partner','fallback-partner',LORE_DB.partner[saveFile.equippedPartner].img,PARTNER_EMOJI[saveFile.equippedPartner],`monster-${saveFile.equippedPartner+1}.png`);
         } else pContainer.style.display='none';
         state.hp=state.maxHp;return buffMsg;
     }
@@ -1399,7 +1512,7 @@
     }
 
     function spawnNextMonster(isFirstSpawn = false, callback = null) {
-        const gameplayBg = document.getElementById('battle-stage-bg'), mermaid = document.getElementById('fallback-mermaid'), partnerContainer = document.getElementById('char-partner-container');
+        const gameplayBg = document.getElementById('battle-stage-bg'), mermaid = activeSprite('char-mermaid','fallback-mermaid'), partnerContainer = document.getElementById('char-partner-container');
         mermaid.classList.remove('anim-mermaid-enter', 'anim-mermaid-run', 'anim-attack', 'anim-hurt'); partnerContainer.classList.remove('anim-mermaid-enter', 'anim-mermaid-run', 'anim-partner-atk');
         void mermaid.offsetWidth; void partnerContainer.offsetWidth;
 
@@ -1425,11 +1538,14 @@
     }
 
     function setupSprite(type,index,isElite=false,isFirstSpawn=false) {
-        const sprite=document.getElementById('fallback-monster');
+        const sprite=document.getElementById('fallback-monster'), art=document.getElementById('char-monster');
         sprite.className='character monster '+(isFirstSpawn?'':'anim-monster-enter ')+(isElite?'elite-monster ':'')+(type==='boss'?'boss':'');
-        sprite.textContent=type==='practice'?'🧸':type==='mob'?MOB_EMOJI[index]:BOSS_EMOJI[index];
+        art.className=sprite.className+' asset-sprite';
+        const file=type==='practice'?'mob-practice.png':type==='mob'?LORE_DB.mob[index].img:LORE_DB.boss[index].img;
+        const emoji=type==='practice'?'🧸':type==='mob'?MOB_EMOJI[index]:BOSS_EMOJI[index];
         sprite.setAttribute('aria-label',type==='boss'?'Boss '+getBossName(index):'深海魔物');
-        sprite.style.visibility='visible';
+        art.style.visibility='visible';sprite.style.visibility='visible';
+        setArtwork('char-monster','fallback-monster',file,emoji);
     }
 
     function showSpeech(text, isGood = true, isBossSkill = false) {
@@ -1440,7 +1556,7 @@
 
     function updateUI() {
         let hpHTML = "";
-        for(let i=0;i<state.maxHp;i++) hpHTML+=i<state.hp?'❤️':'🖤';
+        for(let i=0;i<state.maxHp;i++) hpHTML+=i<state.hp?`<img src="images/icon-heart-full.png" alt="❤️" class="hp-icon" onerror="this.outerHTML='❤️'">`:`<img src="images/icon-heart-empty.png" alt="🖤" class="hp-icon" onerror="this.outerHTML='🖤'">`;
         document.getElementById('ui-hp').innerHTML = hpHTML;
         const progressUI = document.getElementById('ui-progress');
         if (state.isEndless) progressUI.innerHTML = `🏆 總擊退: <span style="color:#fff;">${state.endlessScore}</span>`;
@@ -1528,7 +1644,7 @@
         if (gameState !== 'PLAYING') return; gameState = 'RESOLVING'; clearInterval(state.timerInterval); document.getElementById('ui-question').classList.remove('interference');
         for(let i=0; i<3; i++) document.getElementById(`btn-ans-${i}`).disabled = true;
         const btn = document.getElementById(`btn-ans-${btnIndex}`); const selected = Number(btn.querySelector('.option-value').textContent);
-        let mermaid = document.getElementById('fallback-mermaid'); let partnerContainer = document.getElementById('char-partner-container');
+        let mermaid = activeSprite('char-mermaid','fallback-mermaid'); let partnerContainer = document.getElementById('char-partner-container');
         mermaid.classList.remove('anim-attack', 'anim-hurt', 'anim-mermaid-enter', 'anim-mermaid-run'); partnerContainer.classList.remove('anim-partner-atk', 'anim-mermaid-enter', 'anim-mermaid-run');
         void mermaid.offsetWidth; void partnerContainer.offsetWidth;
 
@@ -1540,9 +1656,9 @@
 
     function handleCorrect(mermaid, partnerContainer) {
         playSFX('correct');
-        mermaid.classList.add('anim-attack'); if(saveFile.equippedPartner !== null) partnerContainer.classList.add('anim-partner-atk');
+        mermaid.classList.add('anim-attack'); showAttackArtwork(); if(saveFile.equippedPartner !== null) partnerContainer.classList.add('anim-partner-atk');
 
-        let monster = document.getElementById('fallback-monster');
+        let monster = activeSprite('char-monster','fallback-monster');
         monster.classList.remove('anim-monster-hurt', 'anim-monster-enter'); void monster.offsetWidth; monster.classList.add('anim-monster-hurt');
 
         if (state.isPractice) {
@@ -1600,7 +1716,7 @@
         playSFX('wrong'); const gameContainer = document.getElementById('game-container'); gameContainer.classList.add('shake-screen');
         safeSetTimeout(() => gameContainer.classList.remove('shake-screen'), 400);
 
-        if(!mermaid) mermaid = document.getElementById('fallback-mermaid'); mermaid.classList.add('anim-hurt');
+        if(!mermaid) mermaid = activeSprite('char-mermaid','fallback-mermaid'); mermaid.classList.add('anim-hurt');
         if (!state.isPractice) state.hp--;
 
         const questionUI = document.getElementById('ui-question'); const originalQuestion = questionUI.innerText; const expression = originalQuestion.split('=')[0].trim();
@@ -1615,7 +1731,7 @@
 
     function triggerBoss() {
         state.isBoss = true; state.bossHp = state.baseBossHp; clearInterval(state.timerInterval); gameState = 'WARNING';
-        document.getElementById('monster-ui').style.display = 'none'; document.getElementById('fallback-monster').style.visibility = 'hidden';
+        document.getElementById('monster-ui').style.display = 'none'; document.getElementById('fallback-monster').style.visibility='hidden';document.getElementById('char-monster').style.visibility='hidden';
 
         let bossIndex = 0;
         if (state.level === 10 || state.level === 20) bossIndex = 9;
@@ -1624,7 +1740,7 @@
         else if (state.level === 'endless') bossIndex = Math.floor(Math.random() * 10);
 
         const warningScreen = document.getElementById('boss-warning'); const bossSilhouette = document.getElementById('warning-boss-silhouette');
-        bossSilhouette.textContent=BOSS_EMOJI[bossIndex];bossSilhouette.style.backgroundImage='none';
+        bossSilhouette.textContent=BOSS_EMOJI[bossIndex];setBackgroundArt('warning-boss-silhouette',LORE_DB.boss[bossIndex].img);
         document.getElementById('boss-name-display').innerText = getBossName(bossIndex, state.level === 'endless');
         warningScreen.classList.add('show'); playSFX('warning');
 
